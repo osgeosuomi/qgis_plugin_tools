@@ -290,7 +290,9 @@ def _create_handlers(
             "".join((c if c.isalnum() else "_") for c in message_log_name) + ".log"
         )
         file_handler = RotatingFileHandler(
-            str(get_log_folder() / log_file_name), maxBytes=1024 * 1024 * 2
+            str(get_log_folder() / log_file_name),
+            maxBytes=1024 * 1024 * 2,
+            backupCount=5,
         )
         file_handler.setLevel(file_level)
         file_formatter = logging.Formatter(
