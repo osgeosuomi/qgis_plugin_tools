@@ -7,7 +7,7 @@ import datetime
 
 import pytest
 from qgis.core import QgsDateTimeRange, QgsRasterLayer, QgsSingleBandGrayRenderer
-from qgis.PyQt.QtCore import QDateTime, Qt
+from qgis.PyQt.QtCore import QDate, QDateTime, Qt, QTime
 
 from ..testing.utilities import qgis_supports_temporal
 from ..tools.network import download_to_file
@@ -54,8 +54,8 @@ def test_set_fixed_temporal_range(netcdf_layer, t_range):
     tprops = netcdf_layer.temporalProperties()
     assert tprops.isActive()
     assert tprops.fixedTemporalRange() == QgsDateTimeRange(
-        QDateTime(2020, 11, 2, 15, 0, 0, 0, Qt.TimeSpec(1)),
-        QDateTime(2020, 11, 3, 11, 0, 0, 0, Qt.TimeSpec(1)),
+        QDateTime(QDate(2020, 11, 2), QTime(15, 0, 0, 0), Qt.TimeSpec(1)),
+        QDateTime(QDate(2020, 11, 3), QTime(11, 0, 0, 0), Qt.TimeSpec(1)),
     )
 
 
@@ -97,8 +97,8 @@ def test_set_band_based_on_range3(configured_layer):
 )
 def test_set_band_based_on_range4(configured_layer):
     t_range2 = QgsDateTimeRange(
-        QDateTime(2020, 11, 3, 10, 0, 0, 0, Qt.TimeSpec(1)),
-        QDateTime(2020, 11, 3, 11, 0, 0, 0, Qt.TimeSpec(1)),
+        QDateTime(QDate(2020, 11, 3), QTime(10, 0, 0, 0), Qt.TimeSpec(1)),
+        QDateTime(QDate(2020, 11, 3), QTime(11, 0, 0, 0), Qt.TimeSpec(1)),
     )
     band_number = set_band_based_on_range(configured_layer, t_range2)
     assert band_number == 20

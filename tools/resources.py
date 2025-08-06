@@ -386,7 +386,7 @@ def package_file(package: importlib.resources.Package, file_name: str) -> Path:
     with importlib.resources.path(package, file_name) as requested_path:
         if not requested_path.is_file():
             raise FileNotFoundError(
-                f"requested file {file_name} not found in {package}"
+                f"requested file {file_name} not found in {package}"  # noqa: E713
             )
 
     if not requested_path.is_file():

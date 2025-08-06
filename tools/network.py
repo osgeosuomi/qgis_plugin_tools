@@ -170,7 +170,7 @@ def request_raw(
             byte_data = bytes(json.dumps(data), encoding)
             req.setRawHeader(
                 b"Content-Type",
-                bytes(f"application/json; charset={encoding}", encoding),
+                bytes(f"application/json; charset={encoding}", encoding),  # noqa: E702
             )
         elif files:
             # Support multipart binary. Generate boundary like
@@ -188,8 +188,8 @@ def request_raw(
                 content = file_info[1]
                 content_type = file_info[2]
                 content_disposition_form_data = (
-                    f"Content-Disposition: form-data;"
-                    f' name="{name}";'
+                    f"Content-Disposition: form-data;"  # noqa: E702, E231
+                    f' name="{name}";'  # noqa: E702, E231
                     f' filename="{file_name}"\r\n'
                 )
                 content_type_form_data = f"Content-Type: {content_type}\r\n\r\n"
@@ -202,7 +202,9 @@ def request_raw(
             byte_data += last_byte_boundary
             req.setRawHeader(
                 b"Content-Type",
-                bytes(f"multipart/form-data; boundary={boundary}", encoding),
+                bytes(
+                    f"multipart/form-data; boundary={boundary}", encoding  # noqa: E702
+                ),
             )
         else:
             byte_data = b""
@@ -211,7 +213,7 @@ def request_raw(
         raise Exception(f"Request method {method} not supported.")
     reply: QgsNetworkReplyContent = request_blocking.reply()
     reply_error = reply.error()
-    if reply_error != QNetworkReply.NoError:
+    if reply_error != QNetworkReply.NetworkError.NoError:
         # Error content will be empty in older QGIS versions:
         # https://github.com/qgis/QGIS/issues/42442
         message = (

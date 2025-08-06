@@ -22,7 +22,7 @@ class BaseTask(QgsTask):
     """
 
     def __init__(self) -> None:
-        super().__init__(self.name, QgsTask.CanCancel)
+        super().__init__(self.name, QgsTask.Flag.CanCancel)
         self.exception: Optional[Exception] = None
 
     @property
@@ -56,7 +56,7 @@ class BaseTask(QgsTask):
         if result:
             LOGGER.debug(
                 f"Task {self.name} ended successfully in "
-                f"{self.elapsedTime() / 1000:.2f}!"
+                f"{self.elapsedTime() / 1000:.2f}!"  # noqa: E231
             )
             pass
         else:

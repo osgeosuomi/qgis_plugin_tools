@@ -32,18 +32,18 @@ except ImportError:
 LOGGER = logging.getLogger(__name__)
 
 POINT_TYPES = {
-    QgsWkbTypes.Point,
-    QgsWkbTypes.MultiPoint,
+    QgsWkbTypes.Type.Point,
+    QgsWkbTypes.Type.MultiPoint,
 }
 
 LINE_TYPES = {
-    QgsWkbTypes.LineString,
-    QgsWkbTypes.MultiLineString,
+    QgsWkbTypes.Type.LineString,
+    QgsWkbTypes.Type.MultiLineString,
 }
 POLYGON_TYPES = {
-    QgsWkbTypes.Polygon,
-    QgsWkbTypes.MultiPolygon,
-    QgsWkbTypes.CurvePolygon,
+    QgsWkbTypes.Type.Polygon,
+    QgsWkbTypes.Type.MultiPolygon,
+    QgsWkbTypes.Type.CurvePolygon,
 }
 
 
@@ -88,8 +88,10 @@ def set_temporal_settings(
     :param unit: QgsUnitTypes.TemporalUnit
     """
     if unit is None:
-        unit = QgsUnitTypes.TemporalMinutes
-    mode = QgsVectorLayerTemporalProperties.ModeFeatureDateTimeInstantFromField
+        unit = QgsUnitTypes.TemporalUnit.TemporalMinutes
+    mode = (
+        QgsVectorLayerTemporalProperties.TemporalMode.ModeFeatureDateTimeInstantFromField  # noqa: E501
+    )
     tprops: QgsVectorLayerTemporalProperties = layer.temporalProperties()
     tprops.setMode(mode)
     tprops.setStartField(dt_field)
