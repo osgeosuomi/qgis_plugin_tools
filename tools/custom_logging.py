@@ -179,13 +179,18 @@ class SimpleMessageBarProxy(QObject):
     def emit_message(self, title: str, text: str, level: int, duration: int) -> None:
         self._emit_message.emit(title, text, level, duration)
 
+    def _sanitize(self, text: Optional[str]) -> Optional[str]:
+        if not text:
+            return text
+        return text.replace("<", "&lt;")
+
     @pyqtSlot(str, str, int, int)
     def push_message(self, title: str, text: str, level: int, duration: int) -> None:
         try:
             if self._msg_bar is not None:
                 self._msg_bar.pushMessage(
-                    title=title,
-                    text=text,
+                    title=self._sanitize(title),
+                    text=self._sanitize(text),
                     level=level,
                     duration=duration,
                 )
