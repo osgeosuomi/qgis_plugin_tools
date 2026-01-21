@@ -88,6 +88,6 @@ def value_for_widget(widget: Type[QWidget]) -> Union[str, bool, float, int]:
 def provider_fields(fields: QgsFields) -> QgsFields:
     flds = QgsFields()
     for i in range(fields.count()):
-        if fields.fieldOrigin(i) == QgsFields.OriginProvider:
+        if fields.fieldOrigin(i) == QgsFields.FieldOrigin.OriginProvider:
             flds.append(fields.at(i))
     return flds

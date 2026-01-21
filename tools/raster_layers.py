@@ -35,13 +35,15 @@ def set_raster_renderer_to_singleband(layer: QgsRasterLayer, band: int = 1) -> N
     )
 
     stats: QgsRasterBandStats = provider.bandStatistics(
-        band, QgsRasterBandStats.All, layer.extent(), 0
+        band, QgsRasterBandStats.Stats.All, layer.extent(), 0
     )
     min_val = max(stats.minimumValue, 0)
     max_val = max(stats.maximumValue, 0)
 
     enhancement = QgsContrastEnhancement(renderer.dataType(band))
-    contrast_enhancement = QgsContrastEnhancement.StretchToMinimumMaximum
+    contrast_enhancement = (
+        QgsContrastEnhancement.ContrastEnhancementAlgorithm.StretchToMinimumMaximum
+    )
     enhancement.setContrastEnhancementAlgorithm(contrast_enhancement, True)
     enhancement.setMinimumValue(min_val)
     enhancement.setMaximumValue(max_val)
@@ -56,7 +58,7 @@ def set_fixed_temporal_range(layer: QgsRasterLayer, t_range: QgsDateTimeRange) -
     :param layer: raster layer
     :param t_range: fixed temporal range
     """
-    mode = QgsRasterLayerTemporalProperties.ModeFixedTemporalRange
+    mode = QgsRasterLayerTemporalProperties.TemporalMode.ModeFixedTemporalRange
     tprops: QgsRasterLayerTemporalProperties = layer.temporalProperties()
     tprops.setMode(mode)
     if t_range.begin().timeSpec() == 0 or t_range.end().timeSpec() == 0:
@@ -83,7 +85,10 @@ def set_band_based_on_range(layer: QgsRasterLayer, t_range: QgsDateTimeRange) ->
         and t_range.begin().isValid()
         and t_range.end().isValid()
     ):
-        if tprops.mode() == QgsRasterLayerTemporalProperties.ModeFixedTemporalRange:
+        if (
+            tprops.mode()
+            == QgsRasterLayerTemporalProperties.TemporalMode.ModeFixedTemporalRange
+        ):
             layer_t_range: QgsDateTimeRange = tprops.fixedTemporalRange()
             start: datetime.datetime = layer_t_range.begin().toPyDateTime()
             end: datetime.datetime = layer_t_range.end().toPyDateTime()

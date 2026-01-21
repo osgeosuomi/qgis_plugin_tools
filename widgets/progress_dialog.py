@@ -55,7 +55,10 @@ class ProgressDialog(QDialog, FORM_CLASS):
             self.push_btn.setText(abort_btn_text)
             layout = QHBoxLayout()
             spacer = QSpacerItem(
-                100, 20, QSizePolicy.MinimumExpanding, QSizePolicy.Expanding
+                100,
+                20,
+                QSizePolicy.Policy.MinimumExpanding,
+                QSizePolicy.Policy.Expanding,
             )
             layout.addSpacerItem(spacer)
             layout.addWidget(self.push_btn)

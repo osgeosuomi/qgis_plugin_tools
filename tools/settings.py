@@ -21,7 +21,7 @@ def get_setting(
     default: Optional[Any] = None,
     typehint: Optional[type] = None,
     internal: bool = True,
-    section: int = QgsSettings.NoSection,
+    section: int = QgsSettings.Section.NoSection,
 ) -> Union[QVariant, str]:
     """
     Get QGIS setting value plugin
@@ -45,7 +45,7 @@ def set_setting(
     key: str,
     value: Union[str, int, float, bool],
     internal: bool = True,
-    section: int = QgsSettings.NoSection,
+    section: int = QgsSettings.Section.NoSection,
 ) -> bool:
     """
     Set a value in the QgsSetting

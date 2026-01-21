@@ -31,9 +31,11 @@ def test_run_simple_task_canceled(task_runner: TestTaskRunner, qgis_iface):
     success = task_runner.run_task(task, cancel=True)
 
     # for some reason this randomly fails if the signal is not waited for
-    QCoreApplication.processEvents(QEventLoop.AllEvents, 100)  # 100 ms wait
+    QCoreApplication.processEvents(
+        QEventLoop.ProcessEventsFlag.AllEvents, 100
+    )  # 100 ms wait
 
-    messages = qgis_iface.messageBar().get_messages(Qgis.Warning)
+    messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Warning)
 
     assert not success
     assert task_runner.fail
@@ -48,7 +50,7 @@ def test_run_simple_task_canceled_after_a_while(
 ):
     task = SimpleTask()
     success = task_runner.run_task(task, cancel=True, sleep_before_cancel=0.01)
-    messages = qgis_iface.messageBar().get_messages(Qgis.Critical)
+    messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
 
     assert not success
     assert task_runner.fail
@@ -59,7 +61,7 @@ def test_run_simple_task_canceled_after_a_while(
 def test_run_simple_task_failed(task_runner: TestTaskRunner, qgis_iface):
     task = SimpleTask(True)
     success = task_runner.run_task(task)
-    messages = qgis_iface.messageBar().get_messages(Qgis.Critical)
+    messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
 
     assert not success
     assert task_runner.fail
@@ -71,7 +73,7 @@ def test_run_simple_task_failed_with_qgs_plugin_exception(
 ):
     task = SimpleTask(True, QgsPluginException)
     success = task_runner.run_task(task)
-    messages = qgis_iface.messageBar().get_messages(Qgis.Critical)
+    messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
 
     assert not success
     assert task_runner.fail

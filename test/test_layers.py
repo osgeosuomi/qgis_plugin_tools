@@ -9,6 +9,8 @@ from ..tools.layers import LayerType
 
 
 def test_layer_type():
-    assert LayerType.from_wkb_type(QgsWkbTypes.CurvePolygonZM) == LayerType.Polygon
-    assert LayerType.from_wkb_type(QgsWkbTypes.MultiPoint) == LayerType.Point
-    assert LayerType.from_wkb_type(QgsWkbTypes.MultiLineString25D) == LayerType.Line
+    assert LayerType.from_wkb_type(QgsWkbTypes.Type.CurvePolygonZM) == LayerType.Polygon
+    assert LayerType.from_wkb_type(QgsWkbTypes.Type.MultiPoint) == LayerType.Point
+    assert (
+        LayerType.from_wkb_type(QgsWkbTypes.Type.MultiLineString25D) == LayerType.Line
+    )

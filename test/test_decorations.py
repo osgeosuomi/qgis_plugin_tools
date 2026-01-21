@@ -50,28 +50,28 @@ class MockClass:
 
 def test_logging_if_fails(initialize_logger, qgis_iface):
     function_that_shows_msg()
-    messages = qgis_iface.messageBar().get_messages(Qgis.Critical)
+    messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
     assert "Error message:Please implement" in messages
 
 
 def test_logging_if_fails_method(initialize_logger, qgis_iface):
     MockClass().method_that_shows_msg()
 
-    messages = qgis_iface.messageBar().get_messages(Qgis.Critical)
+    messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
     assert "M: Error message:Please implement" in messages
 
 
 def test_logging_if_fails_without_details(initialize_logger, qgis_iface):
     function_that_fails(1, 2, 3, kwarg2=4)
 
-    messages = qgis_iface.messageBar().get_messages(Qgis.Critical)
+    messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
     assert "Unhandled exception occurred:Error message" in messages
 
 
 def test_logging_if_fails_without_details_method(initialize_logger, qgis_iface):
     MockClass().method_that_fails(1, 2, 3, kwarg2=4)
 
-    messages = qgis_iface.messageBar().get_messages(Qgis.Critical)
+    messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
     assert "Unhandled exception occurred:M: Error message" in messages
 
 
