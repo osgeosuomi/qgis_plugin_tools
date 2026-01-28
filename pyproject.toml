@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qgis_plugin_tools"
+version = "0.5.0"
+authors = [
+    { name = "3Liz, Gispo Ltd.", email = "info@gispo.fi" },
+]
+maintainers = [
+    { name = "Gispo Ltd.", email = "info@gispo.fi" },
+    { name = "OSGeo Suomi", email = "info@osgeo.fi" }
+]
+description = "A collection of helpful tools and widgets to aid QGIS plugin tool development"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.5"
+license = { text = "GNU GPL v2.0" }
+keywords = ["qgis", "QGIS", "PyQGIS"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+]
+
+[project.urls]
+Homepage = "https://github.com/GispoCoding/qgis_plugin_tools"
+
+[tool.setuptools]
+packages = [
+    "qgis_plugin_tools",
+    "qgis_plugin_tools.infrastructure",
+    "qgis_plugin_tools.resources",
+    "qgis_plugin_tools.resources.ui",
+    "qgis_plugin_tools.testing",
+    "qgis_plugin_tools.tools",
+    "qgis_plugin_tools.widgets",
+]
+zip-safe = false
+
+[tool.setuptools.package-dir]
+qgis_plugin_tools = "."
+
+[tool.setuptools.package-data]
+"*" = [
+    "py.typed",
+    "*.ui",
+]
+
+[tool.flake8]
+max-line-length = 88
+per-file-ignores = [
+    "test/*:ANN001,ANN201",
+]
+extend-ignore = [
+    "E203",
+    "ANN101",
+]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
