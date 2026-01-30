@@ -14,7 +14,7 @@ maintainers = [
 ]
 description = "A collection of helpful tools and widgets to aid QGIS plugin tool development"
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.5"
+requires-python = ">=3.9"
 license = { text = "GNU GPL v2.0" }
 keywords = ["qgis", "QGIS", "PyQGIS"]
 classifiers = [
@@ -23,10 +23,6 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3 :: Only",
@@ -38,6 +34,27 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/GispoCoding/qgis_plugin_tools"
+
+[dependency-groups]
+development = [
+    "flake8",
+    "flake8-qgis",
+    "flake8-pyproject",
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "pytest-mock",
+    "pytest-qgis",
+    "pytest-qt",
+    "pytest-timeout",
+    "pyqt5-stubs",
+    "requests",
+    "ruff",
+    "types-requests",
+]
+
+[tool.uv]
+default-groups = ["development"]
 
 [tool.setuptools]
 packages = [
@@ -61,15 +78,83 @@ qgis_plugin_tools = "."
 ]
 
 [tool.flake8]
-max-line-length = 88
-per-file-ignores = [
-    "test/*:ANN001,ANN201",
-]
-extend-ignore = [
-    "E203",
-    "ANN101",
+select = [
+    "QGS"
 ]
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
+[tool.ruff]
+line-length = 88
+indent-width = 4
+
+lint.ignore = [
+    "ANN204",
+    "ANN401",
+    "PGH003",
+    "RUF100",
+    "TID252",
+    "PGH004"
+]
+
+lint.select = [
+    "ANN", # flake8-annotations
+    "ARG", # flake8-unused-arguments
+    "B",   # flake8-bugbear
+    "C",   # flake8-comprehensions
+    "C90", # flake8, mccabe
+    "E",   # flake8, pycodestyle
+    "F",   # flake8, Pyflakes
+    "I",   # isort
+    "INP", # flake8-no-pep420
+    "N",   # pep8-naming
+    "PIE", # flake8-pie
+    "PGH", # pygrep-hooks
+    "PL",  # pylint
+    "PT",  # flake8-pytest-style
+    "RUF", # Ruff-specific rules
+    "SIM", # flake8-simplify
+    "T",   # flake8-print
+    "ICN", # flake8-import-conventions
+    "TCH", # flake8-type-checking
+    "TID", # flake8-tidy-imports
+    "W",   # flake8, pycodestyle
+    "UP",  # pyupgrade
+]
+
+[tool.ruff.lint.per-file-ignores]
+"test/*" = [
+    "ANN001",
+    "ANN201",
+    "ANN202",
+    "ARG001",
+    "C901",
+    "N802",
+    "PLR2004",
+]
+"widgets/*" = [
+    "ANN201",
+    "ANN001",
+    "ANN204"
+]
+"tools/logger_processing.py" = [
+    "ANN001",
+    "ANN201",
+    "ANN202",
+    "N802",
+    "N803",
+    "ARG002",
+]
+"tools/algorithm_processing.py" = [
+    "ANN001",
+    "ANN201",
+    "ANN202",
+    "N802",
+    "N803",
+    "ARG002",
+]
+
+
+[tool.mypy]
+disable_error_code = "misc"
+ignore_missing_imports = true
+follow_imports = "silent"
+show_column_numbers = true

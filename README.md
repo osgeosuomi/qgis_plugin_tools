@@ -3,8 +3,8 @@
 [![Downloads](https://img.shields.io/pypi/dm/qgis_plugin_tools.svg)](https://pypistats.org/packages/qgis_plugin_tools)
 ![CI](https://github.com/osgeosuomi/qgis_plugin_tools/workflows/Tests/badge.svg)
 [![Code on Github](https://img.shields.io/badge/Code-GitHub-brightgreen)](https://github.com/osgeosuomi/pytest-qgis)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![uv](https://img.shields.io/badge/uv-managed-blue)](https://github.com/astral-sh/uv)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
 
@@ -54,7 +54,24 @@ pip install -e /path/to/qgis_plugin_tools --use-pep517 --config-settings editabl
 ```
 
 ### Setting up development environment
-Refer to [development](https://github.com/GispoCoding/cookiecutter-qgis-plugin/blob/main/%7B%7Bcookiecutter.project_directory%7D%7D/docs/development.md#setting-up-development-environment) documentation.
+
+This project uses [uv](https://docs.astral.sh/uv/getting-started/installation/)
+to manage python packages. Make sure to have it installed first.
+
+- Create a venv that is aware of system QGIS libraries: `uv venv --system-site-packages`
+    - On Windows, maybe use a tool like [qgis-venv-creator](ttps://github.com/GispoCoding/qgis-venv-creator).
+
+```shell
+# Activate the virtual environment
+$ source .venv/bin/activate
+# Install dependencies
+$ uv sync
+# Install pre-commit hooks
+$ pre-commit install
+```
+#### Updating dependencies
+
+`uv lock --upgrade`
 
 ## How to use it
 
