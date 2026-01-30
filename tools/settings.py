@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union
+from typing import Any
 
 from qgis.core import QgsExpressionContextUtils, QgsProject, QgsSettings
 from qgis.PyQt.QtCore import QVariant
@@ -18,11 +18,11 @@ def setting_key(*args: str) -> str:
 
 def get_setting(
     key: str,
-    default: Optional[Any] = None,
-    typehint: Optional[type] = None,
+    default: Any | None = None,
+    typehint: type | None = None,
     internal: bool = True,
     section: int = QgsSettings.NoSection,
-) -> Union[QVariant, str]:
+) -> QVariant | str:
     """
     Get QGIS setting value plugin
 
@@ -43,7 +43,7 @@ def get_setting(
 
 def set_setting(
     key: str,
-    value: Union[str, int, float, bool],
+    value: str | int | float | bool,
     internal: bool = True,
     section: int = QgsSettings.NoSection,
 ) -> bool:
@@ -61,10 +61,10 @@ def set_setting(
 
 def get_project_setting(
     key: str,
-    default: Optional[Any] = None,
-    typehint: Optional[type] = None,
+    default: Any | None = None,
+    typehint: type | None = None,
     internal: bool = True,
-) -> Union[QVariant, str, None]:
+) -> QVariant | str | None:
     """
     Get QGIS project setting value
 
@@ -102,7 +102,7 @@ def get_project_setting(
 
 
 def set_project_setting(
-    key: str, value: Union[str, int, float, bool], internal: bool = True
+    key: str, value: str | int | float | bool, internal: bool = True
 ) -> bool:
     """
     Set a value in the QGIS project settings
@@ -119,14 +119,14 @@ def set_project_setting(
         return True
 
 
-def parse_value(value: Union[QVariant, str]) -> Union[None, str, bool]:
+def parse_value(value: QVariant | str) -> None | str | bool:
     """
     Parse QSettings value
 
     :param value: QVariant
     """
     str_value = str(value)
-    val: Union[None, str, bool] = str_value
+    val: None | str | bool = str_value
     if str_value == "NULL":
         val = None
     elif str_value == "true":

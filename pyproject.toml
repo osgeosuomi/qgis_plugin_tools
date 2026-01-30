@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qgis_plugin_tools"
-version = "0.5.0"
+version = "0.5.0.post0"
 authors = [
     { name = "3Liz, Gispo Ltd.", email = "info@gispo.fi" },
 ]
@@ -14,26 +14,28 @@ maintainers = [
 ]
 description = "A collection of helpful tools and widgets to aid QGIS plugin tool development"
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.9"
-license = { text = "GNU GPL v2.0" }
+requires-python = ">=3.10"
+license = "GPL-2.0"
+license-files = ["LICENSE"]
+
 keywords = ["qgis", "QGIS", "PyQGIS"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Operating System :: OS Independent",
-    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
 ]
 
 [project.urls]
-Homepage = "https://github.com/GispoCoding/qgis_plugin_tools"
+homepage = "https://github.com/GispoCoding/qgis_plugin_tools"
 
 [dependency-groups]
 development = [
@@ -75,6 +77,7 @@ qgis_plugin_tools = "."
 "*" = [
     "py.typed",
     "*.ui",
+    "LICENSE",
 ]
 
 [tool.flake8]
@@ -87,12 +90,12 @@ line-length = 88
 indent-width = 4
 
 lint.ignore = [
-    "ANN204",
-    "ANN401",
-    "PGH003",
-    "RUF100",
-    "TID252",
-    "PGH004"
+    "ANN204", # Missing return type special method
+    "ANN401", # Any used in typing
+    "PGH003", # Blanket type ignore (some old widgets do not contain typing)
+    "RUF100", # Unused noqa (Conflicts with QGS flake8-rule)
+    "TID252", # Ban relative imports (relative imports are needed until submodule usage is removed)
+    "PGH004" # Blanket noqa (some old widgets do not contain typing)
 ]
 
 lint.select = [

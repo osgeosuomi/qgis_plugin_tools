@@ -2,10 +2,11 @@
 
 import functools
 import logging
+from collections.abc import Callable
 from enum import Enum, unique
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-from typing import Any, Callable, Optional
+from typing import Any
 
 from qgis.core import Qgis, QgsApplication, QgsMessageLog
 from qgis.gui import QgisInterface, QgsMessageBar
@@ -65,7 +66,7 @@ def qgis_level(logging_level: str) -> int:
 
 
 def bar_msg(
-    details: Any = "", duration: Optional[int] = None, success: bool = False
+    details: Any = "", duration: int | None = None, success: bool = False
 ) -> dict[str, Any]:
     """
     Helper function to construct extra arguments for message bar logger message
@@ -86,7 +87,7 @@ class QgsLogHandler(logging.Handler):
     """A logging handler that will log messages to the QGIS logging console"""
 
     def __init__(
-        self, level: int = logging.NOTSET, message_log_name: Optional[str] = None
+        self, level: int = logging.NOTSET, message_log_name: str | None = None
     ) -> None:
         logging.Handler.__init__(self, level)
         self._message_log_name = message_log_name
@@ -165,7 +166,7 @@ class SimpleMessageBarProxy(QObject):
 
     _emit_message = pyqtSignal(str, str, int, int)
 
-    def __init__(self, msg_bar: Optional[QgsMessageBar] = None) -> None:
+    def __init__(self, msg_bar: QgsMessageBar | None = None) -> None:
         super().__init__()
         self._msg_bar = msg_bar
         self._emit_message.connect(self.push_message)
@@ -173,7 +174,7 @@ class SimpleMessageBarProxy(QObject):
     def emit_message(self, title: str, text: str, level: int, duration: int) -> None:
         self._emit_message.emit(title, text, level, duration)
 
-    def _sanitize(self, text: Optional[str]) -> Optional[str]:
+    def _sanitize(self, text: str | None) -> str | None:
         if not text:
             return text
         return text.replace("<", "&lt;")
@@ -195,7 +196,7 @@ class SimpleMessageBarProxy(QObject):
 class QgsMessageBarHandler(logging.Handler):
     """A logging handler that will log messages to the QGIS message bar."""
 
-    def __init__(self, msg_bar: Optional[QgsMessageBar] = None) -> None:
+    def __init__(self, msg_bar: QgsMessageBar | None = None) -> None:
         super().__init__()
         self._message_bar_proxy = SimpleMessageBarProxy(msg_bar)
         self._message_bar_proxy.moveToThread(QgsApplication.instance().thread())
@@ -269,7 +270,7 @@ def get_log_folder() -> Path:
 
 
 def _create_handlers(
-    message_log_name: str, message_bar: Optional[QgsMessageBar]
+    message_log_name: str, message_bar: QgsMessageBar | None
 ) -> list[logging.Handler]:
     handlers: list[logging.Handler] = []
 
@@ -325,7 +326,7 @@ def _create_handlers(
 
 
 def setup_logger(  # noqa: QGS105
-    logger_name: str, iface: Optional[QgisInterface] = None
+    logger_name: str, iface: QgisInterface | None = None
 ) -> logging.Logger:
     """Run once when the module is loaded and enable logging.
 
@@ -437,7 +438,7 @@ def teardown_loggers(logger_names: list[str]) -> None:
 def setup_loggers(
     *logger_names: str,
     message_log_name: str,
-    message_bar: Optional[QgsMessageBar] = None,
+    message_bar: QgsMessageBar | None = None,
 ) -> Callable[[], None]:
     """
     Setups all the loggers for the given logger names.

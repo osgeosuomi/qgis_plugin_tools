@@ -1,5 +1,6 @@
 import logging
-from typing import Any, Callable, Optional, Union
+from collections.abc import Callable
+from typing import Any
 
 from qgis.core import QgsTask
 
@@ -23,7 +24,7 @@ class BaseTask(QgsTask):
 
     def __init__(self) -> None:
         super().__init__(self.name, QgsTask.CanCancel)
-        self.exception: Optional[Exception] = None
+        self.exception: Exception | None = None
 
     @property
     def name(self) -> str:
@@ -71,7 +72,7 @@ class BaseTask(QgsTask):
             except Exception as e:
                 MsgBar.exception(tr("Unhandled exception occurred"), e)
 
-    def setProgress(self, progress: Union[int, float]) -> None:  # noqa: N802
+    def setProgress(self, progress: int | float) -> None:  # noqa: N802
         self._check_if_canceled()
         super().setProgress(progress)
 
