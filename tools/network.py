@@ -3,7 +3,7 @@ import logging
 import re
 import shutil
 from pathlib import Path
-from typing import Dict, List, Literal, NamedTuple, Optional, Tuple
+from typing import Literal, NamedTuple, Optional
 from urllib.parse import urlencode
 from uuid import uuid4
 
@@ -23,7 +23,7 @@ except ImportError:
     requests = None  # type: ignore
     RequestException = None  # type: ignore
 
-__copyright__ = "Copyright 2020-2023, Gispo Ltd"
+__copyright__ = "Copyright 2020-2023, Gispo Ltd, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
@@ -51,7 +51,7 @@ def fetch(
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    params: Optional[Dict[str, str]] = None,
+    params: Optional[dict[str, str]] = None,
 ) -> str:
     """
     Fetch resource from the internet. Similar to requests.get(url) but is
@@ -59,7 +59,7 @@ def fetch(
     :param url: address of the web resource
     :param encoding: Encoding which will be used to decode the bytes
     :param authcfg_id: authcfg id from QGIS settings, defaults to ''
-    :param params: Dictionary to send in the query string
+    :param params: dictionary to send in the query string
     :return: encoded string of the content
     """
     content, _ = fetch_raw(url, encoding, authcfg_id, params)
@@ -70,8 +70,8 @@ def post(
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    data: Optional[Dict[str, str]] = None,
-    files: Optional[List[FileField]] = None,
+    data: Optional[dict[str, str]] = None,
+    files: Optional[list[FileField]] = None,
 ) -> str:
     """
     Post resource. Similar to requests.post(url, data, files) but is
@@ -79,7 +79,7 @@ def post(
     :param url: address of the web resource
     :param encoding: Encoding which will be used to decode the bytes
     :param authcfg_id: authcfg id from QGIS settings, defaults to ''
-    :param data: Dictionary to send in the request body
+    :param data: dictionary to send in the request body
     :param files: Files to send multipart-encoded. Same format as requests.
     :return: encoded string of the content
     """
@@ -91,15 +91,15 @@ def fetch_raw(
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    params: Optional[Dict[str, str]] = None,
-) -> Tuple[bytes, str]:
+    params: Optional[dict[str, str]] = None,
+) -> tuple[bytes, str]:
     """
     Fetch resource from the internet. Similar to requests.get(url) but is
     recommended way of handling requests in QGIS plugin
     :param url: address of the web resource
     :param encoding: Encoding which will be used to decode the bytes
     :param authcfg_id: authcfg id from QGIS settings, defaults to ''
-    :param params: Dictionary to send in the query string
+    :param params: dictionary to send in the query string
     :return: bytes of the content and default name of the file or empty string
     """
     return request_raw(url, "get", encoding, authcfg_id, params)
@@ -109,31 +109,31 @@ def post_raw(
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    data: Optional[Dict[str, str]] = None,
-    files: Optional[List[FileField]] = None,
-) -> Tuple[bytes, str]:
+    data: Optional[dict[str, str]] = None,
+    files: Optional[list[FileField]] = None,
+) -> tuple[bytes, str]:
     """
     Post resource. Similar to requests.post(url, data, files) but is
     recommended way of handling requests in QGIS plugin
     :param url: address of the web resource
     :param encoding: Encoding which will be used to decode the bytes
     :param authcfg_id: authcfg id from QGIS settings, defaults to ''
-    :param data: Dictionary to send in the request body
+    :param data: dictionary to send in the request body
     :param files: Files to send multipart-encoded. Same format as requests.
     :return: bytes of the content and default name of the file or empty string
     """
     return request_raw(url, "post", encoding, authcfg_id, None, data, files)
 
 
-def request_raw(
+def request_raw(  # noqa: PLR0915, PLR0913, C901
     url: str,
     method: Literal["get", "post"] = "get",
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    params: Optional[Dict[str, str]] = None,
-    data: Optional[Dict[str, str]] = None,
-    files: Optional[List[FileField]] = None,
-) -> Tuple[bytes, str]:
+    params: Optional[dict[str, str]] = None,
+    data: Optional[dict[str, str]] = None,
+    files: Optional[list[FileField]] = None,
+) -> tuple[bytes, str]:
     """
     Request resource from the internet. Similar to requests.get(url) and
     requests.post(url, data) but is recommended way of handling requests in QGIS plugin
@@ -141,8 +141,8 @@ def request_raw(
     :param method: method to use, defaults to 'get'
     :param encoding: Encoding which will be used to decode the bytes
     :param authcfg_id: authcfg id from QGIS settings, defaults to ''
-    :param params: Dictionary to send in the query string
-    :param data: Dictionary to send in the request body
+    :param params: dictionary to send in the query string
+    :param data: dictionary to send in the request body
     :param files: Files to send multipart-encoded. Same format as requests.
     :return: bytes of the content and default name of the file or empty string
     """
@@ -215,9 +215,7 @@ def request_raw(
         # Error content will be empty in older QGIS versions:
         # https://github.com/qgis/QGIS/issues/42442
         message = (
-            bytes(reply.content()).decode("utf-8")
-            if len(bytes(reply.content()))
-            else None
+            bytes(reply.content()).decode("utf-8") if bytes(reply.content()) else None
         )
         # bar_msg will just show a generic Qt error string.
         raise QgsPluginNetworkException(
@@ -262,7 +260,7 @@ def download_to_file(
                 out_name = default_filename
             else:
                 out_name = url.replace("http://", "").replace("https://", "")
-                if len(out_name.split("/")[-1]) > 2:
+                if len(out_name.split("/")[-1]) > 2:  # noqa: PLR2004
                     out_name = out_name.split("/")[-1]
         else:
             out_name = output_name
@@ -277,11 +275,11 @@ def download_to_file(
             with requests.get(url, stream=True) as r:
                 try:
                     r.raise_for_status()
-                except Exception:
+                except Exception as e:
                     raise QgsPluginNetworkException(
                         tr("Request failed with status code {}", r.status_code),
                         bar_msg=bar_msg(r.text),
-                    )
+                    ) from e
                 default_filenames = re.findall(
                     "filename=(.+)", r.headers.get(CONTENT_DISPOSITION_HEADER, "")
                 )
@@ -292,7 +290,9 @@ def download_to_file(
                 with open(output, "wb") as f:
                     shutil.copyfileobj(r.raw, f)
         except RequestException as e:
-            raise QgsPluginNetworkException(tr("Request failed"), bar_msg=bar_msg(e))
+            raise QgsPluginNetworkException(
+                tr("Request failed"), bar_msg=bar_msg(e)
+            ) from e
     else:
         # Using simple fetch_raw
         content, default_filename = fetch_raw(url, encoding)

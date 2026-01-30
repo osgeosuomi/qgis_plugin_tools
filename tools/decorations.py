@@ -1,8 +1,9 @@
-__copyright__ = "Copyright 2020-2021, Gispo Ltd"
+__copyright__ = "Copyright 2020-2021, Gispo Ltd, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 2"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
 
+from functools import wraps
 from typing import Any, Callable, Optional
 
 from .exceptions import QgsPluginException
@@ -18,14 +19,13 @@ def log_if_fails(
     Use this as a decorator with functions and methods that
     might throw uncaught exceptions.
     """
-    from functools import wraps
 
     # caller is at depth 3 (MessageBarLogger log call, this function, actual call)
     message_bar = MessageBarLogger(logger_name, stack_level=3)
 
     def decorator(fn: Callable) -> Callable:
         @wraps(fn)
-        def wrapper(*args: Any, **kwargs: Any) -> None:  # noqa: ANN001
+        def wrapper(*args: Any, **kwargs: Any) -> None:
             try:
                 # Qt injects False into some signals
                 if args[1:] != (False,):
@@ -51,10 +51,9 @@ def taskify(fn: Callable) -> Callable:
     """
     Decoration used to turn any function or method into a FunctionTask task.
     """
-    from functools import wraps
 
     @wraps(fn)
-    def wrapper(*args: Any, **kwargs: Any) -> FunctionTask:  # noqa: ANN001
+    def wrapper(*args: Any, **kwargs: Any) -> FunctionTask:
         return FunctionTask(lambda: fn(*args, **kwargs))
 
     return wrapper

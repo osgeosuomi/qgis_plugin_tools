@@ -1,9 +1,9 @@
-__copyright__ = "Copyright 2020-2021, Gispo Ltd"
+__copyright__ = "Copyright 2020-2021, Gispo Ltd, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
 
-import datetime
+from typing import TYPE_CHECKING
 
 from qgis.core import (
     QgsContrastEnhancement,
@@ -19,6 +19,9 @@ try:
     from qgis.core import QgsRasterLayerTemporalProperties
 except ImportError:
     QgsRasterLayerTemporalProperties = None
+
+if TYPE_CHECKING:
+    import datetime
 
 
 def set_raster_renderer_to_singleband(layer: QgsRasterLayer, band: int = 1) -> None:
@@ -82,12 +85,11 @@ def set_band_based_on_range(layer: QgsRasterLayer, t_range: QgsDateTimeRange) ->
         tprops.isVisibleInTemporalRange(t_range)
         and t_range.begin().isValid()
         and t_range.end().isValid()
-    ):
-        if tprops.mode() == QgsRasterLayerTemporalProperties.ModeFixedTemporalRange:
-            layer_t_range: QgsDateTimeRange = tprops.fixedTemporalRange()
-            start: datetime.datetime = layer_t_range.begin().toPyDateTime()
-            end: datetime.datetime = layer_t_range.end().toPyDateTime()
-            delta = (end - start) / layer.bandCount()
-            band_num = int((t_range.begin().toPyDateTime() - start) / delta) + 1
-            set_raster_renderer_to_singleband(layer, band_num)
+    ) and tprops.mode() == QgsRasterLayerTemporalProperties.ModeFixedTemporalRange:
+        layer_t_range: QgsDateTimeRange = tprops.fixedTemporalRange()
+        start: datetime.datetime = layer_t_range.begin().toPyDateTime()
+        end: datetime.datetime = layer_t_range.end().toPyDateTime()
+        delta = (end - start) / layer.bandCount()
+        band_num = int((t_range.begin().toPyDateTime() - start) / delta) + 1
+        set_raster_renderer_to_singleband(layer, band_num)
     return band_num

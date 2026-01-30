@@ -1,18 +1,17 @@
-# flake8: noqa ANN201, ANN001, ANN204
 """QCombobox with checkbox for selecting multiple items."""
+
 from qgis.core import QgsMapLayer
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QStandardItem, QStandardItemModel
 from qgis.PyQt.QtWidgets import QStyledItemDelegate
 
-__copyright__ = "Copyright 2019, 3Liz"
+__copyright__ = "Copyright 2019, 3Liz, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 3"
 __email__ = "info@3liz.org"
 __revision__ = "$Format:%H$"
 
 
 class CheckableComboBox:
-
     """Basic QCombobox with selectable items."""
 
     def __init__(self, combobox, select_all=None):
@@ -80,10 +79,7 @@ class CheckableFieldComboBox(CheckableComboBox):
 
         for i, field in enumerate(self.layer.fields()):
             alias = field.alias()
-            if alias:
-                name = "{} ({})".format(field.name(), alias)
-            else:
-                name = field.name()
+            name = f"{field.name()} ({alias})" if alias else field.name()
             item = QStandardItem(name)
             item.setData(field.name())
             item.setIcon(self.layer.fields().iconForField(i))

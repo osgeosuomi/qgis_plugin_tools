@@ -1,10 +1,11 @@
 """Tools about version."""
-from typing import Tuple
 
 from osgeo import osr
 
 from .exceptions import QgsPluginVersionInInvalidFormat
 from .resources import metadata_config
+
+EXPECTED_VERSION_LENGTH = 3
 
 
 def format_version_integer(version_string: str) -> int:
@@ -24,31 +25,31 @@ def version(remove_v_prefix: bool = True) -> str:
     return v
 
 
-def proj_version() -> Tuple[int, int]:
+def proj_version() -> tuple[int, int]:
     """Returns PROJ library version"""
     major: int = osr.GetPROJVersionMajor()
     minor: int = osr.GetPROJVersionMinor()
     return major, minor
 
 
-def version_from_string(version: str) -> Tuple[int, int, int]:
+def version_from_string(version: str) -> tuple[int, int, int]:
     """
     Transforms version string in format 'x.y.z' to tuple (x,y,z) for comparisons
     :param version:
     :return:
     """
     parts = version.split(".")
-    if len(parts) != 3:
+    if len(parts) != EXPECTED_VERSION_LENGTH:
         raise QgsPluginVersionInInvalidFormat()
     return int(parts[0]), int(parts[1]), int(parts[2])
 
 
-def string_from_version(version: Tuple[int, int, int]) -> str:
+def string_from_version(version: tuple[int, int, int]) -> str:
     """
     Transforms version tuple in format (x,y,z) to string in format 'x.y.z'
     :param version:
     :return:
     """
-    if len(version) != 3:
+    if len(version) != EXPECTED_VERSION_LENGTH:
         raise QgsPluginVersionInInvalidFormat()
     return ".".join(map(str, version))

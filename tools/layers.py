@@ -1,12 +1,12 @@
 import enum
 
-__copyright__ = "Copyright 2020-2021, Gispo Ltd"
+__copyright__ = "Copyright 2020-2021, Gispo Ltd, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
 
 import logging
-from typing import List, Optional, Set, Union
+from typing import ClassVar, Optional, Union
 
 from qgis.core import (
     QgsExpression,
@@ -49,10 +49,10 @@ POLYGON_TYPES = {
 
 @enum.unique
 class LayerType(enum.Enum):
-    Point = {"wkb_types": POINT_TYPES}
-    Line = {"wkb_types": LINE_TYPES}
-    Polygon = {"wkb_types": POLYGON_TYPES}
-    Unknown = {"wkb_types": set()}  # type: ignore
+    Point: ClassVar[dict[str, set]] = {"wkb_types": POINT_TYPES}
+    Line: ClassVar[dict[str, set]] = {"wkb_types": LINE_TYPES}
+    Polygon: ClassVar[dict[str, set]] = {"wkb_types": POLYGON_TYPES}
+    Unknown: ClassVar[dict[str, set]] = {"wkb_types": set()}  # type: ignore
 
     @staticmethod
     def from_wkb_type(wkb_type: int) -> "LayerType":
@@ -70,7 +70,7 @@ class LayerType(enum.Enum):
         return LayerType.from_wkb_type(geometry.wkbType())
 
     @property
-    def wkb_types(self) -> Set[QgsWkbTypes.GeometryType]:
+    def wkb_types(self) -> set[QgsWkbTypes.GeometryType]:
         return self.value["wkb_types"]
 
 
@@ -102,7 +102,7 @@ def evaluate_expressions(
     exp: QgsExpression,
     feature: Optional[QgsFeature] = None,
     layer: Optional[QgsMapLayer] = None,
-    context_scopes: Optional[List[QgsExpressionContextScope]] = None,
+    context_scopes: Optional[list[QgsExpressionContextScope]] = None,
 ) -> Union[bool, int, str, float, None]:
     """
     Evaluate a QGIS expression

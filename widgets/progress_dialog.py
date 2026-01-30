@@ -74,7 +74,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
 
     def closeEvent(self, close_event: QCloseEvent) -> None:  # noqa: N802
         super().closeEvent(close_event)
-        LOGGER.warning("Closing progress bar")
+        LOGGER.debug("Closing progress bar")
         self.aborted.emit()
 
     @log_if_fails
@@ -99,7 +99,7 @@ def create_simple_continuous_progress_dialog(
     return progress_dialog
 
 
-def run_task_with_progress_dialog(
+def run_task_with_progress_dialog(  # noqa: PLR0913
     task: QgsTask,
     status_text: str,
     parent: Optional[QDialog] = None,
@@ -119,7 +119,7 @@ def run_task_with_progress_dialog(
     )
 
 
-def run_task_with_continuous_progress_dialog(
+def run_task_with_continuous_progress_dialog(  # noqa: PLR0913
     task: QgsTask,
     status_text: str,
     parent: Optional[QDialog] = None,

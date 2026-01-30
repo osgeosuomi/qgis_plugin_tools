@@ -1,6 +1,6 @@
 import logging
 import sys
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from .custom_logging import bar_msg
 
@@ -15,13 +15,13 @@ class MessageBarLogger:
 
     def __init__(self, logger_name: str, stack_level: int = 2) -> None:
         self._logger = logging.getLogger(logger_name)
-        self._logger_kwargs: Dict[str, Any] = (
+        self._logger_kwargs: dict[str, Any] = (
             {}
-            if sys.version_info.major == 3 and sys.version_info.minor < 8
+            if sys.version_info.major == 3 and sys.version_info.minor < 8  # noqa: PLR2004
             else {"stacklevel": stack_level}
         )
 
-    def info(
+    def info(  # noqa: PLR0913
         self,
         message: Any,
         details: Any = "",
@@ -57,7 +57,7 @@ class MessageBarLogger:
                 **self._logger_kwargs,
             )
 
-    def warning(
+    def warning(  # noqa: PLR0913
         self,
         message: Any,
         details: Any = "",
@@ -92,7 +92,7 @@ class MessageBarLogger:
                 **self._logger_kwargs,
             )
 
-    def error(
+    def error(  # noqa: PLR0913
         self,
         message: Any,
         details: Any = "",
@@ -127,7 +127,7 @@ class MessageBarLogger:
                 **self._logger_kwargs,
             )
 
-    def exception(
+    def exception(  # noqa: PLR0913
         self,
         message: Any,
         details: Any = "",

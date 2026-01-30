@@ -1,10 +1,9 @@
-# coding=utf-8
 """Common functionality used by regression tests."""
 
 import os
 import time
 import warnings
-from typing import Type, Union
+from typing import Union
 
 from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
@@ -13,7 +12,7 @@ from ..tools.exceptions import QgsPluginNotImplementedException
 from ..tools.tasks import BaseTask
 
 
-def get_qgis_app():  # noqa
+def get_qgis_app() -> None:
     warnings.warn(
         "get_qgis_app() is deprecated. Use library pytest-qgis instead.",
         DeprecationWarning,
@@ -38,7 +37,7 @@ def is_running_in_tools_module_ci() -> bool:
 
 def qgis_supports_temporal() -> bool:
     try:
-        from qgis.core import QgsRasterLayerTemporalProperties  # noqa F401
+        from qgis.core import QgsRasterLayerTemporalProperties  # noqa: F401, PLC0415
 
         return True
     except ImportError:
@@ -95,7 +94,7 @@ class SimpleTask(BaseTask):
     def __init__(
         self,
         will_fail: bool = False,
-        error_to_raise: Type[Exception] = ValueError,
+        error_to_raise: type[Exception] = ValueError,
         steps: int = 10,
         sleep_time: float = 0.01,
     ) -> None:

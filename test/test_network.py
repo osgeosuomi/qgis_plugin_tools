@@ -1,4 +1,4 @@
-__copyright__ = "Copyright 2020-2021, Gispo Ltd"
+__copyright__ = "Copyright 2020-2021, Gispo Ltd, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
@@ -134,7 +134,7 @@ def test_download_to_file_without_requests(qgis_new_project, tmpdir):
 
 def test_download_to_file_with_name(qgis_new_project, tmpdir):
     path_to_file = download_to_file(
-        "https://raw.githubusercontent.com/GispoCoding/FMI2QGIS/master/FMI2QGIS/test/data/aq_small.nc",  # noqa E501
+        "https://raw.githubusercontent.com/GispoCoding/FMI2QGIS/master/FMI2QGIS/test/data/aq_small.nc",
         tmpdir,
     )
     assert path_to_file.exists()

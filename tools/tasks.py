@@ -9,7 +9,7 @@ from .messages import MsgBar
 
 LOGGER = logging.getLogger(__name__)
 
-__copyright__ = "Copyright 2021, qgis_plugin_tools contributors"
+__copyright__ = "Copyright 2021-2026, qgis_plugin_tools contributors"
 __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 
@@ -40,7 +40,7 @@ class BaseTask(QgsTask):
         try:
             self._check_if_canceled()
             return self._run()
-        except Exception as e:  # noqa: PIE786
+        except Exception as e:
             self.exception = e
             return False
 
@@ -58,20 +58,18 @@ class BaseTask(QgsTask):
                 f"Task {self.name} ended successfully in "
                 f"{self.elapsedTime() / 1000:.2f}!"
             )
-            pass
+        elif self.exception is None:
+            MsgBar.warning(
+                tr("Task {} was not successful", self.name),
+                tr("Task was cancelled by user or some dependency tasks failed"),
+            )
         else:
-            if self.exception is None:
-                MsgBar.warning(
-                    tr("Task {} was not successful", self.name),
-                    tr("Task was cancelled by user or some dependency tasks failed"),
-                )
-            else:
-                try:
-                    raise self.exception
-                except QgsPluginException as e:
-                    MsgBar.exception(str(e), **e.bar_msg)
-                except Exception as e:
-                    MsgBar.exception(tr("Unhandled exception occurred"), e)
+            try:
+                raise self.exception
+            except QgsPluginException as e:
+                MsgBar.exception(str(e), **e.bar_msg)
+            except Exception as e:
+                MsgBar.exception(tr("Unhandled exception occurred"), e)
 
     def setProgress(self, progress: Union[int, float]) -> None:  # noqa: N802
         self._check_if_canceled()

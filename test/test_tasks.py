@@ -1,4 +1,5 @@
 import time
+from typing import Any
 
 from qgis.core import Qgis
 from qgis.PyQt.QtCore import QCoreApplication, QEventLoop
@@ -12,7 +13,7 @@ __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 
 
-def fn(*args, **kwargs):  # noqa
+def fn(*args: Any, **kwargs: Any):  # noqa: ANN003
     for _ in range(10):
         time.sleep(0.01)
     return args, kwargs

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# flake8: noqa
+# ruff: noqa
+
 import argparse
 import os
 import shutil
@@ -154,7 +155,8 @@ class PluginMaker:
         self.submodules = submodules
         VERBOSE = verbose
 
-        # git-like usage https://chase-seibert.github.io/blog/2014/03/21/python-multilevel-argparse.html # noqa
+        # git-like usage
+        # https://chase-seibert.github.io/blog/2014/03/21/python-multilevel-argparse.html
         usage = f"""build.py <command> [<args>]
 Commands:
      clean          Cleans resources
@@ -197,7 +199,7 @@ Put -h after command to see available optional arguments if any
     def _get_platform_args(self):
         pre_args = []
         if is_windows():
-            pre_args = ["cmd", "/c"]  # noqa W605
+            pre_args = ["cmd", "/c"]  # noqa: W605
         return pre_args
 
     def deploy(self):
@@ -361,7 +363,7 @@ Put -h after command to see available optional arguments if any
         if is_windows():
             env = os.environ.copy()
             env["PATH"] += (
-                f';{os.path.join(os.path.expanduser("~"), "AppData", "Local", "Programs", "Git", "cmd")}'
+                f";{os.path.join(os.path.expanduser('~'), 'AppData', 'Local', 'Programs', 'Git', 'cmd')}"
                 ";C:\\Program Files\\Git\\cmd"
             )
         else:

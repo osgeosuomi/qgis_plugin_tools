@@ -1,5 +1,5 @@
-# flake8: noqa E501
-__copyright__ = "Copyright 2020-2021, Gispo Ltd"
+# ruff: noqa E501
+__copyright__ = "Copyright 2020-2021 Gispo Ltd, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
@@ -48,7 +48,7 @@ def setup_pydevd(host: str = "localhost", port: int = 5678) -> bool:
             pydevd.settrace(host, port=port, stdoutToServer=True, stderrToServer=True)
             succeeded = True
         except Exception as e:
-            print("Unable to create pydevd debugger: {}".format(e))
+            print(f"Unable to create pydevd debugger: {e}")
 
     return succeeded
 
@@ -92,7 +92,7 @@ def setup_ptvsd(host: str = "localhost", port: int = 5678) -> bool:
             ptvsd.enable_attach((host, port))
             succeeded = True
         except Exception as e:
-            print("Unable to create ptvsd debugger: {}".format(e))
+            print(f"Unable to create ptvsd debugger: {e}")
     return succeeded
 
 
@@ -130,13 +130,13 @@ def setup_debugpy(host: str = "localhost", port: int = 5678) -> bool:
     succeeded = False
     if _check_if_should_setup() and not os.environ.get("QGIS_DEBUGPY_HAS_LOADED"):
         try:
-            import debugpy
+            import debugpy  # noqa: PLC0415, T100
 
             debugpy.configure(python=shutil.which("python"))
-            debugpy.listen((host, port))
+            debugpy.listen((host, port))  # noqa: T100
             succeeded = True
         except Exception as e:
-            print("Unable to create debugpy debugger: {}".format(e))
+            print(f"Unable to create debugpy debugger: {e}")  # noqa: T201
         else:
             # extra guard for debugpy not to setup it twice
             # (causes debugging session to hang)

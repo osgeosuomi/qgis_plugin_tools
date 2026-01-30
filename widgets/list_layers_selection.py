@@ -1,11 +1,12 @@
 """QListWidget with layers selection."""
+
 from typing import Optional
 
 from qgis.core import QgsMapLayer, QgsMapLayerModel, QgsProject
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QAbstractItemView, QListWidget, QListWidgetItem, QWidget
 
-__copyright__ = "Copyright 2019, 3Liz"
+__copyright__ = "Copyright 2019, 3Liz, 2026 OSGeo Suomi"
 __license__ = "GPL version 3"
 __email__ = "info@3liz.org"
 __revision__ = "$Format:%H$"
