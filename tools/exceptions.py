@@ -3,7 +3,7 @@ __license__ = "GPL version 2"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
 
-from typing import Any, Optional
+from typing import Any
 
 from qgis.PyQt.QtNetwork import QNetworkReply
 
@@ -17,7 +17,7 @@ class QgsPluginException(Exception):  # noqa: N818
     default_msg = ""
 
     def __init__(
-        self, message: Optional[str] = None, bar_msg: Optional[dict[str, Any]] = None
+        self, message: str | None = None, bar_msg: dict[str, Any] | None = None
     ) -> None:
         """
         Initializes the exception with custom bar_msg to be shown in message bar
@@ -37,7 +37,7 @@ class QgsPluginNetworkException(QgsPluginException):
     def __init__(
         self,
         *args: Any,
-        error: Optional[QNetworkReply.NetworkError] = None,
+        error: QNetworkReply.NetworkError | None = None,
         **kwargs: Any,
     ) -> None:
         """

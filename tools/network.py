@@ -3,7 +3,7 @@ import logging
 import re
 import shutil
 from pathlib import Path
-from typing import Literal, NamedTuple, Optional
+from typing import Literal, NamedTuple
 from urllib.parse import urlencode
 from uuid import uuid4
 
@@ -51,7 +51,7 @@ def fetch(
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    params: Optional[dict[str, str]] = None,
+    params: dict[str, str] | None = None,
 ) -> str:
     """
     Fetch resource from the internet. Similar to requests.get(url) but is
@@ -70,8 +70,8 @@ def post(
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    data: Optional[dict[str, str]] = None,
-    files: Optional[list[FileField]] = None,
+    data: dict[str, str] | None = None,
+    files: list[FileField] | None = None,
 ) -> str:
     """
     Post resource. Similar to requests.post(url, data, files) but is
@@ -91,7 +91,7 @@ def fetch_raw(
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    params: Optional[dict[str, str]] = None,
+    params: dict[str, str] | None = None,
 ) -> tuple[bytes, str]:
     """
     Fetch resource from the internet. Similar to requests.get(url) but is
@@ -109,8 +109,8 @@ def post_raw(
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    data: Optional[dict[str, str]] = None,
-    files: Optional[list[FileField]] = None,
+    data: dict[str, str] | None = None,
+    files: list[FileField] | None = None,
 ) -> tuple[bytes, str]:
     """
     Post resource. Similar to requests.post(url, data, files) but is
@@ -130,9 +130,9 @@ def request_raw(  # noqa: PLR0915, PLR0913, C901
     method: Literal["get", "post"] = "get",
     encoding: str = ENCODING,
     authcfg_id: str = "",
-    params: Optional[dict[str, str]] = None,
-    data: Optional[dict[str, str]] = None,
-    files: Optional[list[FileField]] = None,
+    params: dict[str, str] | None = None,
+    data: dict[str, str] | None = None,
+    files: list[FileField] | None = None,
 ) -> tuple[bytes, str]:
     """
     Request resource from the internet. Similar to requests.get(url) and
@@ -238,7 +238,7 @@ def request_raw(  # noqa: PLR0915, PLR0913, C901
 def download_to_file(
     url: str,
     output_dir: Path,
-    output_name: Optional[str] = None,
+    output_name: str | None = None,
     use_requests_if_available: bool = True,
     encoding: str = ENCODING,
 ) -> Path:

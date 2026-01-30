@@ -6,7 +6,7 @@ __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
 
 import logging
-from typing import ClassVar, Optional, Union
+from typing import ClassVar
 
 from qgis.core import (
     QgsExpression,
@@ -100,10 +100,10 @@ def set_temporal_settings(
 
 def evaluate_expressions(
     exp: QgsExpression,
-    feature: Optional[QgsFeature] = None,
-    layer: Optional[QgsMapLayer] = None,
-    context_scopes: Optional[list[QgsExpressionContextScope]] = None,
-) -> Union[bool, int, str, float, None]:
+    feature: QgsFeature | None = None,
+    layer: QgsMapLayer | None = None,
+    context_scopes: list[QgsExpressionContextScope] | None = None,
+) -> bool | int | str | float | None:
     """
     Evaluate a QGIS expression
     :param exp: QGIS expression

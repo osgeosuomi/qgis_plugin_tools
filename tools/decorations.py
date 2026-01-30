@@ -3,8 +3,9 @@ __license__ = "GPL version 2"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
 
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Optional
+from typing import Any
 
 from .exceptions import QgsPluginException
 from .i18n import tr
@@ -13,7 +14,7 @@ from .tasks import FunctionTask
 
 
 def log_if_fails(
-    fn: Optional[Callable] = None, /, *, logger_name: str = __name__
+    fn: Callable | None = None, /, *, logger_name: str = __name__
 ) -> Callable:
     """
     Use this as a decorator with functions and methods that

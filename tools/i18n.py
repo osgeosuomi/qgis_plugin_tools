@@ -1,7 +1,7 @@
 """I18n tools."""
 
 from os.path import join
-from typing import Any, Optional
+from typing import Any
 
 from qgis.core import QgsSettings
 from qgis.PyQt.QtCore import QFileInfo, QLocale
@@ -18,8 +18,8 @@ __revision__ = "$Format:%H$"
 
 
 def setup_translation(
-    file_pattern: str = "{}.qm", folder: Optional[str] = None
-) -> tuple[str, Optional[str]]:
+    file_pattern: str = "{}.qm", folder: str | None = None
+) -> tuple[str, str | None]:
     """Find the translation file according to locale.
 
     :param file_pattern: Custom file pattern to use to find QM files.

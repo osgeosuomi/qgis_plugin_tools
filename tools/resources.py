@@ -7,14 +7,13 @@ import sys
 from collections.abc import Iterator
 from os.path import abspath, dirname, exists, join, pardir
 from pathlib import Path
-from typing import TYPE_CHECKING, NamedTuple, Optional
+from typing import TYPE_CHECKING, NamedTuple
 
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog, QWidget
 
 if TYPE_CHECKING:
     import os
-    from typing import Union
 
 __copyright__ = (
     "Copyright 2019, 3Liz, 2020-2021 Gispo Ltd, 2026 qgis_plugin_tools contributors"
@@ -87,7 +86,7 @@ def _iterate_modules(module_name: str) -> Iterator[str]:
 
 class IsPluginResult(NamedTuple):
     is_plugin: bool
-    plugin_directory: Optional[str] = None
+    plugin_directory: str | None = None
 
     def __bool__(self) -> bool:
         return self.is_plugin
@@ -135,7 +134,7 @@ def _plugin_path_dependency() -> str:
     """
 
     for frame_info in inspect.stack():
-        caller_module_name: Optional[str] = frame_info.frame.f_globals.get("__name__")
+        caller_module_name: str | None = frame_info.frame.f_globals.get("__name__")
         if caller_module_name is None or "qgis_plugin_tools" in caller_module_name:
             # We are interested only on calls from outside of qgis_plugin_tools
             continue
@@ -277,7 +276,7 @@ def metadata_config() -> configparser.ConfigParser:
     return config
 
 
-def qgis_plugin_ci_config() -> Optional[dict]:
+def qgis_plugin_ci_config() -> dict | None:
     """
     Get configuration of the ci config or None
     """
@@ -348,7 +347,7 @@ def load_ui(*args: str) -> QWidget:
     return load_ui_from_file(ui_file_path)
 
 
-def load_ui_from_file(ui_file_path: "Union[str, os.PathLike]") -> QWidget:
+def load_ui_from_file(ui_file_path: "str | os.PathLike") -> QWidget:
     ui_class, _ = uic.loadUiType(ui_file_path)
     return ui_class
 
@@ -359,7 +358,7 @@ def ui_file_dialog(*ui_file_name_parts: str):  # noqa: ANN201
     class UiFileDialogClass(QDialog, load_ui(*ui_file_name_parts)):  # type: ignore
         def __init__(
             self,
-            parent: Optional[QWidget],
+            parent: QWidget | None,
         ) -> None:
             super().__init__(parent)
             self.setupUi(self)  # provided by load_ui FORM_CLASS

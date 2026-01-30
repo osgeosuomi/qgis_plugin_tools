@@ -3,7 +3,7 @@ __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 
 import logging
-from typing import Callable, Optional, Union
+from collections.abc import Callable
 
 from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt import uic
@@ -44,7 +44,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
 
     def __init__(
         self,
-        parent: Optional[QDialog] = None,
+        parent: QDialog | None = None,
         show_abort_button: bool = False,
         abort_btn_text: str = abort_btn_text,
     ) -> None:
@@ -68,7 +68,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
         LOGGER.debug(f"Status:   {status_text}")
         self.status_label.setText(status_text)
 
-    def update_progress_bar(self, progress: Union[int, float]) -> None:
+    def update_progress_bar(self, progress: int | float) -> None:
         """Update progress bar with a progress"""
         self.progress_bar.setValue(int(min(100, progress)))
 
@@ -85,7 +85,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
 
 def create_simple_continuous_progress_dialog(
     status_text: str,
-    parent: Optional[QDialog] = None,
+    parent: QDialog | None = None,
     show_abort_button: bool = False,
     abort_btn_text: str = ProgressDialog.abort_btn_text,
 ) -> ProgressDialog:
@@ -102,11 +102,11 @@ def create_simple_continuous_progress_dialog(
 def run_task_with_progress_dialog(  # noqa: PLR0913
     task: QgsTask,
     status_text: str,
-    parent: Optional[QDialog] = None,
+    parent: QDialog | None = None,
     show_abort_button: bool = False,
     abort_btn_text: str = ProgressDialog.abort_btn_text,
-    completed_callback: Optional[Callable] = None,
-    terminated_callback: Optional[Callable] = None,
+    completed_callback: Callable | None = None,
+    terminated_callback: Callable | None = None,
 ) -> None:
     """
     Runs a given task while showing a progress bar dialog.
@@ -122,11 +122,11 @@ def run_task_with_progress_dialog(  # noqa: PLR0913
 def run_task_with_continuous_progress_dialog(  # noqa: PLR0913
     task: QgsTask,
     status_text: str,
-    parent: Optional[QDialog] = None,
+    parent: QDialog | None = None,
     show_abort_button: bool = False,
     abort_btn_text: str = ProgressDialog.abort_btn_text,
-    completed_callback: Optional[Callable] = None,
-    terminated_callback: Optional[Callable] = None,
+    completed_callback: Callable | None = None,
+    terminated_callback: Callable | None = None,
 ) -> None:
     """
     Runs a given task while showing a simple continuous progress bar dialog.
@@ -142,8 +142,8 @@ def run_task_with_continuous_progress_dialog(  # noqa: PLR0913
 def _make_connections_and_run_task(
     progress_dialog: ProgressDialog,
     task: QgsTask,
-    completed_callback: Optional[Callable],
-    terminated_callback: Optional[Callable],
+    completed_callback: Callable | None,
+    terminated_callback: Callable | None,
 ) -> None:
     task.taskCompleted.connect(lambda: progress_dialog.close())
     task.taskTerminated.connect(lambda: progress_dialog.close())

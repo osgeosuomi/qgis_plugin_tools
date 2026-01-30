@@ -1,7 +1,5 @@
 """QListWidget with layers selection."""
 
-from typing import Optional
-
 from qgis.core import QgsMapLayer, QgsMapLayerModel, QgsProject
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QAbstractItemView, QListWidget, QListWidgetItem, QWidget
@@ -17,7 +15,7 @@ class ListLayersSelection(QListWidget):
         super().__init__(parent)
         self.setSelectionMode(QAbstractItemView.MultiSelection)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.project: Optional[QgsProject] = None
+        self.project: QgsProject | None = None
 
     def set_project(self, project: QgsProject) -> None:
         self.project = project

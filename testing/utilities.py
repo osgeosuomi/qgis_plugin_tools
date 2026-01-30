@@ -3,7 +3,6 @@
 import os
 import time
 import warnings
-from typing import Union
 
 from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
@@ -66,7 +65,7 @@ class TestTaskRunner:
         self,
         task: QgsTask,
         cancel: bool = False,
-        sleep_before_cancel: Union[int, float] = 0.0,
+        sleep_before_cancel: int | float = 0.0,
     ) -> bool:
         """
         Run task and return whether it was successful or not.

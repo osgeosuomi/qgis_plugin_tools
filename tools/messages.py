@@ -1,6 +1,6 @@
 import logging
 import sys
-from typing import Any, Optional
+from typing import Any
 
 from .custom_logging import bar_msg
 
@@ -25,9 +25,9 @@ class MessageBarLogger:
         self,
         message: Any,
         details: Any = "",
-        duration: Optional[int] = None,
+        duration: int | None = None,
         success: bool = False,
-        exc_info: Optional[Exception] = None,
+        exc_info: Exception | None = None,
         stack_info: bool = False,
     ) -> None:
         """
@@ -61,9 +61,9 @@ class MessageBarLogger:
         self,
         message: Any,
         details: Any = "",
-        duration: Optional[int] = None,
+        duration: int | None = None,
         success: bool = False,
-        exc_info: Optional[Exception] = None,
+        exc_info: Exception | None = None,
         stack_info: bool = False,
     ) -> None:
         """
@@ -96,9 +96,9 @@ class MessageBarLogger:
         self,
         message: Any,
         details: Any = "",
-        duration: Optional[int] = None,
+        duration: int | None = None,
         success: bool = False,
-        exc_info: Optional[Exception] = None,
+        exc_info: Exception | None = None,
         stack_info: bool = False,
     ) -> None:
         """
@@ -131,9 +131,9 @@ class MessageBarLogger:
         self,
         message: Any,
         details: Any = "",
-        duration: Optional[int] = None,
+        duration: int | None = None,
         success: bool = False,
-        exc_info: Optional[Exception] = None,
+        exc_info: Exception | None = None,
         stack_info: bool = False,
     ) -> None:
         """
