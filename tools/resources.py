@@ -1,11 +1,13 @@
 """Tools to work with resource files."""
+
 import configparser
 import importlib.resources
 import inspect
 import sys
+from collections.abc import Iterator
 from os.path import abspath, dirname, exists, join, pardir
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, Iterator, NamedTuple, Optional
+from typing import TYPE_CHECKING, NamedTuple, Optional
 
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog, QWidget
@@ -15,7 +17,7 @@ if TYPE_CHECKING:
     from typing import Union
 
 __copyright__ = (
-    "Copyright 2019, 3Liz, 2020-2021 Gispo Ltd, "
+    "Copyright 2019, 3Liz, 2020-2021 Gispo Ltd, 2026 qgis_plugin_tools contributors"
     "2022-2023 National Land Survey of Finland"
 )
 __license__ = "GPL version 3"
@@ -200,7 +202,7 @@ def plugin_name() -> str:
     :return: The stripped plugin name.
     :rtype: basestring
     """
-    global PLUGIN_NAME, _IS_SUBMODULE_USAGE
+    global PLUGIN_NAME  # noqa: PLW0602, PLW0603
 
     if PLUGIN_NAME != "":
         return PLUGIN_NAME
@@ -236,7 +238,7 @@ def plugin_display_name() -> str:
 
 def slug_name() -> str:
     """Return project slug name in .qgis-plugin.ci"""
-    global SLUG_NAME, _IS_SUBMODULE_USAGE
+    global SLUG_NAME  # noqa: PLW0603
 
     if SLUG_NAME != "":
         return SLUG_NAME
@@ -275,7 +277,7 @@ def metadata_config() -> configparser.ConfigParser:
     return config
 
 
-def qgis_plugin_ci_config() -> Optional[Dict]:
+def qgis_plugin_ci_config() -> Optional[dict]:
     """
     Get configuration of the ci config or None
     """
@@ -351,7 +353,7 @@ def load_ui_from_file(ui_file_path: "Union[str, os.PathLike]") -> QWidget:
     return ui_class
 
 
-def ui_file_dialog(*ui_file_name_parts: str):  # noqa ANN201
+def ui_file_dialog(*ui_file_name_parts: str):  # noqa: ANN201
     """DRY helper for building classes from a .ui file"""
 
     class UiFileDialogClass(QDialog, load_ui(*ui_file_name_parts)):  # type: ignore

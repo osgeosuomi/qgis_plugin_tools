@@ -1,5 +1,5 @@
 import importlib.resources
-from typing import Any, Dict, Type
+from typing import Any
 
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QWidget
@@ -36,15 +36,15 @@ def load_ui_file(package: importlib.resources.Package, ui_file_name: str) -> Any
 
     ui_file_path = package_file(package, ui_file_name)
 
-    ui_class: Type[CompiledUI]
-    base_class: Type[QWidget]
+    ui_class: type[CompiledUI]
+    base_class: type[QWidget]
     ui_class, base_class = uic.loadUiType(str(ui_file_path))
 
     class UiFileWidget(base_class, ui_class):  # type: ignore
         def __init__(
             self,
             *args: Any,
-            **kwargs: Dict[str, Any],
+            **kwargs: dict[str, Any],
         ) -> None:
             super().__init__(*args, **kwargs)
             self.setupUi(self)

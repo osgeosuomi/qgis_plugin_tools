@@ -1,23 +1,23 @@
-__copyright__ = "Copyright 2020-2021, Gispo Ltd"
+__copyright__ = "Copyright 2020-2021, Gispo Ltd, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 2"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
 
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from qgis.PyQt.QtNetwork import QNetworkReply
 
 from .i18n import tr
 
 
-class QgsPluginException(Exception):
+class QgsPluginException(Exception):  # noqa: N818
     """Use this as a base exception class in custom exceptions"""
 
     # Override default_msg to set default message in inherited classes
     default_msg = ""
 
     def __init__(
-        self, message: Optional[str] = None, bar_msg: Optional[Dict[str, Any]] = None
+        self, message: Optional[str] = None, bar_msg: Optional[dict[str, Any]] = None
     ) -> None:
         """
         Initializes the exception with custom bar_msg to be shown in message bar
@@ -28,7 +28,7 @@ class QgsPluginException(Exception):
             message = self.default_msg
         self.message = message
         super().__init__(message)
-        self.bar_msg: Dict[str, Any] = bar_msg if bar_msg is not None else {}
+        self.bar_msg: dict[str, Any] = bar_msg if bar_msg is not None else {}
 
 
 class QgsPluginNetworkException(QgsPluginException):

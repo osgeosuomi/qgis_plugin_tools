@@ -1,4 +1,4 @@
-__copyright__ = "Copyright 2020-2021, Gispo Ltd"
+__copyright__ = "Copyright 2020-2021, Gispo Ltd, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
@@ -32,7 +32,7 @@ def function_that_runs_as_a_task(arg, kwarg=None):
 
 class MockClass:
     @log_if_fails
-    def method_that_fails(self, arg, arg2, kwarg1=None, kwarg2=None):
+    def method_that_fails(self, arg, arg2, kwarg1=None, kwarg2=None):  # noqa: ARG002
         raise ValueError("M: Error message")
 
     @log_if_fails

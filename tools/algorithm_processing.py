@@ -1,5 +1,5 @@
-# flake8: noqa N802
 """Base class algorithm."""
+
 from os.path import isfile
 
 from qgis.core import QgsProcessingAlgorithm

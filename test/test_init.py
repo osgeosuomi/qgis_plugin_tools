@@ -1,6 +1,6 @@
 """Tests QGIS plugin init. Modified from unittest to pytest and using plugin_path"""
 
-__author__ = "Tim Sutton <tim@linfiniti.com>"
+__author__ = "Tim Sutton <tim@linfiniti.com>, 2026 qgis_plugin_tools contributors"
 __revision__ = "$Format:%H$"
 __date__ = "17/10/2010"
 __license__ = "GPL"
@@ -38,14 +38,13 @@ def test_read_init():
     parser = configparser.ConfigParser()
     parser.optionxform = str
     parser.read(file_path)
-    message = 'Cannot find a section named "general" in %s' % file_path
+    message = f'Cannot find a section named "general" in {file_path}'
     assert parser.has_section("general"), message
     metadata.extend(parser.items("general"))
 
     for expectation in required_metadata:
-        message = 'Cannot find metadata "%s" in metadata source (%s).' % (
-            expectation,
-            file_path,
+        message = (
+            f'Cannot find metadata "{expectation}" in metadata source ({file_path}).'
         )
 
         assert expectation in dict(metadata), message

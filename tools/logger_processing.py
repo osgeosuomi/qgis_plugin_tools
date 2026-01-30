@@ -1,9 +1,8 @@
-# flake8: noqa N802
 import logging
 
 from qgis.core import QgsProcessingFeedback
 
-__copyright__ = "Copyright 2020-2021, Gispo Ltd"
+__copyright__ = "Copyright 2020-2021, Gispo Ltd, 2026 qgis_plugin_tools contributors"
 __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"

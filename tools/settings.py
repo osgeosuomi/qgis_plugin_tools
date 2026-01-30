@@ -95,7 +95,7 @@ def get_project_setting(
             elif typehint is list:
                 value, conversion_ok = proj.readListEntry(*args)
         except TypeError as e:
-            raise QgsPluginInvalidProjectSetting(str(e))
+            raise QgsPluginInvalidProjectSetting(str(e)) from e
     else:
         value, conversion_ok = proj.readEntry(*args)
     return value if conversion_ok else default
