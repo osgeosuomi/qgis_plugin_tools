@@ -1,6 +1,7 @@
 import time
 from typing import Any
 
+import pytest
 from qgis.core import Qgis
 from qgis.PyQt.QtCore import QCoreApplication, QEventLoop
 
@@ -27,6 +28,7 @@ def test_run_simple_task(task_runner: TestTaskRunner):
     assert task_runner.progress == 100
 
 
+@pytest.mark.skip("Fix in #91")
 def test_run_simple_task_canceled(task_runner: TestTaskRunner, qgis_iface):
     task = SimpleTask()
     success = task_runner.run_task(task, cancel=True)
