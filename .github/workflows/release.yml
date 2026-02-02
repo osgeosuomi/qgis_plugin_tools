@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        python-versions: [3.9]
+        python-versions: [3.12]
 
     steps:
       - name: Get version from tag
@@ -23,11 +23,11 @@ jobs:
           echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
         shell: bash
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Get Changelog Entry
         id: changelog_reader
-        uses: mindsers/changelog-reader-action@v2
+        uses: mindsers/changelog-reader-action@v2.2.3
         with:
           validation_depth: 10
           version: ${{ steps.tag_name.outputs.current_version }}
@@ -50,7 +50,7 @@ jobs:
 
       - name: create github release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2.5.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -60,7 +60,7 @@ jobs:
           prerelease: false
 
       - name: publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@release/v1.13.0
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
