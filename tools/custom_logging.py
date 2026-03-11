@@ -420,6 +420,7 @@ def teardown_logger(logger_name: str) -> None:
     """
     logger = logging.getLogger(logger_name)
     for handler in logger.handlers[:]:
+        handler.close()
         logger.removeHandler(handler)
 
     # if the logger name was plugin_name(), also clean up the special case logger
