@@ -2,16 +2,36 @@
 
 ## Logging
 
-For setting up the logging (usually in main plugin file):
+For setting up the logging (usually in the main plugin file):
 
 ```python
-# Setup loggers usually in initGui, with the plugin package name passed as the root
-# logger namespace
+# Here is a sample plugin.py file
 
-from qgis_plugin_tools.tools.custom_logging import setup_logger
+from qgis_plugin_tools.tools.custom_logging import setup_loggers
+import qgis_plugin_tools
+import MyPluginPackage # package where plugin.py lies
 
-setup_logger(__name__.split('.')[0]) # use the top level name
-setup_logger("your_plugin_package_name") # pass manually as string
+class MyPlugin:
+
+    def __init__(self) -> None:
+        # Save the teardown function to be able to teardown the loggers later
+        self._teardown_loggers = lambda: None
+        ...
+
+    def initGui(self) -> None:
+        # Setup loggers with the plugin package name passed as the root logger namespace
+        self._teardown_loggers = setup_loggers(
+            MyPluginPackage.__name__,
+            qgis_plugin_tools.__name__,
+            message_log_name="My Plugin",
+        )
+        ...
+
+    def unload(self) -> None:
+        # Teardown the loggers in plugin unload, works also when reloading plugin with plugin reloader
+        self._teardown_loggers()
+        self._teardown_loggers = lambda: None
+        ...
 
 # In some cases you might want to add a message bar to a dialog and use logging
 # from there, this adds message_bar to dialog and uses it with message bar
@@ -21,12 +41,6 @@ from qgis_plugin_tools.tools.custom_logging import add_logger_msg_bar_to_widget
 
 dialog = Dialog()
 add_logger_msg_bar_to_widget(dialog)
-
-# teardown the handlers in plugin unload
-
-from qgis_plugin_tools.tools.custom_logging import teardown_logger
-
-teardown_logger("your_plugin_package_name")
 ```
 
 To use the logging system in plugin files:
@@ -57,6 +71,24 @@ from qgis_plugin_tools.tools.custom_logging import bar_msg
 
 LOGGER.warning('Msg bar message', extra={'details:': "some details here"})
 LOGGER.error('Msg bar message', extra=bar_msg("some details here", duration=10))
+```
+
+To change the log level of the plugin you can either edit QGIS3.ini file:
+
+```init
+[YourPlugin]
+log_level/file=WARNING
+log_level/stream=DEBUG
+```
+
+or change the log level in runtime:
+
+```python
+from qgis_plugin_tools.tools.custom_logging import LogTarget, get_log_level_key
+from qgis_plugin_tools.tools.settings import set_setting
+
+set_setting(get_log_level_key(LogTarget.STREAM), "WARNING")
+set_setting(get_log_level_key(LogTarget.FILE), "CRITICAL")
 ```
 
 ## Exceptions

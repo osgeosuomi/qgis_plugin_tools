@@ -246,7 +246,9 @@ def get_log_level_key(target: LogTarget) -> str:
 
 def get_log_level_name(target: LogTarget) -> str:
     """Finds the log level name of the target"""
-    return get_setting(get_log_level_key(target), target.default_level, str)
+    return get_setting(
+        get_log_level_key(target), target.default_level, str, internal=False
+    )
 
 
 def get_log_level(target: LogTarget) -> int:
