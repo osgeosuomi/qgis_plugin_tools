@@ -65,9 +65,9 @@ Use [`QgsPluginException`](../tools/exceptions.py) as a base class for every exc
 all user thrown exceptions at the same time, and you can even use the bar messages in exceptions.
 
 ```python
-from .qgis_plugin_tools.tools.exceptions import QgsPluginException
-from .qgis_plugin_tools.tools.messages import MsgBar
-from .qgis_plugin_tools.tools.i18n import tr
+from qgis_plugin_tools.tools.exceptions import QgsPluginException
+from qgis_plugin_tools.tools.messages import MsgBar
+from qgis_plugin_tools.tools.i18n import tr
 
 try:
     # do something that might throw exception
@@ -88,7 +88,7 @@ Use this instead of `requests` or `urllib` modules.
 Check [tests](../testing/test_network.py) for more examples.
 
 ```python
-from .qgis_plugin_tools.tools.network import fetch
+from qgis_plugin_tools.tools.network import fetch
 
 contents = fetch('www.examapleurl.com')
 ```
@@ -114,7 +114,7 @@ to make it possibly translatable.
 ```python
 from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 
-from .qgis_plugin_tools.tools.i18n import setup_translation, tr
+from qgis_plugin_tools.tools.i18n import setup_translation, tr
 
 # For setting up the translation file (usually in plugin.py __init__)
 locale, file_path = setup_translation()
@@ -131,15 +131,26 @@ tr('{} + {} is definitely {}', 1,1,3)
 
 ### Setting up translations
 
+> [!WARNING]
+> Using plugin_maker.py will be deprecated in future releases.
+> Compiling translations will be possible with
+> [qgis-plugin-dev-tools](https://github.com/nlsfi/qgis-plugin-dev-tools/issues/25)
+> shortly.
+
 Check out [translation guide](../infrastructure/template/root/docs/development.md#Translating).
 
 ## Debug server
+
+> [!WARNING]
+> This feature will be deprecated in future releases.
+> Use [qgis-plugin-dev-tools](https://github.com/nlsfi/qgis-plugin-dev-tools?tab=readme-ov-file#plugin-development-mode)
+> to control debugging.
 
 Plugin can connect to already running debug server with following code in the plugin's `__init__.py` file.
 Check out comments in [debugging.py](../infrastructure/debugging.py).
 
 ```python
-from .qgis_plugin_tools.infrastructure.debugging import setup_pydevd, setup_debugpy
+from qgis_plugin_tools.infrastructure.debugging import setup_pydevd, setup_debugpy
 
 # It is a good idea to set up an environment variable to control this. Like:
 # if os.environ.get('QGIS_PLUGIN_USE_DEBUGGER') == 'pydevd':
@@ -147,6 +158,11 @@ setup_pydevd()
 ```
 
 ## Using PluginMaker
+
+> [!WARNING]
+> This feature will be deprecated in future releases.
+> Use [qgis-plugin-dev-tools](https://github.com/nlsfi/qgis-plugin-dev-tools)
+> to do the development and deployments.
 
 There is a script [plugin_maker.py](infrastructure/plugin_maker.py), which can
 be used to replace Makefile and pb_tool in plugin build, deployment, translation and packaging processes.

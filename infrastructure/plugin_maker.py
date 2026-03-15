@@ -19,6 +19,17 @@ __license__ = "GPL version 3"
 __email__ = "info@gispo.fi"
 __revision__ = "$Format:%H$"
 
+import warnings
+
+warnings.warn(
+    "This tool will be deprecated in the future.\n"
+    "All the relevant functionality will be available in "
+    "qgis-plugin-dev-tools "
+    "(https://github.com/nlsfi/qgis-plugin-dev-tools)",
+    DeprecationWarning,
+    2,
+)
+
 
 def is_windows():
     return "win" in sys.platform and "darwin" not in sys.platform

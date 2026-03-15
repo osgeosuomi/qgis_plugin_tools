@@ -18,17 +18,40 @@ As it's a submodule, you can configure your GIT to auto update the submodule com
 The module is helping you with:
 * [setting up some logging](docs/usage.md#Logging) (QgsMessageLog, file log, remote logs...)
 * [fetching resources](docs/usage.md#Resource-tools) in `resources` or other folders
-* [fetching compiled UI file](docs/usage.md#Resource-tools) in `resources/ui` folder
-* fetching compiled translation file in `resources/i18n` folder
+* [fetching compiled UI file](docs/usage.md#Resource-tools) in `resources/ui` folder (will be deprecated in the future)
+* fetching compiled translation file in `resources/i18n` folder (will be deprecated in the future)
 * removing QRC resources file easily
 * translate using the `i18n.tr()` function.
-* managing the release process : zip, upload on plugins.qgis.org, tag, GitHub release
+* managing the release process : zip, upload on plugins.qgis.org, tag, GitHub release (will be deprecated in the future)
 * providing some common widgets/code for plugins
-* [setting up a debug server](docs/usage.md#Debug-server)
+* [setting up a debug server](docs/usage.md#Debug-server) (will be deprecated in the future)
 
 ## How to install it
 
-### For a new plugin
+### As external dependency
+
+It is recommended to use this module as an external dependency with the help of [qgis-plugin-dev-tools](https://github.com/nlsfi/qgis-plugin-dev-tools).
+
+The tool can be installed via pip:
+```shell
+pip install qgis_plugin_tools
+```
+
+Remember to add this as a runtime requirement in your pyproject.toml:
+```toml
+[tool.qgis_plugin_dev_tools]
+plugin_package_name = "your_plugin_package_name"
+runtime_requires = [
+    "qgis_plugin_dev_tools"
+]
+```
+
+### As a submodule
+
+> [!WARNING]
+> Using qgis_plugin_tools as a submodule is not recommended and will be deprecated in the future.
+
+#### For a new plugin
 This will create needed structure for your plugin
 
 1. Create new plugin using [cookiecutter-qgis-plugin](https://github.com/osgeosuomi/cookiecutter-qgis-plugin).
@@ -36,22 +59,10 @@ This will create needed structure for your plugin
 1. Next set up the [development environment](https://github.com/osgeosuomi/cookiecutter-qgis-plugin/blob/main/%7B%7Bcookiecutter.project_directory%7D%7D/docs/development.md#setting-up-development-environment),
    edit metadata.txt with description etc. and commit changes.
 
-### For existing plugin
+#### For existing plugin
 1. Go to the root folder of your plugin code source
 1. `git submodule add https://github.com/osgeosuomi/qgis_plugin_tools.git`
 1. To get most out of the submodule, try to refactor the plugin to use the default [plugin tree](#Plugin-tree-example)
-
-### As external dependency
-This project can also be used as an external dependency. It can be installed via pip:
-```shell
-pip install qgis_plugin_tools
-```
-
-The project can also be installed in editable mode, but you must use setuptool's strict mode
-because of the submodule nature of the project:
-```
-pip install -e /path/to/qgis_plugin_tools --use-pep517 --config-settings editable_mode=strict
-```
 
 ### Setting up development environment
 

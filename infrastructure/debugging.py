@@ -8,6 +8,16 @@ import os
 import shutil
 import sys
 
+import warnings
+
+warnings.warn(
+    "This module will be deprecated in the future."
+    "Use qgis-plugin-dev-tools (https://github.com/nlsfi/qgis-plugin-dev-tools) "
+    "to configure debugging.",
+    DeprecationWarning,
+    2,
+)
+
 
 def _check_if_should_setup() -> bool:
     """Check whether to connect to debug server or not"""

@@ -58,6 +58,12 @@ development = [
 [tool.uv]
 default-groups = ["development"]
 
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
 [tool.setuptools]
 packages = [
     "qgis_plugin_tools",
