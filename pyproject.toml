@@ -53,6 +53,7 @@ development = [
     "requests",
     "ruff",
     "types-requests",
+    "pytest-rerunfailures>=16.1",
 ]
 
 [tool.uv]
