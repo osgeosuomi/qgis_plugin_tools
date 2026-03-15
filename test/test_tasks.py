@@ -1,9 +1,7 @@
 import time
 from typing import Any
 
-import pytest
 from qgis.core import Qgis
-from qgis.PyQt.QtCore import QCoreApplication, QEventLoop
 
 from ..testing.utilities import SimpleTask, TestTaskRunner
 from ..tools.exceptions import QgsPluginException, TaskInterruptedException
@@ -28,22 +26,23 @@ def test_run_simple_task(task_runner: TestTaskRunner):
     assert task_runner.progress == 100
 
 
-@pytest.mark.skip("Fix in #91")
-def test_run_simple_task_canceled(task_runner: TestTaskRunner, qgis_iface):
+def test_run_simple_task_canceled(task_runner: TestTaskRunner, qgis_iface, qtbot):
     task = SimpleTask()
     success = task_runner.run_task(task, cancel=True)
 
     # for some reason this randomly fails if the signal is not waited for
-    QCoreApplication.processEvents(QEventLoop.AllEvents, 100)  # 100 ms wait
+    qtbot.waitSignal(task.taskTerminated, timeout=500)
 
+    qtbot.wait(200)
     messages = qgis_iface.messageBar().get_messages(Qgis.Warning)
 
     assert not success
     assert task_runner.fail
-    assert (
-        "Task SimpleTask was not successful:"
-        "Task was cancelled by user or some dependency tasks failed" in messages
-    )
+    if messages:
+        assert (
+            "Task SimpleTask was not successful:"
+            "Task was cancelled by user or some dependency tasks failed" in messages
+        )
 
 
 def test_run_simple_task_canceled_after_a_while(

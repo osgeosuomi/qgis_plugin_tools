@@ -58,7 +58,6 @@ def test_create_simple_continuous_progress_dialog(qtbot, show_abort_btn):
 @pytest.mark.parametrize("show_abort_btn", [True, False])
 @pytest.mark.parametrize("should_abort", [True, False])
 @pytest.mark.parametrize("continuous", [True, False])
-@pytest.mark.skip("Fix in #91")
 def test_run_task_with_progress_dialog(
     qtbot, show_abort_btn, should_abort, continuous, mocker
 ):
@@ -101,7 +100,7 @@ def test_run_task_with_progress_dialog(
     if should_abort:
         QtCore.QTimer.singleShot(5, abort)
 
-    task = SimpleTask(sleep_time=0.005)
+    task = SimpleTask(sleep_time=0.01)
 
     # test
     if continuous:
