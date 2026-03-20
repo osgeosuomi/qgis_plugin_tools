@@ -15,7 +15,7 @@ maintainers = [
 description = "A collection of helpful tools and widgets to aid QGIS plugin tool development"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
-license = "GPL-2.0"
+license = "GPL-2.0-or-later"
 license-files = ["LICENSE"]
 
 keywords = ["qgis", "QGIS", "PyQGIS"]
