@@ -87,32 +87,3 @@ $ pre-commit install
 ## How to use it
 
 Refer to [usage](docs/usage.md) documentation.
-
-
-## Plugin tree example
-
-The plugin should follow the following file tree to get most out of this module.
-
-Plugin `Foo` root folder:
-* `plugin_repo` # **no '-' character!**
-    * **`.gitmodules`**
-    * `.pre-commit-config.yaml`
-    * `.gitattributes`
-    * `.gitignore`
-    * `.qgis-plugin-ci` # to use [qgis-plugin-ci](https://github.com/opengisch/qgis-plugin-ci)
-    * `pluginname` # **no '-' character!**
-        * `.gitignore`
-      * `qgis_plugins_tools/` # submodule
-      * **`resources/`**
-        * `i18n/` # Alternatively translations could use [Transifex](infrastructure/template/root/docs/development.md#Translating)
-          * `fi.ts`
-          * `fi.qm`
-        * `ui/`
-          * `main_dialog.ui`
-        * `icons/`
-          * `my_icon.svg`
-      * `__init__.py`
-      * `foo.py`
-      * `metadata.txt`
-      * `build.py`
-    * `test/`
