@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qgis_plugin_tools"
-version = "1.0.0"
+version = "1.0.0.post1"
 authors = [
     { name = "3Liz, Gispo Ltd.", email = "info@gispo.fi" },
 ]
