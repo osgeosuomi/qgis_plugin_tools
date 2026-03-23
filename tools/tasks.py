@@ -23,7 +23,7 @@ class BaseTask(QgsTask):
     """
 
     def __init__(self) -> None:
-        super().__init__(self.name, QgsTask.CanCancel)
+        super().__init__(self.name, QgsTask.Flag.CanCancel)
         self.exception: Exception | None = None
 
     @property

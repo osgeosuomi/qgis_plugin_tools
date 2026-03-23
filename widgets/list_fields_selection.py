@@ -13,8 +13,8 @@ __revision__ = "$Format:%H$"
 class ListFieldsSelection(QListWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
+        self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.layer = None
 
     def set_layer(self, layer: QgsVectorLayer):
@@ -29,7 +29,7 @@ class ListFieldsSelection(QListWidget):
                 cell.setText(field.name())
             else:
                 cell.setText(f"{field.name()} ({alias})")
-            cell.setData(Qt.UserRole, field.name())
+            cell.setData(Qt.ItemDataRole.UserRole, field.name())
             index = layer.fields().indexFromName(field.name())
             if index >= 0:
                 cell.setIcon(self.layer.fields().iconForField(index))
@@ -38,12 +38,12 @@ class ListFieldsSelection(QListWidget):
     def set_selection(self, fields: tuple):
         for i in range(self.count()):
             item = self.item(i)
-            item.setSelected(item.data(Qt.UserRole) in fields)
+            item.setSelected(item.data(Qt.ItemDataRole.UserRole) in fields)
 
     def selection(self) -> list:
         selection = []
         for i in range(self.count()):
             item = self.item(i)
             if item.isSelected():
-                selection.append(item.data(Qt.UserRole))
+                selection.append(item.data(Qt.ItemDataRole.UserRole))
         return selection
