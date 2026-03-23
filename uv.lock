@@ -616,7 +616,7 @@ wheels = [
 
 [[package]]
 name = "qgis-plugin-tools"
-version = "0.5.0.post0"
+version = "1.0.0"
 source = { editable = "." }
 
 [package.dev-dependencies]
