@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Breaking fix: Log level setting key is no longer double prefixed with the plugin name. Check QGIS3.ini files to check if you need to update your settings.
 - Breaking maintenance: Drop support for Python 3.9.
 - Maintenance: Major development enviroment improvements.
+- Maintentance: Make project compatible with QGIS 4
 
 ## [0.5.0] - 2024-5-21
 
