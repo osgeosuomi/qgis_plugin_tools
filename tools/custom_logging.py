@@ -56,13 +56,13 @@ def qgis_level(logging_level: str) -> int:
     :rtype: Qgis.MessageLevel
     """
     if logging_level in {"CRITICAL", "ERROR"}:
-        return Qgis.Critical
+        return Qgis.MessageLevel.Critical
     elif logging_level == "WARNING":
-        return Qgis.Warning
+        return Qgis.MessageLevel.Warning
     elif logging_level in {"INFO", "DEBUG"}:
-        return Qgis.Info
+        return Qgis.MessageLevel.Info
 
-    return Qgis.Info
+    return Qgis.MessageLevel.Info
 
 
 def bar_msg(
@@ -113,7 +113,9 @@ class QgsLogHandler(logging.Handler):
             ).format(self._message_log_name)
             # print(message)
             # noinspection PyCallByClass,PyTypeChecker
-            QgsMessageLog.logMessage(message, level=Qgis.Critical, **tag_kwargs)
+            QgsMessageLog.logMessage(
+                message, level=Qgis.MessageLevel.Critical, **tag_kwargs
+            )
 
 
 class QgsMessageBarFilter(logging.Filter):
@@ -137,7 +139,7 @@ class QgsMessageBarFilter(logging.Filter):
         record.qgis_level = (  # type: ignore
             qgis_level(record.levelname)
             if not args.get("success", False)
-            else Qgis.Success
+            else Qgis.MessageLevel.Success
         )
         record.duration = args.get("duration", self.bar_msg_duration(record.levelname))  # type: ignore
         return True

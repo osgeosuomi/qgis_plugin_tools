@@ -211,7 +211,7 @@ def request_raw(  # noqa: PLR0915, PLR0913, C901
         raise Exception(f"Request method {method} not supported.")
     reply: QgsNetworkReplyContent = request_blocking.reply()
     reply_error = reply.error()
-    if reply_error != QNetworkReply.NoError:
+    if reply_error != QNetworkReply.NetworkError.NoError:
         # Error content will be empty in older QGIS versions:
         # https://github.com/qgis/QGIS/issues/42442
         message = (
