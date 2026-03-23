@@ -26,17 +26,17 @@ jobs:
         run: uv build
       - name: Publish
         run: uv publish
-      - name: Get version from tag
-        id: tag_name
-        run: |
-          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
-        shell: bash
-      - name: create github release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: dist/*
-          draft: false
-          prerelease: false
+#      - name: Get version from tag
+#        id: tag_name
+#        run: |
+#          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
+#        shell: bash
+#      - name: create github release
+#        id: create_release
+#        uses: softprops/action-gh-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          files: dist/*
+#          draft: false
+#          prerelease: false
