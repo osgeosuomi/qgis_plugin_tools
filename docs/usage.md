@@ -144,16 +144,52 @@ It is a good practice to use wrap every meaningful log or message string inside 
 to make it possibly translatable.
 
 ```python
-from qgis.PyQt.QtCore import QCoreApplication, QTranslator
+from qgis.PyQt import QtCore
+from pathlib import Path
 
-from qgis_plugin_tools.tools.i18n import setup_translation, tr
+from qgis_plugin_tools.tools.i18n import setup_translation
 
-# For setting up the translation file (usually in plugin.py __init__)
-locale, file_path = setup_translation()
-if file_path:
-    self.translator = QTranslator()
-    self.translator.load(file_path)
-    QCoreApplication.installTranslator(self.translator)
+# For setting up the translation file (usually in root __init__.py)
+TRANSLATORS: list[QtCore.QTranslator] = []
+
+def setup_translators() -> list[QtCore.QTranslator]:
+    # Function to set up translators. This can lie also outside __init__.py
+    translators = []
+    main_locale, main_file_path = setup_translation()
+    if main_file_path:
+        main_translator = QtCore.QTranslator()
+        main_translator.load(main_file_path)
+        # noinspection PyCallByClass
+        QtCore.QCoreApplication.installTranslator(main_translator)
+        translators.append(main_translator)
+
+    # If you have other QGIS plugins as libraries that need translations
+    import other_plugin_1
+    import other_plugin_2
+
+    for library in (other_plugin_1, other_plugin_2):
+        library_locale, library_file_path = setup_translation(
+            folder=str(Path(library.__file__).parent / "resources" / "i18n")
+        )
+        if library_file_path:
+            library_translator = QtCore.QTranslator()
+            library_translator.load(library_file_path)
+            # noinspection PyCallByClass
+            QtCore.QCoreApplication.installTranslator(library_translator)
+            translators.append(library_translator)
+    return translators
+
+
+def classFactory(_):  # noqa: ANN201, ANN001, N802
+    """Class factory."""
+
+    from yuor_plugin.plugin import Plugin  # noqa: PLC0415
+    TRANSLATORS.extend(setup_translators())
+
+    return Plugin()
+
+# Everywhere else in the plugin
+from qgis_plugin_tools.tools.i18n import tr
 
 # Wrap translatable string with tr
 tr('This will be translated')
@@ -163,13 +199,8 @@ tr('{} + {} is definitely {}', 1,1,3)
 
 ### Setting up translations
 
-> [!WARNING]
-> Using plugin_maker.py will be deprecated in future releases.
-> Compiling translations will be possible with
-> [qgis-plugin-dev-tools](https://github.com/nlsfi/qgis-plugin-dev-tools/issues/25)
-> shortly.
-
-Check out [translation guide](../infrastructure/template/root/docs/development.md#Translating).
+To set update and create translation files, refer to [qgis-plugin-dev-tools translation quide](https://github.com/nlsfi/qgis-plugin-dev-tools?tab=readme-ov-file#updating-translations).
+For doing the translation and compiling translation files, we recommend using [Qt Linguist](https://doc.qt.io/qt-6/qtlinguist-index.html).
 
 ## Debug server
 
