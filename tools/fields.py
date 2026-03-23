@@ -1,6 +1,6 @@
 from qgis.core import QgsApplication, QgsFields
 from qgis.gui import QgsDateTimeEdit, QgsDoubleSpinBox, QgsSpinBox
-from qgis.PyQt.QtCore import QVariant
+from qgis.PyQt.QtCore import QMetaType, QVariant
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QDateEdit, QWidget
 
@@ -12,26 +12,26 @@ __revision__ = "$Format:%H$"
 
 # noinspection PyCallByClass,PyArgumentList
 def variant_type_icon(field_type: QVariant) -> QIcon:  # noqa: PLR0911
-    if field_type == QVariant.Bool:
+    if field_type == QMetaType.Type.Bool:
         return QgsApplication.getThemeIcon("/mIconFieldBool.svg")
     elif field_type in [
-        QVariant.Int,
-        QVariant.UInt,
-        QVariant.LongLong,
-        QVariant.ULongLong,
+        QMetaType.Type.Int,
+        QMetaType.Type.UInt,
+        QMetaType.Type.LongLong,
+        QMetaType.Type.ULongLong,
     ]:
         return QgsApplication.getThemeIcon("/mIconFieldInteger.svg")
-    elif field_type == QVariant.Double:
+    elif field_type == QMetaType.Type.Double:
         return QgsApplication.getThemeIcon("/mIconFieldFloat.svg")
-    elif field_type == QVariant.String:
+    elif field_type == QMetaType.Type.QString:
         return QgsApplication.getThemeIcon("/mIconFieldText.svg")
-    elif field_type == QVariant.Date:
+    elif field_type == QMetaType.Type.QDate:
         return QgsApplication.getThemeIcon("/mIconFieldDate.svg")
-    elif field_type == QVariant.DateTime:
+    elif field_type == QMetaType.Type.QDateTime:
         return QgsApplication.getThemeIcon("/mIconFieldDateTime.svg")
-    elif field_type == QVariant.Time:
+    elif field_type == QMetaType.Type.QTime:
         return QgsApplication.getThemeIcon("/mIconFieldTime.svg")
-    elif field_type == QVariant.ByteArray:
+    elif field_type == QMetaType.Type.QByteArray:
         return QgsApplication.getThemeIcon("/mIconFieldBinary.svg")
     else:
         return QIcon()
@@ -39,30 +39,30 @@ def variant_type_icon(field_type: QVariant) -> QIcon:  # noqa: PLR0911
 
 def widget_for_field(field_type: QVariant) -> QWidget:  # noqa: PLR0911
     q_combo_box = QComboBox()
-    q_combo_box.setEditable(True)
+    q_combo_box.setEditable(True)  # noqa: QGS202
 
-    if field_type == QVariant.Bool:
+    if field_type == QMetaType.Type.Bool:
         return QCheckBox()
     elif field_type in [
-        QVariant.Int,
-        QVariant.UInt,
-        QVariant.LongLong,
-        QVariant.ULongLong,
+        QMetaType.Type.Int,
+        QMetaType.Type.UInt,
+        QMetaType.Type.LongLong,
+        QMetaType.Type.ULongLong,
     ]:
         spin_box = QgsSpinBox()
         spin_box.setMaximum(2147483647)
         return spin_box
-    elif field_type == QVariant.Double:
+    elif field_type == QMetaType.Type.Double:
         spin_box = QgsDoubleSpinBox()
         spin_box.setMaximum(2147483647)
         return spin_box
-    elif field_type == QVariant.String:
+    elif field_type == QMetaType.Type.QString:
         return q_combo_box
-    elif field_type == QVariant.Date:
+    elif field_type == QMetaType.Type.QDate:
         return QDateEdit()
-    elif field_type in (QVariant.DateTime, QVariant.Time):
+    elif field_type in (QMetaType.Type.QDateTime, QMetaType.Type.QTime):
         return QgsDateTimeEdit()
-    elif field_type == QVariant.ByteArray:
+    elif field_type == QMetaType.Type.QByteArray:
         return q_combo_box
     else:
         return q_combo_box

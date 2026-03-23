@@ -17,7 +17,7 @@ class CheckableComboBox:
     def __init__(self, combobox, select_all=None):
         """Constructor."""
         self.combo = combobox
-        self.combo.setEditable(True)
+        self.combo.setEditable(True)  # noqa: QGS202
         self.combo.lineEdit().setReadOnly(True)
         self.model = QStandardItemModel(self.combo)
         self.combo.setModel(self.model)
@@ -37,7 +37,7 @@ class CheckableComboBox:
         item.setEnabled(True)
         item.setCheckable(True)
         item.setSelectable(False)
-        self.model.appendRow(item)
+        self.model.appendRow(item)  # noqa: QGS202
 
     def combo_changed(self):
         """Slot when the combo has changed."""

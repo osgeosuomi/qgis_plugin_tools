@@ -70,7 +70,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
 
     def update_progress_bar(self, progress: int | float) -> None:
         """Update the progress bar with a progress"""
-        self.progress_bar.setValue(int(min(100, progress)))
+        self.progress_bar.setValue(int(min(100, progress)))  # noqa: QGS202
 
     def closeEvent(self, close_event: QCloseEvent) -> None:  # noqa: N802
         super().closeEvent(close_event)
