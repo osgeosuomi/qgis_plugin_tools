@@ -40,7 +40,7 @@ homepage = "https://github.com/GispoCoding/qgis_plugin_tools"
 [dependency-groups]
 development = [
     "flake8",
-    "flake8-qgis",
+    "flake8-qgis>=2.0.1",
     "flake8-pyproject",
     "mypy",
     "pre-commit",
@@ -96,6 +96,8 @@ select = [
 [tool.ruff]
 line-length = 88
 indent-width = 4
+
+lint.external = ["QGS"]
 
 lint.ignore = [
     "ANN204", # Missing return type special method
