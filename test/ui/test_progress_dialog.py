@@ -32,7 +32,7 @@ def test_progress_bar_dialog(qtbot, show_abort_btn):
 
     assert hasattr(p_dialog, "push_btn") is show_abort_btn
     if show_abort_btn:
-        qtbot.mouseClick(p_dialog.push_btn, QtCore.Qt.LeftButton)
+        qtbot.mouseClick(p_dialog.push_btn, QtCore.Qt.MouseButton.LeftButton)
     else:
         p_dialog.close()
 
@@ -50,7 +50,7 @@ def test_create_simple_continuous_progress_dialog(qtbot, show_abort_btn):
     qtbot.addWidget(p_dialog)
 
     if show_abort_btn:
-        qtbot.mouseClick(p_dialog.push_btn, QtCore.Qt.LeftButton)
+        qtbot.mouseClick(p_dialog.push_btn, QtCore.Qt.MouseButton.LeftButton)
     else:
         p_dialog.close()
 
@@ -82,7 +82,7 @@ def test_run_task_with_progress_dialog(
         nonlocal aborted
         aborted = True
         if show_abort_btn:
-            qtbot.mouseClick(p_dialog.push_btn, QtCore.Qt.LeftButton)
+            qtbot.mouseClick(p_dialog.push_btn, QtCore.Qt.MouseButton.LeftButton)
         else:
             p_dialog.close()
 
