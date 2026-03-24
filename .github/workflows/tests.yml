@@ -21,7 +21,8 @@ jobs:
       matrix:
         qgis-image-tag:
           - release-3_34
-          - "3.40"
+          - "3.44"
+          - "4.0-trixie"
           - latest
       fail-fast: false
 
