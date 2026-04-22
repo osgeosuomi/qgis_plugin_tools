@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Feature: Add timeout to network requests
+
 ## [1.0.0] - 2026-3-23
 
 - Breaking fix: Log level setting key is no longer double prefixed with the plugin name. Check QGIS3.ini files to check if you need to update your settings.
