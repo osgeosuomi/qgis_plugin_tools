@@ -7,7 +7,12 @@ from typing import Literal, NamedTuple
 from urllib.parse import urlencode
 from uuid import uuid4
 
-from qgis.core import Qgis, QgsBlockingNetworkRequest, QgsNetworkReplyContent
+from qgis.core import (
+    Qgis,
+    QgsBlockingNetworkRequest,
+    QgsNetworkAccessManager,
+    QgsNetworkReplyContent,
+)
 from qgis.PyQt.QtCore import QByteArray, QSettings, QUrl
 from qgis.PyQt.QtNetwork import QNetworkReply, QNetworkRequest
 
@@ -15,6 +20,8 @@ from ..tools.exceptions import QgsPluginNetworkException
 from ..tools.i18n import tr
 from ..tools.resources import plugin_name
 from .custom_logging import bar_msg
+
+DEFAULT_TIMEOUT_SECONDS = 30.0
 
 try:
     import requests
@@ -52,6 +59,7 @@ def fetch(
     encoding: str = ENCODING,
     authcfg_id: str = "",
     params: dict[str, str] | None = None,
+    timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> str:
     """
     Fetch resource from the internet. Similar to requests.get(url) but is
@@ -60,18 +68,20 @@ def fetch(
     :param encoding: Encoding which will be used to decode the bytes
     :param authcfg_id: authcfg id from QGIS settings, defaults to ''
     :param params: dictionary to send in the query string
+    :param timeout: Timeout for the request in seconds
     :return: encoded string of the content
     """
-    content, _ = fetch_raw(url, encoding, authcfg_id, params)
+    content, _ = fetch_raw(url, encoding, authcfg_id, params, timeout=timeout)
     return content.decode(ENCODING)
 
 
-def post(
+def post(  # noqa: PLR0913
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
     data: dict[str, str] | None = None,
     files: list[FileField] | None = None,
+    timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> str:
     """
     Post resource. Similar to requests.post(url, data, files) but is
@@ -81,9 +91,10 @@ def post(
     :param authcfg_id: authcfg id from QGIS settings, defaults to ''
     :param data: dictionary to send in the request body
     :param files: Files to send multipart-encoded. Same format as requests.
+    :param timeout: Timeout for the request in seconds
     :return: encoded string of the content
     """
-    content, _ = post_raw(url, encoding, authcfg_id, data, files)
+    content, _ = post_raw(url, encoding, authcfg_id, data, files, timeout=timeout)
     return content.decode(ENCODING)
 
 
@@ -92,6 +103,7 @@ def fetch_raw(
     encoding: str = ENCODING,
     authcfg_id: str = "",
     params: dict[str, str] | None = None,
+    timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> tuple[bytes, str]:
     """
     Fetch resource from the internet. Similar to requests.get(url) but is
@@ -100,17 +112,19 @@ def fetch_raw(
     :param encoding: Encoding which will be used to decode the bytes
     :param authcfg_id: authcfg id from QGIS settings, defaults to ''
     :param params: dictionary to send in the query string
+    :param timeout: Timeout for the request in seconds
     :return: bytes of the content and default name of the file or empty string
     """
-    return request_raw(url, "get", encoding, authcfg_id, params)
+    return request_raw(url, "get", encoding, authcfg_id, params, timeout=timeout)
 
 
-def post_raw(
+def post_raw(  # noqa: PLR0913
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
     data: dict[str, str] | None = None,
     files: list[FileField] | None = None,
+    timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> tuple[bytes, str]:
     """
     Post resource. Similar to requests.post(url, data, files) but is
@@ -120,12 +134,15 @@ def post_raw(
     :param authcfg_id: authcfg id from QGIS settings, defaults to ''
     :param data: dictionary to send in the request body
     :param files: Files to send multipart-encoded. Same format as requests.
+    :param timeout: Timeout for the request in seconds
     :return: bytes of the content and default name of the file or empty string
     """
-    return request_raw(url, "post", encoding, authcfg_id, None, data, files)
+    return request_raw(
+        url, "post", encoding, authcfg_id, None, data, files, timeout=timeout
+    )
 
 
-def request_raw(  # noqa: PLR0915, PLR0913, C901
+def request_raw(  # noqa: PLR0915, PLR0913, C901, PLR0912
     url: str,
     method: Literal["get", "post"] = "get",
     encoding: str = ENCODING,
@@ -133,6 +150,7 @@ def request_raw(  # noqa: PLR0915, PLR0913, C901
     params: dict[str, str] | None = None,
     data: dict[str, str] | None = None,
     files: list[FileField] | None = None,
+    timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> tuple[bytes, str]:
     """
     Request resource from the internet. Similar to requests.get(url) and
@@ -144,6 +162,7 @@ def request_raw(  # noqa: PLR0915, PLR0913, C901
     :param params: dictionary to send in the query string
     :param data: dictionary to send in the request body
     :param files: Files to send multipart-encoded. Same format as requests.
+    :param timeout: Timeout for the request in seconds
     :return: bytes of the content and default name of the file or empty string
     """
     if params:
@@ -161,86 +180,94 @@ def request_raw(  # noqa: PLR0915, PLR0913, C901
     request_blocking = QgsBlockingNetworkRequest()
     if authcfg_id:
         request_blocking.setAuthCfg(authcfg_id)
-    # QNetworkRequest *only* supports get and post. No idea why.
-    if method == "get":
-        _ = request_blocking.get(req)
-    elif method == "post":
-        if data:
-            # Support JSON
-            byte_data = bytes(json.dumps(data), encoding)
-            req.setRawHeader(
-                b"Content-Type",
-                bytes(f"application/json; charset={encoding}", encoding),
-            )
-        elif files:
-            # Support multipart binary. Generate boundary like
-            # https://github.com/requests/toolbelt/blob/master/requests_toolbelt/multipart/encoder.py
-            boundary = uuid4().hex
-            byte_boundary = bytes(f"\r\n--{boundary}\r\n", encoding)
-            last_byte_boundary = bytes(f"\r\n--{boundary}--\r\n", encoding)
+    previous_timeout = QgsNetworkAccessManager.timeout()
+    QgsNetworkAccessManager.setTimeout(int(timeout * 1000))
+    try:
+        # QNetworkRequest *only* supports get and post. No idea why.
+        if method == "get":
+            _ = request_blocking.get(req)
+        elif method == "post":
+            if data:
+                # Support JSON
+                byte_data = bytes(json.dumps(data), encoding)
+                req.setRawHeader(
+                    b"Content-Type",
+                    bytes(f"application/json; charset={encoding}", encoding),
+                )
+            elif files:
+                # Support multipart binary. Generate boundary like
+                # https://github.com/requests/toolbelt/blob/master/requests_toolbelt/multipart/encoder.py
+                boundary = uuid4().hex
+                byte_boundary = bytes(f"\r\n--{boundary}\r\n", encoding)
+                last_byte_boundary = bytes(f"\r\n--{boundary}--\r\n", encoding)
 
-            # each file may have different content type, name and filename
-            byte_data = b""
-            for file_field in files:
-                name = file_field[0]
-                file_info = file_field[1]
-                file_name = file_info[0]
-                content = file_info[1]
-                content_type = file_info[2]
-                content_disposition_form_data = (
-                    f"Content-Disposition: form-data;"
-                    f' name="{name}";'
-                    f' filename="{file_name}"\r\n'
+                # each file may have different content type, name and filename
+                byte_data = b""
+                for file_field in files:
+                    name = file_field[0]
+                    file_info = file_field[1]
+                    file_name = file_info[0]
+                    content = file_info[1]
+                    content_type = file_info[2]
+                    content_disposition_form_data = (
+                        f"Content-Disposition: form-data;"
+                        f' name="{name}";'
+                        f' filename="{file_name}"\r\n'
+                    )
+                    content_type_form_data = f"Content-Type: {content_type}\r\n\r\n"
+                    byte_boundary_with_headers = (
+                        byte_boundary
+                        + bytes(content_disposition_form_data, encoding)
+                        + bytes(content_type_form_data, encoding)
+                    )
+                    byte_data += byte_boundary_with_headers + content
+                byte_data += last_byte_boundary
+                req.setRawHeader(
+                    b"Content-Type",
+                    bytes(f"multipart/form-data; boundary={boundary}", encoding),
                 )
-                content_type_form_data = f"Content-Type: {content_type}\r\n\r\n"
-                byte_boundary_with_headers = (
-                    byte_boundary
-                    + bytes(content_disposition_form_data, encoding)
-                    + bytes(content_type_form_data, encoding)
-                )
-                byte_data += byte_boundary_with_headers + content
-            byte_data += last_byte_boundary
-            req.setRawHeader(
-                b"Content-Type",
-                bytes(f"multipart/form-data; boundary={boundary}", encoding),
-            )
+            else:
+                byte_data = b""
+            _ = request_blocking.post(req, byte_data)
         else:
-            byte_data = b""
-        _ = request_blocking.post(req, byte_data)
-    else:
-        raise Exception(f"Request method {method} not supported.")
-    reply: QgsNetworkReplyContent = request_blocking.reply()
-    reply_error = reply.error()
-    if reply_error != QNetworkReply.NetworkError.NoError:
-        # Error content will be empty in older QGIS versions:
-        # https://github.com/qgis/QGIS/issues/42442
-        message = (
-            bytes(reply.content()).decode("utf-8") if bytes(reply.content()) else None
-        )
-        # bar_msg will just show a generic Qt error string.
-        raise QgsPluginNetworkException(
-            message=message,
-            error=reply_error,
-            bar_msg=bar_msg(reply.errorString()),
-        )
+            raise Exception(f"Request method {method} not supported.")
+        reply: QgsNetworkReplyContent = request_blocking.reply()
+        reply_error = reply.error()
+        if reply_error != QNetworkReply.NetworkError.NoError:
+            # Error content will be empty in older QGIS versions:
+            # https://github.com/qgis/QGIS/issues/42442
+            message = (
+                bytes(reply.content()).decode("utf-8")
+                if bytes(reply.content())
+                else None
+            )
+            # bar_msg will just show a generic Qt error string.
+            raise QgsPluginNetworkException(
+                message=message,
+                error=reply_error,
+                bar_msg=bar_msg(reply.errorString()),
+            )
 
-    # https://stackoverflow.com/a/39103880/10068922
-    default_name = ""
-    if reply.hasRawHeader(CONTENT_DISPOSITION_BYTE_HEADER):
-        header: QByteArray = reply.rawHeader(CONTENT_DISPOSITION_BYTE_HEADER)
-        default_name = bytes(header).decode(encoding).split("filename=")[1]
-        if default_name[0] in ['"', "'"]:
-            default_name = default_name[1:-1]
+        # https://stackoverflow.com/a/39103880/10068922
+        default_name = ""
+        if reply.hasRawHeader(CONTENT_DISPOSITION_BYTE_HEADER):
+            header: QByteArray = reply.rawHeader(CONTENT_DISPOSITION_BYTE_HEADER)
+            default_name = bytes(header).decode(encoding).split("filename=")[1]
+            if default_name[0] in ['"', "'"]:
+                default_name = default_name[1:-1]
 
-    return bytes(reply.content()), default_name
+        return bytes(reply.content()), default_name
+    finally:
+        QgsNetworkAccessManager.setTimeout(previous_timeout)
 
 
-def download_to_file(
+def download_to_file(  # noqa: PLR0913
     url: str,
     output_dir: Path,
     output_name: str | None = None,
     use_requests_if_available: bool = True,
     encoding: str = ENCODING,
+    timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> Path:
     """
     Downloads a binary file to the file efficiently
@@ -251,6 +278,7 @@ def download_to_file(
     :param use_requests_if_available: Use Python package requests
     if it is available in the environment
     :param encoding: Encoding which will be used to decode the bytes
+    :param timeout: Timeout for the download in seconds
     :return: Path to the file
     """
 
@@ -272,7 +300,7 @@ def download_to_file(
         # https://stackoverflow.com/a/39217788/10068922
 
         try:
-            with requests.get(url, stream=True) as r:
+            with requests.get(url, stream=True, timeout=timeout) as r:
                 try:
                     r.raise_for_status()
                 except Exception as e:
@@ -295,7 +323,7 @@ def download_to_file(
             ) from e
     else:
         # Using simple fetch_raw
-        content, default_filename = fetch_raw(url, encoding)
+        content, default_filename = fetch_raw(url, encoding, timeout=timeout)
         output = get_output(default_filename)
         with open(output, "wb") as f:
             f.write(content)
