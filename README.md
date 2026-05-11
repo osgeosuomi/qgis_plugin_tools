@@ -87,3 +87,8 @@ $ pre-commit install
 ## How to use it
 
 Refer to [usage](docs/usage.md) documentation.
+
+## Contributing
+
+Contributions are very welcome. Get started by reading OSGeo
+Suomi [CONTRIBUTING guidelines](https://github.com/osgeosuomi/.github/blob/main/CONTRIBUTING.md).
