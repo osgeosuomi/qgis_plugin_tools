@@ -64,11 +64,13 @@ def set_fixed_temporal_range(layer: QgsRasterLayer, t_range: QgsDateTimeRange) -
     mode = QgsRasterLayerTemporalProperties.TemporalMode.ModeFixedTemporalRange
     tprops: QgsRasterLayerTemporalProperties = layer.temporalProperties()
     tprops.setMode(mode)
-    if t_range.begin().timeSpec() == 0 or t_range.end().timeSpec() == 0:
+    local = Qt.TimeSpec.LocalTime
+    utc = Qt.TimeSpec.UTC
+    if t_range.begin().timeSpec() == local or t_range.end().timeSpec() == local:
         begin = t_range.begin()
         end = t_range.end()
-        begin.setTimeSpec(Qt.TimeSpec(1))
-        end.setTimeSpec(Qt.TimeSpec(1))
+        begin.setTimeSpec(utc)
+        end.setTimeSpec(utc)
         t_range = QgsDateTimeRange(begin, end)
     tprops.setFixedTemporalRange(t_range)
     tprops.setIsActive(True)
