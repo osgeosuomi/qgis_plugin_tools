@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Fix: Set raster temporal range to UTC correctly on PyQt6
+
 ## [1.1.1] - 2026-7-24
 
 - Feature: Add timeout to network requests
