@@ -1,5 +1,6 @@
 """Setting up logging using QGIS, file, Sentry..."""
 
+import contextlib
 import functools
 import logging
 from collections.abc import Callable
@@ -183,7 +184,9 @@ class SimpleMessageBarProxy(QObject):
 
     @pyqtSlot(str, str, int, int)
     def push_message(self, title: str, text: str, level: int, duration: int) -> None:
-        try:
+        # The underlying C++ message bar object may already be deleted, e.g. when
+        # QGIS is shutting down. Logging must never break the caller.
+        with contextlib.suppress(RuntimeError):
             if self._msg_bar is not None:
                 self._msg_bar.pushMessage(
                     title=self._sanitize(title),
@@ -191,8 +194,6 @@ class SimpleMessageBarProxy(QObject):
                     level=level,
                     duration=duration,
                 )
-        except Exception:
-            pass
 
 
 class QgsMessageBarHandler(logging.Handler):

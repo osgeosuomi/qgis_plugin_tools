@@ -139,8 +139,8 @@ def _plugin_path_dependency() -> str:
             # We are interested only on calls from outside of qgis_plugin_tools
             continue
         for module_name in _iterate_modules(caller_module_name):
-            if is_plugin := _is_module_qgis_plugin(module_name):
-                assert is_plugin.plugin_directory
+            is_plugin = _is_module_qgis_plugin(module_name)
+            if is_plugin and is_plugin.plugin_directory:
                 return is_plugin.plugin_directory
 
     # fall back to default directory tree

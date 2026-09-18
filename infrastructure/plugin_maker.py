@@ -5,7 +5,7 @@
 import argparse
 import os
 import shutil
-import subprocess
+import subprocess  # nosec B404 - developer build tool, commands are built internally
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
@@ -33,6 +33,13 @@ warnings.warn(
 
 def is_windows():
     return "win" in sys.platform and "darwin" not in sys.platform
+
+
+def _shell_executable():
+    """Resolve the full path of the shell used to run the generated scripts."""
+    if is_windows():
+        return os.environ.get("COMSPEC") or shutil.which("cmd.exe") or "cmd.exe"
+    return shutil.which("sh") or "/bin/sh"
 
 
 PLUGINNAME = plugin_name()
@@ -334,8 +341,9 @@ Put -h after command to see available optional arguments if any
                     f"You can move the file whenever you want."
                 )
         else:
-            process = subprocess.Popen(
-                "cmd.exe",
+            # Arguments come from this developer tool itself, not from untrusted input.
+            process = subprocess.Popen(  # nosec B603
+                _shell_executable(),
                 shell=False,
                 universal_newlines=True,
                 stdin=subprocess.PIPE,
@@ -402,8 +410,9 @@ Put -h after command to see available optional arguments if any
             requirements=requirements,
         )
 
-        process = subprocess.Popen(
-            "cmd.exe" if is_windows() else "sh",
+        # Arguments come from this developer tool itself, not from untrusted input.
+        process = subprocess.Popen(  # nosec B603
+            _shell_executable(),
             shell=False,
             universal_newlines=True,
             stdin=subprocess.PIPE,
@@ -419,7 +428,8 @@ Put -h after command to see available optional arguments if any
         if d is not None:
             cmd = f"cd {d} && " + cmd
         echo(cmd, force=force_show_output)
-        pros = subprocess.Popen(
+        # Arguments come from the plugin's own configuration, not from untrusted input.
+        pros = subprocess.Popen(  # nosec B603
             args,
             cwd=d,
             stdout=subprocess.PIPE,

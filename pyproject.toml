@@ -39,6 +39,7 @@ homepage = "https://github.com/GispoCoding/qgis_plugin_tools"
 
 [dependency-groups]
 development = [
+    "bandit[toml]>=1.9.4",
     "flake8",
     "flake8-qgis>=2.0.1",
     "flake8-pyproject",
@@ -165,6 +166,9 @@ lint.select = [
     "ARG002",
 ]
 
+
+[tool.bandit]
+exclude_dirs = [".venv", "test"]
 
 [tool.mypy]
 disable_error_code = "misc"

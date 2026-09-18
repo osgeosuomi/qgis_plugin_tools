@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Fix: `resources.plugin_path()` no longer fails with an `AssertionError` when a plugin module has no directory. It now falls back to the default directory tree.
+- Fix: Message bar helpers no longer hide unrelated errors. Only `RuntimeError` is suppressed.
+- Maintenance: Add bandit security checks to linting.
+
 ## [1.1.1] - 2026-7-24
 
 - Feature: Add timeout to network requests
