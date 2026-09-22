@@ -51,7 +51,6 @@ def _iterate_modules(module_name: str) -> Iterator[str]:
         "plugin"
     ]
     """
-
     modules = module_name.split(".")
     for i in range(len(modules), 0, -1):
         yield ".".join(modules[:i])
@@ -75,7 +74,6 @@ def _is_module_qgis_plugin(module_name: str) -> IsPluginResult:
     >>> if is_plugin := _is_module_qgis_plugin('myplugin'):
     >>>    print(f"Plugin is installed ad {is_plugin.plugin_directory}")
     """
-
     module = sys.modules.get(module_name)
     if module is None or not inspect.ismodule(module):
         return IsPluginResult(False)
@@ -105,7 +103,6 @@ def _plugin_path_dependency() -> str:
 
     Traverses packages of calling modules bottom up and checks if it is a qgis plugin.
     """
-
     for frame_info in inspect.stack():
         caller_module_name: str | None = frame_info.frame.f_globals.get("__name__")
         if caller_module_name is None or "qgis_plugin_tools" in caller_module_name:
@@ -152,8 +149,7 @@ def root_path(*args: str) -> str:
 
 
 def profile_path(*args: str) -> str:
-    """
-    Get the path inside profile folder.
+    """Get the path inside profile folder.
     return: Absolute path to the resource.
     """
     path = QgsApplication.qgisSettingsDirPath()
@@ -200,7 +196,7 @@ def slug_name() -> str:
     try:
         metadata = metadata_config()
         name: str = metadata["general"]["repository"]
-        slug = name.split("/")[-1]
+        slug = name.rsplit("/", maxsplit=1)[-1]
     except KeyError:
         slug = plugin_name()
 
@@ -208,9 +204,7 @@ def slug_name() -> str:
 
 
 def task_logger_name() -> str:
-    """
-    Returns the name for task logger
-    """
+    """Returns the name for task logger"""
     return f"{plugin_name()}_task"
 
 
@@ -227,9 +221,7 @@ def metadata_config() -> configparser.ConfigParser:
 
 
 def qgis_plugin_ci_config() -> dict | None:
-    """
-    Get configuration of the ci config or None
-    """
+    """Get configuration of the ci config or None"""
     path_str = root_path(".qgis-plugin-ci")
     if not Path(path_str).exists():
         path_str = plugin_path(".qgis-plugin-ci")
@@ -254,7 +246,6 @@ def plugin_test_data_path(*args: str) -> str:
     :return: Absolute path to the resources folder.
     :rtype: str
     """
-
     path = abspath(abspath(join(root_path(), "test", "data")))
     if not exists(path):
         path = abspath(abspath(join(plugin_path(), "test", "data")))
@@ -317,8 +308,7 @@ def ui_file_dialog(*ui_file_name_parts: str):  # noqa: ANN201
 
 
 def package_file(package: importlib.resources.Package, file_name: str) -> Path:
-    """
-    Safely access a file in the package hierarchy. This will
+    """Safely access a file in the package hierarchy. This will
     ensure the requested file actually exists on the file system
     outside the contextmanager, so that the file can be still
     accessed with the path on demand later.
@@ -333,7 +323,6 @@ def package_file(package: importlib.resources.Package, file_name: str) -> Path:
     >>> package_file(myplugin.resources, 'image.svg')
     C:/Users/me/AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins/myplugin/resources/image.svg
     """
-
     with importlib.resources.path(package, file_name) as requested_path:
         if not requested_path.is_file():
             raise FileNotFoundError(

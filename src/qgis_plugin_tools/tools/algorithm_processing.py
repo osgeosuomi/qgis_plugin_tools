@@ -44,8 +44,7 @@ class BaseProcessingAlgorithm(QgsProcessingAlgorithm):
         icon = resources_path("icons", "icon.png")
         if isfile(icon):
             return QIcon(icon)
-        else:
-            return super().icon()
+        return super().icon()
 
     def shortHelpString(self):
         raise NotImplementedError

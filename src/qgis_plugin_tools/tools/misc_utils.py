@@ -24,8 +24,7 @@ from qgis.core import QgsRectangle
 
 
 def extent_to_bbox(extent: QgsRectangle, precision: int = 2) -> str:
-    """
-    Add extent for the query
+    """Add extent for the query
 
     :param extent: QgsRectangle expected to be in the right extent
     :param precision: Precision of coordinates

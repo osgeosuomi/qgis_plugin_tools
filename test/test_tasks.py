@@ -33,7 +33,7 @@ from qgis_plugin_tools.tools.exceptions import (
 from qgis_plugin_tools.tools.tasks import FunctionTask
 
 
-def fn(*args: Any, **kwargs: Any):  # noqa: ANN003
+def fn(*args: Any, **kwargs: Any):
     for _ in range(10):
         time.sleep(0.01)
     return args, kwargs

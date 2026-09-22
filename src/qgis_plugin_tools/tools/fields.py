@@ -31,27 +31,26 @@ from qgis.PyQt.QtWidgets import QCheckBox, QComboBox, QDateEdit, QWidget
 def variant_type_icon(field_type: QVariant) -> QIcon:  # noqa: PLR0911
     if field_type == QMetaType.Type.Bool:
         return QgsApplication.getThemeIcon("/mIconFieldBool.svg")
-    elif field_type in [
+    if field_type in [
         QMetaType.Type.Int,
         QMetaType.Type.UInt,
         QMetaType.Type.LongLong,
         QMetaType.Type.ULongLong,
     ]:
         return QgsApplication.getThemeIcon("/mIconFieldInteger.svg")
-    elif field_type == QMetaType.Type.Double:
+    if field_type == QMetaType.Type.Double:
         return QgsApplication.getThemeIcon("/mIconFieldFloat.svg")
-    elif field_type == QMetaType.Type.QString:
+    if field_type == QMetaType.Type.QString:
         return QgsApplication.getThemeIcon("/mIconFieldText.svg")
-    elif field_type == QMetaType.Type.QDate:
+    if field_type == QMetaType.Type.QDate:
         return QgsApplication.getThemeIcon("/mIconFieldDate.svg")
-    elif field_type == QMetaType.Type.QDateTime:
+    if field_type == QMetaType.Type.QDateTime:
         return QgsApplication.getThemeIcon("/mIconFieldDateTime.svg")
-    elif field_type == QMetaType.Type.QTime:
+    if field_type == QMetaType.Type.QTime:
         return QgsApplication.getThemeIcon("/mIconFieldTime.svg")
-    elif field_type == QMetaType.Type.QByteArray:
+    if field_type == QMetaType.Type.QByteArray:
         return QgsApplication.getThemeIcon("/mIconFieldBinary.svg")
-    else:
-        return QIcon()
+    return QIcon()
 
 
 def widget_for_field(field_type: QVariant) -> QWidget:  # noqa: PLR0911
@@ -60,7 +59,7 @@ def widget_for_field(field_type: QVariant) -> QWidget:  # noqa: PLR0911
 
     if field_type == QMetaType.Type.Bool:
         return QCheckBox()
-    elif field_type in [
+    if field_type in [
         QMetaType.Type.Int,
         QMetaType.Type.UInt,
         QMetaType.Type.LongLong,
@@ -69,33 +68,31 @@ def widget_for_field(field_type: QVariant) -> QWidget:  # noqa: PLR0911
         spin_box = QgsSpinBox()
         spin_box.setMaximum(2147483647)
         return spin_box
-    elif field_type == QMetaType.Type.Double:
+    if field_type == QMetaType.Type.Double:
         spin_box = QgsDoubleSpinBox()
         spin_box.setMaximum(2147483647)
         return spin_box
-    elif field_type == QMetaType.Type.QString:
+    if field_type == QMetaType.Type.QString:
         return q_combo_box
-    elif field_type == QMetaType.Type.QDate:
+    if field_type == QMetaType.Type.QDate:
         return QDateEdit()
-    elif field_type in (QMetaType.Type.QDateTime, QMetaType.Type.QTime):
+    if field_type in (QMetaType.Type.QDateTime, QMetaType.Type.QTime):
         return QgsDateTimeEdit()
-    elif field_type == QMetaType.Type.QByteArray:
+    if field_type == QMetaType.Type.QByteArray:
         return q_combo_box
-    else:
-        return q_combo_box
+    return q_combo_box
 
 
 def value_for_widget(widget: type[QWidget]) -> str | bool | float | int:
     if isinstance(widget, QComboBox):
         return widget.currentText()
-    elif isinstance(widget, QCheckBox):
+    if isinstance(widget, QCheckBox):
         return widget.isChecked()
-    elif isinstance(widget, QgsDateTimeEdit):
+    if isinstance(widget, QgsDateTimeEdit):
         return widget.dateTime().toString("yyyy-MM-dd hh:mm:ss")
-    elif isinstance(widget, (QgsSpinBox, QgsDoubleSpinBox)):
+    if isinstance(widget, (QgsSpinBox, QgsDoubleSpinBox)):
         return widget.value()
-    else:
-        return str(widget.text())
+    return str(widget.text())
 
 
 def provider_fields(fields: QgsFields) -> QgsFields:

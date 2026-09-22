@@ -33,11 +33,9 @@ from qgis_plugin_tools.tools.tasks import FunctionTask
 def log_if_fails(
     fn: Callable | None = None, /, *, logger_name: str = __name__
 ) -> Callable:
-    """
-    Use this as a decorator with functions and methods that
+    """Use this as a decorator with functions and methods that
     might throw uncaught exceptions.
     """
-
     # caller is at depth 3 (MessageBarLogger log call, this function, actual call)
     message_bar = MessageBarLogger(logger_name, stack_level=3)
 
@@ -66,9 +64,7 @@ def log_if_fails(
 
 
 def taskify(fn: Callable) -> Callable:
-    """
-    Decoration used to turn any function or method into a FunctionTask task.
-    """
+    """Decoration used to turn any function or method into a FunctionTask task."""
 
     @wraps(fn)
     def wrapper(*args: Any, **kwargs: Any) -> FunctionTask:

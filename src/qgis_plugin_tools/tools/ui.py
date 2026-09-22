@@ -36,8 +36,7 @@ class CompiledUI:
 
 
 def load_ui_file(package: importlib.resources.Package, ui_file_name: str) -> Any:
-    """
-    Use like importlib.resources to load a single ui file from a package to a class:
+    """Use like importlib.resources to load a single ui file from a package to a class:
 
     ```
     MyUi: Type[QDockWidget] = load_ui_file(my.imported.module, "dock_widget.ui")

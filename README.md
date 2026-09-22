@@ -1,4 +1,5 @@
 # QGIS Plugin tools
+
 [![PyPI version](https://badge.fury.io/py/qgis_plugin_tools.svg)](https://badge.fury.io/py/qgis_plugin_tools)
 [![Downloads](https://img.shields.io/pypi/dm/qgis_plugin_tools.svg)](https://pypistats.org/packages/qgis_plugin_tools)
 [![Code on Github](https://img.shields.io/badge/Code-GitHub-brightgreen)](https://github.com/osgeosuomi/pytest-qgis)
@@ -6,10 +7,10 @@
 [![uv](https://img.shields.io/badge/uv-managed-blue)](https://github.com/astral-sh/uv)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-
 **Warning: The API is not stable yet. Function and files may move between commits.**
 
 The module is helping you with:
+
 * [setting up some logging](docs/usage.md#Logging) (QgsMessageLog, file log, remote logs...)
 * [fetching resources](docs/usage.md#Resource-tools) in `resources` or other folders
 * [fetching compiled UI file](docs/usage.md#Resource-tools) in `resources/ui` folder
@@ -24,11 +25,13 @@ It is recommended to use this library as an external dependency with the help of
 Or some other tool that can download the library though pip.
 
 The tool can be installed via pip:
+
 ```shell
 pip install qgis_plugin_tools
 ```
 
 Remember to add this as a runtime requirement in your pyproject.toml:
+
 ```toml
 [tool.qgis_plugin_dev_tools]
 plugin_package_name = "your_plugin_package_name"
@@ -42,8 +45,8 @@ runtime_requires = [
 This project uses [uv](https://docs.astral.sh/uv/getting-started/installation/)
 to manage python packages. Make sure to have it installed first.
 
-- Create a venv that is aware of system QGIS libraries: `uv venv --system-site-packages`
-    - On Windows, maybe use a tool like [qgis-venv-creator](ttps://github.com/GispoCoding/qgis-venv-creator).
+* Create a venv that is aware of system QGIS libraries: `uv venv --system-site-packages`
+  * On Windows, maybe use a tool like [qgis-venv-creator](ttps://github.com/GispoCoding/qgis-venv-creator).
 
 ```shell
 # Activate the virtual environment
@@ -53,6 +56,7 @@ $ uv sync
 # Install pre-commit hooks
 $ pre-commit install
 ```
+
 #### Updating dependencies
 
 `uv lock --upgrade`

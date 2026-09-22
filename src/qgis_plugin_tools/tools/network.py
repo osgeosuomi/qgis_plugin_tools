@@ -78,8 +78,7 @@ def fetch(
     params: dict[str, str] | None = None,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> str:
-    """
-    Fetch resource from the internet. Similar to requests.get(url) but is
+    """Fetch resource from the internet. Similar to requests.get(url) but is
     recommended way of handling requests in QGIS plugin
     :param url: address of the web resource
     :param encoding: Encoding which will be used to decode the bytes
@@ -100,8 +99,7 @@ def post(  # noqa: PLR0913
     files: list[FileField] | None = None,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> str:
-    """
-    Post resource. Similar to requests.post(url, data, files) but is
+    """Post resource. Similar to requests.post(url, data, files) but is
     recommended way of handling requests in QGIS plugin
     :param url: address of the web resource
     :param encoding: Encoding which will be used to decode the bytes
@@ -122,8 +120,7 @@ def fetch_raw(
     params: dict[str, str] | None = None,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> tuple[bytes, str]:
-    """
-    Fetch resource from the internet. Similar to requests.get(url) but is
+    """Fetch resource from the internet. Similar to requests.get(url) but is
     recommended way of handling requests in QGIS plugin
     :param url: address of the web resource
     :param encoding: Encoding which will be used to decode the bytes
@@ -143,8 +140,7 @@ def post_raw(  # noqa: PLR0913
     files: list[FileField] | None = None,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> tuple[bytes, str]:
-    """
-    Post resource. Similar to requests.post(url, data, files) but is
+    """Post resource. Similar to requests.post(url, data, files) but is
     recommended way of handling requests in QGIS plugin
     :param url: address of the web resource
     :param encoding: Encoding which will be used to decode the bytes
@@ -169,8 +165,7 @@ def request_raw(  # noqa: PLR0915, PLR0913, C901, PLR0912
     files: list[FileField] | None = None,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> tuple[bytes, str]:
-    """
-    Request resource from the internet. Similar to requests.get(url) and
+    """Request resource from the internet. Similar to requests.get(url) and
     requests.post(url, data) but is recommended way of handling requests in QGIS plugin
     :param url: address of the web resource
     :param method: method to use, defaults to 'get'
@@ -286,8 +281,7 @@ def download_to_file(  # noqa: PLR0913
     encoding: str = ENCODING,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> Path:
-    """
-    Downloads a binary file to the file efficiently
+    """Downloads a binary file to the file efficiently
     :param url: Url of the file
     :param output_dir: Path to the output directory
     :param output_name: If given, use this as file name. Otherwise reads file name from

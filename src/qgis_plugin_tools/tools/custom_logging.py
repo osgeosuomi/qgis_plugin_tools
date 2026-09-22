@@ -75,9 +75,9 @@ def qgis_level(logging_level: str) -> int:
     """
     if logging_level in {"CRITICAL", "ERROR"}:
         return Qgis.MessageLevel.Critical
-    elif logging_level == "WARNING":
+    if logging_level == "WARNING":
         return Qgis.MessageLevel.Warning
-    elif logging_level in {"INFO", "DEBUG"}:
+    if logging_level in {"INFO", "DEBUG"}:
         return Qgis.MessageLevel.Info
 
     return Qgis.MessageLevel.Info
@@ -86,8 +86,7 @@ def qgis_level(logging_level: str) -> int:
 def bar_msg(
     details: Any = "", duration: int | None = None, success: bool = False
 ) -> dict[str, Any]:
-    """
-    Helper function to construct extra arguments for message bar logger message
+    """Helper function to construct extra arguments for message bar logger message
 
     :param details: Longer body of the message. Can be set to empty string.
     :param duration: can be used to specify the message timeout in seconds. If
@@ -137,8 +136,7 @@ class QgsLogHandler(logging.Handler):
 
 
 class QgsMessageBarFilter(logging.Filter):
-    """
-    A logging filter to decide whether the message should be passed and
+    """A logging filter to decide whether the message should be passed and
     to QgsMessageBarHandler as enriched
 
     Description of keys:
@@ -171,11 +169,11 @@ class QgsMessageBarFilter(logging.Filter):
         """
         if logging_level == "CRITICAL":
             return 12
-        elif logging_level == "ERROR":
+        if logging_level == "ERROR":
             return 10
-        elif logging_level == "WARNING":
+        if logging_level == "WARNING":
             return 6
-        elif logging_level in {"INFO", "DEBUG"}:
+        if logging_level in {"INFO", "DEBUG"}:
             return 4
 
         return 4
@@ -222,8 +220,7 @@ class QgsMessageBarHandler(logging.Handler):
         self._message_bar_proxy.moveToThread(QgsApplication.instance().thread())
 
     def emit(self, record: logging.LogRecord) -> None:
-        """
-        Push info message to the QGIS message bar. Pass "extra" kwarg
+        """Push info message to the QGIS message bar. Pass "extra" kwarg
         to logger to use with mandatory "details" key.
 
         :param record: logging record enriched with extra information from
@@ -277,8 +274,7 @@ def get_log_level(target: LogTarget) -> int:
 
 
 def get_log_folder() -> Path:
-    """
-    Get Path to the log folder in QGIS profile directory.
+    """Get Path to the log folder in QGIS profile directory.
     If it does not exist, create one.
 
     :return: Path to the log folder
@@ -352,7 +348,6 @@ def setup_logger(  # noqa: QGS105
 ) -> logging.Logger:
     """Run once when the module is loaded and enable logging.
 
-
     :param logger_name: The logger name that we want to set up.
     :param iface: QGIS Interface
 
@@ -366,7 +361,6 @@ def setup_logger(  # noqa: QGS105
        LOGGER.info('Some bar message', extra={'details': 'details'})
        LOGGER.info('Some bar message', extra=bar_msg('details')) # With helper function
     """
-
     if iface is None:
         try:
             from qgis.utils import iface  # type: ignore  # noqa: PLC0415
@@ -398,8 +392,7 @@ def setup_logger(  # noqa: QGS105
 
 
 def add_logger_msg_bar_to_widget(logger_name: str, widget: QWidget) -> None:
-    """
-    Adds QgsMessageBar to any widget if it is not already there.
+    """Adds QgsMessageBar to any widget if it is not already there.
     This message bar will be used in logging instead of iface message bar.
     :param logger_name: The logger name that we want modify
     :param widget: QWidget that will have the message bar
@@ -414,8 +407,7 @@ def add_logger_msg_bar_to_widget(logger_name: str, widget: QWidget) -> None:
 
 
 def use_custom_msg_bar_in_logger(logger_name: str, msg_bar: QgsMessageBar) -> None:
-    """
-    Remove QgsMessageBarHandler that is using the iface message bar
+    """Remove QgsMessageBarHandler that is using the iface message bar
     and use custom message bar instead
 
     :param logger_name: The logger name that we want modify
@@ -451,9 +443,7 @@ def teardown_logger(logger_name: str) -> None:
 
 
 def teardown_loggers(logger_names: list[str]) -> None:
-    """
-    Remove the added handlers from the speficied handler.
-    """
+    """Remove the added handlers from the speficied handler."""
     for logger_name in logger_names:
         teardown_logger(logger_name)
 
@@ -463,8 +453,7 @@ def setup_loggers(
     message_log_name: str,
     message_bar: QgsMessageBar | None = None,
 ) -> Callable[[], None]:
-    """
-    Setups all the loggers for the given logger names.
+    """Setups all the loggers for the given logger names.
 
     Returns a teardown callback so setup can be called in initGui and
     the returned callback in unload.

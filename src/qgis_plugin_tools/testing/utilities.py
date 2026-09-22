@@ -53,9 +53,7 @@ def qgis_supports_temporal() -> bool:
 
 
 class TestTaskRunner:
-    """
-    This utility class could be used when running tasks in tests.
-    """
+    """This utility class could be used when running tasks in tests."""
 
     success = False
     fail = False
@@ -74,11 +72,9 @@ class TestTaskRunner:
         self,
         task: QgsTask,
         cancel: bool = False,
-        sleep_before_cancel: int | float = 0.0,
+        sleep_before_cancel: float = 0.0,
     ) -> bool:
-        """
-        Run task and return whether it was successful or not.
-        """
+        """Run task and return whether it was successful or not."""
         task.taskCompleted.connect(self.completed)
         task.taskTerminated.connect(self.terminated)
         task.progressChanged.connect(self.set_progress)
@@ -95,9 +91,7 @@ class TestTaskRunner:
 
 
 class SimpleTask(BaseTask):
-    """
-    Test task to used in tests needing a simple task.
-    """
+    """Test task to used in tests needing a simple task."""
 
     def __init__(
         self,

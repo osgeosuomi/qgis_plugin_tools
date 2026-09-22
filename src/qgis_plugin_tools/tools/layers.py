@@ -96,8 +96,7 @@ def set_temporal_settings(
     time_step: int,
     unit: "QgsUnitTypes.TemporalUnit" = None,
 ) -> None:
-    """
-    Set temporal settings for vector layer temporal range for raster layer
+    """Set temporal settings for vector layer temporal range for raster layer
     :param layer: raster layer
     :param dt_field: name of the date time field
     :param time_step: time step in some QgsUnitTypes.TemporalUnit
@@ -120,8 +119,7 @@ def evaluate_expressions(
     layer: QgsMapLayer | None = None,
     context_scopes: list[QgsExpressionContextScope] | None = None,
 ) -> bool | int | str | float | None:
-    """
-    Evaluate a QGIS expression
+    """Evaluate a QGIS expression
     :param exp: QGIS expression
     :param feature: Optional QgsFeature
     :param layer: Optional QgsMapLayer
@@ -147,8 +145,7 @@ def evaluate_expressions(
 
 
 def get_field_index(layer: QgsVectorLayer, field_name: str) -> int:
-    """
-    Get field index if exists
+    """Get field index if exists
     :param layer: QgsVectorLayer
     :param field_name: name of the field
     :return: index of the field

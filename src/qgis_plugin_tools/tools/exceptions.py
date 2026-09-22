@@ -36,8 +36,7 @@ class QgsPluginException(Exception):  # noqa: N818
     def __init__(
         self, message: str | None = None, bar_msg: dict[str, Any] | None = None
     ) -> None:
-        """
-        Initializes the exception with custom bar_msg to be shown in message bar
+        """Initializes the exception with custom bar_msg to be shown in message bar
         :param message: Title of the message
         :param bar_msg: dictionary formed by tools.custom_logging.bar_msg
         """
@@ -57,8 +56,7 @@ class QgsPluginNetworkException(QgsPluginException):
         error: QNetworkReply.NetworkError | None = None,
         **kwargs: Any,
     ) -> None:
-        """
-        Initializes the exception with error details so the plugin may process
+        """Initializes the exception with error details so the plugin may process
         different network exceptions differently.
         :param status: The QNetworkReply error type
         """
