@@ -28,8 +28,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Without git the checkout action downloads a tarball, which honours the
-      # export-ignore rules in .gitattributes and drops files needed by the build
       - run: |
           apt update
           apt install -y git python3-venv curl

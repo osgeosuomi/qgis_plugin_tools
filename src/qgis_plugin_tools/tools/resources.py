@@ -40,48 +40,6 @@ if TYPE_CHECKING:
 
 from qgis.core import QgsApplication
 
-PLUGIN_NAME: str = ""
-SLUG_NAME: str = ""
-
-
-def is_submodule() -> bool:
-    """Detects if qgis_plugin_tools is used as a submodule
-
-    Checks if the second level package name is qgis_plugin_tools
-    The __name__ is:
-    - "myplugin.qgis_plugin_tools.tools.resources" when used as a submodule
-    - "myplugin.dependencies.qgis_plugin_tools.tools.resources" when used as embedded
-      dependency
-    - "qgis_plugin_tools.tools.resources" when used as pip installed package
-    """
-
-    try:
-        _, second_level_package_name, *_ = __name__.split(".")
-    except ValueError:
-        return False
-    return second_level_package_name == "qgis_plugin_tools"
-
-
-_IS_SUBMODULE_USAGE = is_submodule()
-
-
-def _plugin_path_submodule() -> str:
-    # assume qgis_plugin_tools is inside the plugin package,
-    # use the path to the top level module name
-
-    top_level_package_name = __name__.split(".", maxsplit=1)[0]
-    module_file = sys.modules[top_level_package_name].__file__
-
-    if module_file is not None:
-        path = str(Path(module_file).parent.resolve())
-    else:
-        # maybe possible to have __file__ as none? fall back to default
-        # structure with qgis_plugin_tools directly under plugin package
-        path = dirname(dirname(__file__))
-        path = abspath(abspath(join(path, pardir)))
-
-    return path
-
 
 def _iterate_modules(module_name: str) -> Iterator[str]:
     """Iterates modules bottom up
@@ -158,8 +116,8 @@ def _plugin_path_dependency() -> str:
             if is_plugin and is_plugin.plugin_directory:
                 return is_plugin.plugin_directory
 
-    # fall back to default directory tree
-    return _plugin_path_submodule()
+    # fall back to the qgis_plugin_tools package directory
+    return str(Path(__file__).resolve().parent.parent)
 
 
 def plugin_path(*args: str) -> str:
@@ -171,10 +129,7 @@ def plugin_path(*args: str) -> str:
     :return: Absolute path to the resource.
     :rtype: str
     """
-    if _IS_SUBMODULE_USAGE:
-        path = _plugin_path_submodule()
-    else:
-        path = _plugin_path_dependency()
+    path = _plugin_path_dependency()
 
     for item in args:
         path = abspath(join(path, item))
@@ -216,22 +171,12 @@ def plugin_name() -> str:
     :return: The stripped plugin name.
     :rtype: basestring
     """
-    global PLUGIN_NAME  # noqa: PLW0602, PLW0603
-
-    if PLUGIN_NAME != "":
-        return PLUGIN_NAME
-
     try:
         metadata = metadata_config()
         name: str = metadata["general"]["name"]
         name = name.replace(" ", "").strip()
     except KeyError:
         name = "test_plugin"
-
-    # if qgis plugin tools is run as a dependency, global var cannot be set
-    # since it might confuse multiple plugins in the same env using this fn
-    if _IS_SUBMODULE_USAGE:
-        PLUGIN_NAME = name
 
     return name
 
@@ -252,22 +197,12 @@ def plugin_display_name() -> str:
 
 def slug_name() -> str:
     """Return project slug name in .qgis-plugin.ci"""
-    global SLUG_NAME  # noqa: PLW0603
-
-    if SLUG_NAME != "":
-        return SLUG_NAME
-
     try:
         metadata = metadata_config()
         name: str = metadata["general"]["repository"]
         slug = name.split("/")[-1]
     except KeyError:
         slug = plugin_name()
-
-    # if qgis plugin tools is run as a dependency, global var cannot be set
-    # since it might confuse multiple plugins in the same env using this fn
-    if _IS_SUBMODULE_USAGE:
-        SLUG_NAME = slug
 
     return slug
 
