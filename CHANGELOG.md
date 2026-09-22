@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Breaking maintenance: Drop support for Python 3.11 and Python 3.10
 - Breaking maintenance: [Relicense](https://github.com/osgeosuomi/qgis_plugin_tools/issues/106) the project under GPL-2.0-or-later
 - Breaking maintenance: Remove deprecated functionality
 - Fix: Message bar helpers no longer hide unrelated errors. Only `RuntimeError` is suppressed.
@@ -14,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maintenance: Add bandit security checks to linting.
 - Maintenance: Replace an `assert` with a real check in `resources.plugin_path()` internals. No behaviour change.
 - Maintenance: Move the package to a `src/` layout and build with the uv build backend instead of setuptools.
+- Maintenance: use qgis-plugin-copier-template in the repository
 
 ## [1.1.1] - 2026-7-24
 
