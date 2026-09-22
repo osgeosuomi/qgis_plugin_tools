@@ -24,24 +24,11 @@
 
 import os
 import time
-import warnings
 
 from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 
-from ..tools.exceptions import QgsPluginNotImplementedException
 from ..tools.tasks import BaseTask
-
-
-def get_qgis_app() -> None:
-    warnings.warn(
-        "get_qgis_app() is deprecated. Use library pytest-qgis instead.",
-        DeprecationWarning,
-        stacklevel=2,
-    )
-    raise QgsPluginNotImplementedException(
-        "get_qgis_app() is deprecated. Use library pytest-qgis instead."
-    )
 
 
 def is_running_inside_ci() -> bool:

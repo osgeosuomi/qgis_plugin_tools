@@ -70,7 +70,6 @@ explicit = true
 [tool.setuptools]
 packages = [
     "qgis_plugin_tools",
-    "qgis_plugin_tools.infrastructure",
     "qgis_plugin_tools.resources",
     "qgis_plugin_tools.resources.ui",
     "qgis_plugin_tools.testing",
