@@ -61,11 +61,11 @@ class CheckableComboBox:
         self.text_changed(None)
 
     def selected_items(self) -> list:
-        checked_items = []
-        for item in self.model.findItems("*", Qt.MatchFlag.MatchWildcard):
-            if item.checkState() == Qt.CheckState.Checked:
-                checked_items.append(item.data())
-        return checked_items
+        return [
+            item.data()
+            for item in self.model.findItems("*", Qt.MatchFlag.MatchWildcard)
+            if item.checkState() == Qt.CheckState.Checked
+        ]
 
     def set_selected_items(self, items):
         for item in self.model.findItems("*", Qt.MatchFlag.MatchWildcard):

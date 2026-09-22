@@ -38,18 +38,18 @@ class MessageBarLogger:
         self._logger = logging.getLogger(logger_name)
         self._logger_kwargs: dict[str, Any] = (
             {}
-            if sys.version_info.major == 3 and sys.version_info.minor < 8
+            if sys.version_info.major == 3 and sys.version_info.minor < 8  # noqa: YTT204
             else {"stacklevel": stack_level}
         )
 
-    def info(  # noqa: PLR0913
+    def info(  # noqa: PLR0913, PLR0917
         self,
         message: Any,
         details: Any = "",
         duration: int | None = None,
-        success: bool = False,
+        success: bool = False,  # noqa: FBT001, FBT002
         exc_info: Exception | None = None,
-        stack_info: bool = False,
+        stack_info: bool = False,  # noqa: FBT001, FBT002
     ) -> None:
         """Logs info messages to message bar and to other logging handlers
         :param message: Header of the message
@@ -76,14 +76,14 @@ class MessageBarLogger:
                 **self._logger_kwargs,
             )
 
-    def warning(  # noqa: PLR0913
+    def warning(  # noqa: PLR0913, PLR0917
         self,
         message: Any,
         details: Any = "",
         duration: int | None = None,
-        success: bool = False,
+        success: bool = False,  # noqa: FBT001, FBT002
         exc_info: Exception | None = None,
-        stack_info: bool = False,
+        stack_info: bool = False,  # noqa: FBT001, FBT002
     ) -> None:
         """Logs warning messages to message bar and to other logging handlers
         :param message: Header of the message
@@ -110,14 +110,14 @@ class MessageBarLogger:
                 **self._logger_kwargs,
             )
 
-    def error(  # noqa: PLR0913
+    def error(  # noqa: PLR0913, PLR0917
         self,
         message: Any,
         details: Any = "",
         duration: int | None = None,
-        success: bool = False,
+        success: bool = False,  # noqa: FBT001, FBT002
         exc_info: Exception | None = None,
-        stack_info: bool = False,
+        stack_info: bool = False,  # noqa: FBT001, FBT002
     ) -> None:
         """Logs error of risen exception to message bar and to other logging handlers
         :param message: Header of the message
@@ -144,14 +144,14 @@ class MessageBarLogger:
                 **self._logger_kwargs,
             )
 
-    def exception(  # noqa: PLR0913
+    def exception(  # noqa: PLR0913, PLR0917
         self,
         message: Any,
         details: Any = "",
         duration: int | None = None,
-        success: bool = False,
+        success: bool = False,  # noqa: FBT001, FBT002
         exc_info: Exception | None = None,
-        stack_info: bool = False,
+        stack_info: bool = False,  # noqa: FBT001, FBT002
     ) -> None:
         """Logs error with traceback of risen exception to message bar and to
         other logging handlers
@@ -173,7 +173,7 @@ class MessageBarLogger:
             str(message),
             extra=bar_msg(details, duration, success),
             stack_info=stack_info,
-            exc_info=True,
+            exc_info=True,  # noqa: LOG014 - helper is called from except blocks
             **self._logger_kwargs,
         )
         if details != "":

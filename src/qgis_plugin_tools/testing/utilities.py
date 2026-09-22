@@ -46,10 +46,10 @@ def is_running_in_tools_module_ci() -> bool:
 def qgis_supports_temporal() -> bool:
     try:
         from qgis.core import QgsRasterLayerTemporalProperties  # noqa: F401, PLC0415
-
-        return True
     except ImportError:
         return False
+    else:
+        return True
 
 
 class TestTaskRunner:
@@ -71,7 +71,7 @@ class TestTaskRunner:
     def run_task(
         self,
         task: QgsTask,
-        cancel: bool = False,
+        cancel: bool = False,  # noqa: FBT001, FBT002
         sleep_before_cancel: float = 0.0,
     ) -> bool:
         """Run task and return whether it was successful or not."""
@@ -95,7 +95,7 @@ class SimpleTask(BaseTask):
 
     def __init__(
         self,
-        will_fail: bool = False,
+        will_fail: bool = False,  # noqa: FBT001, FBT002
         error_to_raise: type[Exception] = ValueError,
         steps: int = 10,
         sleep_time: float = 0.01,
@@ -110,7 +110,8 @@ class SimpleTask(BaseTask):
         for i in range(self._steps):
             self.setProgress(i * self._steps)
             if self._will_fail:
-                raise self._error_to_raise("custom failure")
+                message = "custom failure"
+                raise self._error_to_raise(message)
             self._check_if_canceled()
             time.sleep(self._sleep_time)
         return True

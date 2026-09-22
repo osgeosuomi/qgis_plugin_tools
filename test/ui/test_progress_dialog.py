@@ -23,6 +23,8 @@
 import time
 
 import pytest
+from pytest_mock import MockerFixture
+from pytestqt.qtbot import QtBot
 from qgis.PyQt import QtCore
 from qgis.PyQt.QtCore import QCoreApplication
 
@@ -32,10 +34,10 @@ from qgis_plugin_tools.widgets import progress_dialog
 
 
 @pytest.mark.parametrize("show_abort_btn", [True, False])
-def test_progress_bar_dialog(qtbot, show_abort_btn):
+def test_progress_bar_dialog(qtbot: QtBot, show_abort_btn: bool):
     aborted = False
 
-    def abort():
+    def abort() -> None:
         nonlocal aborted
         aborted = True
 
@@ -60,7 +62,7 @@ def test_progress_bar_dialog(qtbot, show_abort_btn):
 
 
 @pytest.mark.parametrize("show_abort_btn", [True, False])
-def test_create_simple_continuous_progress_dialog(qtbot, show_abort_btn):
+def test_create_simple_continuous_progress_dialog(qtbot: QtBot, show_abort_btn: bool):
     p_dialog = progress_dialog.create_simple_continuous_progress_dialog(
         "Progressing", show_abort_button=show_abort_btn
     )
@@ -77,7 +79,11 @@ def test_create_simple_continuous_progress_dialog(qtbot, show_abort_btn):
 @pytest.mark.parametrize("should_abort", [True, False])
 @pytest.mark.parametrize("continuous", [True, False])
 def test_run_task_with_progress_dialog(
-    qtbot, show_abort_btn, should_abort, continuous, mocker
+    qtbot: QtBot,
+    show_abort_btn: bool,
+    should_abort: bool,
+    continuous: bool,
+    mocker: MockerFixture,
 ):
     # setup
     aborted = False
@@ -92,11 +98,11 @@ def test_run_task_with_progress_dialog(
         p_dialog = progress_dialog.ProgressDialog(show_abort_button=show_abort_btn)
         p_dialog.set_status("Mocking")
 
-    def complete():
+    def complete() -> None:
         nonlocal completed
         completed = True
 
-    def abort():
+    def abort() -> None:
         nonlocal aborted
         aborted = True
         if show_abort_btn:
@@ -104,7 +110,7 @@ def test_run_task_with_progress_dialog(
         else:
             p_dialog.close()
 
-    def terminate():
+    def terminate() -> None:
         nonlocal terminated
         terminated = True
 
@@ -165,17 +171,17 @@ def test_run_task_with_progress_dialog(
 @pytest.mark.parametrize("show_abort_btn", [True, False])
 @pytest.mark.parametrize("should_fail", [True, False])
 def test_run_task_with_continuous_progress_dialog_failure(
-    qtbot, show_abort_btn, should_fail
+    qtbot: QtBot, show_abort_btn: bool, should_fail: bool
 ):
     # setup
     terminated = False
     completed = False
 
-    def complete():
+    def complete() -> None:
         nonlocal completed
         completed = True
 
-    def terminate():
+    def terminate() -> None:
         nonlocal terminated
         terminated = True
 

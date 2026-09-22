@@ -49,8 +49,8 @@ try:
     import requests
     from requests.exceptions import RequestException
 except ImportError:
-    requests = None  # type: ignore
-    RequestException = None  # type: ignore
+    requests = None  # type: ignore[assignment]
+    RequestException = None  # type: ignore[assignment, misc]
 
 LOGGER = logging.getLogger(__name__)
 ENCODING = "utf-8"
@@ -91,7 +91,7 @@ def fetch(
     return content.decode(ENCODING)
 
 
-def post(  # noqa: PLR0913
+def post(  # noqa: PLR0913, PLR0917
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
@@ -132,7 +132,7 @@ def fetch_raw(
     return request_raw(url, "get", encoding, authcfg_id, params, timeout=timeout)
 
 
-def post_raw(  # noqa: PLR0913
+def post_raw(  # noqa: PLR0913, PLR0917
     url: str,
     encoding: str = ENCODING,
     authcfg_id: str = "",
@@ -155,7 +155,7 @@ def post_raw(  # noqa: PLR0913
     )
 
 
-def request_raw(  # noqa: PLR0915, PLR0913, C901, PLR0912
+def request_raw(  # noqa: PLR0915, PLR0913, PLR0917, C901, PLR0912
     url: str,
     method: Literal["get", "post"] = "get",
     encoding: str = ENCODING,
@@ -242,7 +242,8 @@ def request_raw(  # noqa: PLR0915, PLR0913, C901, PLR0912
                 byte_data = b""
             _ = request_blocking.post(req, byte_data)
         else:
-            raise Exception(f"Request method {method} not supported.")
+            message = f"Request method {method} not supported."
+            raise QgsPluginNetworkException(message)
         reply: QgsNetworkReplyContent = request_blocking.reply()
         reply_error = reply.error()
         if reply_error != QNetworkReply.NetworkError.NoError:
@@ -273,11 +274,11 @@ def request_raw(  # noqa: PLR0915, PLR0913, C901, PLR0912
         QgsNetworkAccessManager.setTimeout(previous_timeout)
 
 
-def download_to_file(  # noqa: PLR0913
+def download_to_file(  # noqa: PLR0913, PLR0917
     url: str,
     output_dir: Path,
     output_name: str | None = None,
-    use_requests_if_available: bool = True,
+    use_requests_if_available: bool = True,  # noqa: FBT001, FBT002
     encoding: str = ENCODING,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
 ) -> Path:
@@ -326,7 +327,7 @@ def download_to_file(  # noqa: PLR0913
                     default_filenames[0] if len(default_filenames) else ""
                 )
                 output = get_output(default_filename)
-                with open(output, "wb") as f:
+                with Path(output).open("wb") as f:
                     shutil.copyfileobj(r.raw, f)
         except RequestException as e:
             raise QgsPluginNetworkException(
@@ -336,6 +337,6 @@ def download_to_file(  # noqa: PLR0913
         # Using simple fetch_raw
         content, default_filename = fetch_raw(url, encoding, timeout=timeout)
         output = get_output(default_filename)
-        with open(output, "wb") as f:
+        with Path(output).open("wb") as f:
             f.write(content)
     return output

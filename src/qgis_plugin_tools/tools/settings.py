@@ -20,6 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
+
 from typing import Any
 
 from qgis.core import QgsExpressionContextUtils, QgsProject, QgsSettings
@@ -41,7 +42,7 @@ def get_setting(
     key: str,
     default: Any | None = None,
     typehint: type | None = None,
-    internal: bool = True,
+    internal: bool = True,  # noqa: FBT001, FBT002
     section: int = QgsSettings.Section.NoSection,
 ) -> QVariant | str:
     """Get QGIS setting value plugin
@@ -63,8 +64,8 @@ def get_setting(
 
 def set_setting(
     key: str,
-    value: str | float | bool,
-    internal: bool = True,
+    value: str | float | bool,  # noqa: FBT001
+    internal: bool = True,  # noqa: FBT001, FBT002
     section: int = QgsSettings.Section.NoSection,
 ) -> bool:
     """Set a value in the QgsSetting
@@ -82,7 +83,7 @@ def get_project_setting(
     key: str,
     default: Any | None = None,
     typehint: type | None = None,
-    internal: bool = True,
+    internal: bool = True,  # noqa: FBT001, FBT002
 ) -> QVariant | str | None:
     """Get QGIS project setting value
 
@@ -120,7 +121,9 @@ def get_project_setting(
 
 
 def set_project_setting(
-    key: str, value: str | float | bool, internal: bool = True
+    key: str,
+    value: str | float | bool,  # noqa: FBT001
+    internal: bool = True,  # noqa: FBT001, FBT002
 ) -> bool:
     """Set a value in the QGIS project settings
 
@@ -135,7 +138,7 @@ def set_project_setting(
     return True
 
 
-def parse_value(value: QVariant | str) -> None | str | bool:
+def parse_value(value: QVariant | str) -> str | bool | None:
     """Parse QSettings value
 
     :param value: QVariant

@@ -61,7 +61,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
     def __init__(
         self,
         parent: QDialog | None = None,
-        show_abort_button: bool = False,
+        show_abort_button: bool = False,  # noqa: FBT001, FBT002
         abort_btn_text: str = abort_btn_text,
     ) -> None:
         QDialog.__init__(self, parent)
@@ -84,7 +84,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
         self.update_progress_bar(0)
 
     def set_status(self, status_text: str) -> None:
-        LOGGER.debug(f"Status:   {status_text}")
+        LOGGER.debug("Status:   %s", status_text)
         self.status_label.setText(status_text)
 
     def update_progress_bar(self, progress: float) -> None:
@@ -105,7 +105,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
 def create_simple_continuous_progress_dialog(
     status_text: str,
     parent: QDialog | None = None,
-    show_abort_button: bool = False,
+    show_abort_button: bool = False,  # noqa: FBT001, FBT002
     abort_btn_text: str = ProgressDialog.abort_btn_text,
 ) -> ProgressDialog:
     """Creates simple progress dialog with a continuous progress bar."""
@@ -116,11 +116,11 @@ def create_simple_continuous_progress_dialog(
     return progress_dialog
 
 
-def run_task_with_progress_dialog(  # noqa: PLR0913
+def run_task_with_progress_dialog(  # noqa: PLR0913, PLR0917
     task: QgsTask,
     status_text: str,
     parent: QDialog | None = None,
-    show_abort_button: bool = False,
+    show_abort_button: bool = False,  # noqa: FBT001, FBT002
     abort_btn_text: str = ProgressDialog.abort_btn_text,
     completed_callback: Callable | None = None,
     terminated_callback: Callable | None = None,
@@ -134,11 +134,11 @@ def run_task_with_progress_dialog(  # noqa: PLR0913
     )
 
 
-def run_task_with_continuous_progress_dialog(  # noqa: PLR0913
+def run_task_with_continuous_progress_dialog(  # noqa: PLR0913, PLR0917
     task: QgsTask,
     status_text: str,
     parent: QDialog | None = None,
-    show_abort_button: bool = False,
+    show_abort_button: bool = False,  # noqa: FBT001, FBT002
     abort_btn_text: str = ProgressDialog.abort_btn_text,
     completed_callback: Callable | None = None,
     terminated_callback: Callable | None = None,
@@ -158,8 +158,8 @@ def _make_connections_and_run_task(
     completed_callback: Callable | None,
     terminated_callback: Callable | None,
 ) -> None:
-    task.taskCompleted.connect(lambda: progress_dialog.close())
-    task.taskTerminated.connect(lambda: progress_dialog.close())
+    task.taskCompleted.connect(progress_dialog.close)
+    task.taskTerminated.connect(progress_dialog.close)
     progress_dialog.aborted.connect(task.cancel)
     if completed_callback:
         task.taskCompleted.connect(completed_callback)

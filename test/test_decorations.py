@@ -23,6 +23,7 @@
 import time
 
 from qgis.core import Qgis
+from qgis.gui import QgisInterface
 
 from qgis_plugin_tools.testing.utilities import TestTaskRunner
 from qgis_plugin_tools.tools.custom_logging import bar_msg
@@ -31,17 +32,21 @@ from qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 
 
 @log_if_fails
-def function_that_fails(arg, arg2, kwarg1=None, kwarg2=None):
-    raise ValueError("Error message")
+def function_that_fails(
+    arg: int, arg2: int, kwarg1: int | None = None, kwarg2: int | None = None
+):
+    message = "Error message"
+    raise ValueError(message)
 
 
 @log_if_fails
 def function_that_shows_msg():
-    raise QgsPluginNotImplementedException("Error message", bar_msg("Please implement"))
+    message = "Error message"
+    raise QgsPluginNotImplementedException(message, bar_msg("Please implement"))
 
 
 @taskify
-def function_that_runs_as_a_task(arg, kwarg=None):
+def function_that_runs_as_a_task(arg: int, kwarg: int | None = None):
     for _ in range(10):
         time.sleep(0.01)
     return arg, kwarg
@@ -49,14 +54,20 @@ def function_that_runs_as_a_task(arg, kwarg=None):
 
 class MockClass:
     @log_if_fails
-    def method_that_fails(self, arg, arg2, kwarg1=None, kwarg2=None):  # noqa: ARG002
-        raise ValueError("M: Error message")
+    def method_that_fails(
+        self,
+        arg: int,
+        arg2: int,
+        kwarg1: int | None = None,
+        kwarg2: int | None = None,
+    ):
+        message = "M: Error message"
+        raise ValueError(message)
 
     @log_if_fails
     def method_that_shows_msg(self):
-        raise QgsPluginNotImplementedException(
-            "M: Error message", bar_msg("Please implement")
-        )
+        message = "M: Error message"
+        raise QgsPluginNotImplementedException(message, bar_msg("Please implement"))
 
     @taskify
     def method_that_runs_as_a_task(self):
@@ -65,27 +76,31 @@ class MockClass:
         return True
 
 
-def test_logging_if_fails(initialize_logger, qgis_iface):
+def test_logging_if_fails(initialize_logger: None, qgis_iface: QgisInterface):
     function_that_shows_msg()
     messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
     assert "Error message:Please implement" in messages
 
 
-def test_logging_if_fails_method(initialize_logger, qgis_iface):
+def test_logging_if_fails_method(initialize_logger: None, qgis_iface: QgisInterface):
     MockClass().method_that_shows_msg()
 
     messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
     assert "M: Error message:Please implement" in messages
 
 
-def test_logging_if_fails_without_details(initialize_logger, qgis_iface):
+def test_logging_if_fails_without_details(
+    initialize_logger: None, qgis_iface: QgisInterface
+):
     function_that_fails(1, 2, 3, kwarg2=4)
 
     messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
     assert "Unhandled exception occurred:Error message" in messages
 
 
-def test_logging_if_fails_without_details_method(initialize_logger, qgis_iface):
+def test_logging_if_fails_without_details_method(
+    initialize_logger: None, qgis_iface: QgisInterface
+):
     MockClass().method_that_fails(1, 2, 3, kwarg2=4)
 
     messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)

@@ -39,7 +39,7 @@ def format_version_integer(version_string: str) -> int:
     return int("".join([a.zfill(2) for a in version_string.strip().split(".")]))
 
 
-def version(remove_v_prefix: bool = True) -> str:
+def version(remove_v_prefix: bool = True) -> str:  # noqa: FBT001, FBT002
     """Return the version defined in metadata.txt."""
     v = metadata_config()["general"]["version"]
     if v.startswith("v") and remove_v_prefix:
@@ -61,7 +61,7 @@ def version_from_string(version: str) -> tuple[int, int, int]:
     """
     parts = version.split(".")
     if len(parts) != EXPECTED_VERSION_LENGTH:
-        raise QgsPluginVersionInInvalidFormat()
+        raise QgsPluginVersionInInvalidFormat
     return int(parts[0]), int(parts[1]), int(parts[2])
 
 
@@ -71,5 +71,5 @@ def string_from_version(version: tuple[int, int, int]) -> str:
     :return:
     """
     if len(version) != EXPECTED_VERSION_LENGTH:
-        raise QgsPluginVersionInInvalidFormat()
+        raise QgsPluginVersionInInvalidFormat
     return ".".join(map(str, version))

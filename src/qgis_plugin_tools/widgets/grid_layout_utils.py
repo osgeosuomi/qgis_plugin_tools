@@ -26,7 +26,7 @@ from qgis.PyQt.QtWidgets import QGridLayout, QLayoutItem
 https://stackoverflow.com/a/19256990/10068922 """
 
 
-def remove_row(layout: QGridLayout, row: int, delete_widgets: bool = True) -> None:
+def remove_row(layout: QGridLayout, row: int, delete_widgets: bool = True) -> None:  # noqa: FBT001, FBT002
     """Removes the contents of the given layout row.
 
     :param layout:
@@ -40,7 +40,9 @@ def remove_row(layout: QGridLayout, row: int, delete_widgets: bool = True) -> No
 
 
 def remove_column(
-    layout: QGridLayout, column: int, delete_widgets: bool = True
+    layout: QGridLayout,
+    column: int,
+    delete_widgets: bool = True,  # noqa: FBT001, FBT002
 ) -> None:
     """Removes the contents of the given layout column.
 
@@ -55,7 +57,10 @@ def remove_column(
 
 
 def remove_cell(
-    layout: QGridLayout, row: int, column: int, delete_widgets: bool = True
+    layout: QGridLayout,
+    row: int,
+    column: int,
+    delete_widgets: bool = True,  # noqa: FBT001, FBT002
 ) -> None:
     """Removes the contents of the given layout cell.
 
@@ -68,7 +73,7 @@ def remove_cell(
     _remove(layout, row, column, delete_widgets)
 
 
-def _remove(layout: QGridLayout, row: int, column: int, delete_widgets: bool) -> None:
+def _remove(layout: QGridLayout, row: int, column: int, delete_widgets: bool) -> None:  # noqa: FBT001
     for i in reversed(range(1, layout.count())):
         r, c, rs, cs = layout.getItemPosition(i)
         if (row == -1 or (r <= row < r + rs)) and (

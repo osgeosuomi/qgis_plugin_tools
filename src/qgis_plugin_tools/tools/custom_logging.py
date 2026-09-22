@@ -84,7 +84,9 @@ def qgis_level(logging_level: str) -> int:
 
 
 def bar_msg(
-    details: Any = "", duration: int | None = None, success: bool = False
+    details: Any = "",
+    duration: int | None = None,
+    success: bool = False,  # noqa: FBT001, FBT002
 ) -> dict[str, Any]:
     """Helper function to construct extra arguments for message bar logger message
 
@@ -152,12 +154,12 @@ class QgsMessageBarFilter(logging.Filter):
         if "details" not in args:
             return False
 
-        record.qgis_level = (  # type: ignore
+        record.qgis_level = (  # type: ignore[attr-defined]
             qgis_level(record.levelname)
             if not args.get("success", False)
             else Qgis.MessageLevel.Success
         )
-        record.duration = args.get("duration", self.bar_msg_duration(record.levelname))  # type: ignore
+        record.duration = args.get("duration", self.bar_msg_duration(record.levelname))  # type: ignore[attr-defined]
         return True
 
     @staticmethod
@@ -228,9 +230,9 @@ class QgsMessageBarHandler(logging.Handler):
         """
         self._message_bar_proxy.emit_message(
             record.message,
-            record.details,  # type: ignore
-            record.qgis_level,  # type: ignore
-            record.duration,  # type: ignore
+            record.details,  # type: ignore[attr-defined]
+            record.qgis_level,  # type: ignore[attr-defined]
+            record.duration,  # type: ignore[attr-defined]
         )
 
 
@@ -363,7 +365,7 @@ def setup_logger(  # noqa: QGS105
     """
     if iface is None:
         try:
-            from qgis.utils import iface  # type: ignore  # noqa: PLC0415
+            from qgis.utils import iface  # type: ignore[no-redef]  # noqa: PLC0415
         except ImportError:
             iface = None
 
@@ -399,7 +401,7 @@ def add_logger_msg_bar_to_widget(logger_name: str, widget: QWidget) -> None:
     """
     if not hasattr(widget, "message_bar"):
         layout: QLayout = widget.layout()
-        widget.message_bar = QgsMessageBar(widget)  # type: ignore
+        widget.message_bar = QgsMessageBar(widget)  # type: ignore[attr-defined]
         if isinstance(layout, QVBoxLayout):
             # noinspection PyArgumentlist
             layout.insertWidget(0, widget.message_bar)

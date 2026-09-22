@@ -22,7 +22,6 @@
 
 import enum
 import logging
-from typing import ClassVar
 
 from qgis.core import (
     QgsExpression,
@@ -63,12 +62,17 @@ POLYGON_TYPES = {
 }
 
 
+UNKNOWN_TYPES: set["QgsWkbTypes.Type"] = set()
+
+
 @enum.unique
 class LayerType(enum.Enum):
-    Point: ClassVar[dict[str, set]] = {"wkb_types": POINT_TYPES}
-    Line: ClassVar[dict[str, set]] = {"wkb_types": LINE_TYPES}
-    Polygon: ClassVar[dict[str, set]] = {"wkb_types": POLYGON_TYPES}
-    Unknown: ClassVar[dict[str, set]] = {"wkb_types": set()}  # type: ignore
+    # Ruff wants a ClassVar annotation for the mutable values, but mypy requires
+    # enum members to be left unannotated, so the rule is silenced here.
+    Point = {"wkb_types": POINT_TYPES}  # noqa: RUF012
+    Line = {"wkb_types": LINE_TYPES}  # noqa: RUF012
+    Polygon = {"wkb_types": POLYGON_TYPES}  # noqa: RUF012
+    Unknown = {"wkb_types": UNKNOWN_TYPES}  # noqa: RUF012
 
     @staticmethod
     def from_wkb_type(wkb_type: int) -> "LayerType":

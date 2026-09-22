@@ -20,12 +20,11 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
-# type: ignore
-
-
+from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
+from qgis.gui import QgisInterface
 
 from qgis_plugin_tools.testing.utilities import TestTaskRunner
 from qgis_plugin_tools.tools.custom_logging import (
@@ -39,7 +38,7 @@ from qgis_plugin_tools.tools.settings import set_setting
 
 
 @pytest.fixture(scope="session")
-def initialize_logger(qgis_iface):
+def initialize_logger(qgis_iface: QgisInterface):
     set_setting(get_log_level_key(LogTarget.FILE), "NOTSET")
     setup_logger(plugin_name(), qgis_iface)
     yield
@@ -47,17 +46,17 @@ def initialize_logger(qgis_iface):
 
 
 @pytest.fixture
-def task_runner(initialize_logger):
+def task_runner(initialize_logger: None):
     return TestTaskRunner()
 
 
 @pytest.fixture
-def file_fixture() -> tuple[str, bytes, str]:
-    with open(Path(__file__).parent / "fixtures/file.xml", "rb") as f:
+def file_fixture() -> Iterator[tuple[str, bytes, str]]:
+    with (Path(__file__).parent / "fixtures/file.xml").open("rb") as f:
         yield "file.xml", f.read(), "text/xml"
 
 
 @pytest.fixture
-def another_file_fixture() -> tuple[str, bytes, str]:
-    with open(Path(__file__).parent / "fixtures/text.txt", "rb") as f:
+def another_file_fixture() -> Iterator[tuple[str, bytes, str]]:
+    with (Path(__file__).parent / "fixtures/text.txt").open("rb") as f:
         yield "text.txt", f.read(), "text/plain"

@@ -22,17 +22,26 @@
 
 import json
 from io import BytesIO
-from typing import Any
+from pathlib import Path
+from typing import Any, Literal, Self
 
 import pytest
-from qgis.core import QgsNetworkAccessManager
+from pytest_mock import MockerFixture
+from qgis.core import QgsNetworkAccessManager, QgsProject
 
 from qgis_plugin_tools.tools import network
 from qgis_plugin_tools.tools.exceptions import QgsPluginNetworkException
-from qgis_plugin_tools.tools.network import download_to_file, fetch, post, request_raw
+from qgis_plugin_tools.tools.network import (
+    FileField,
+    FileInfo,
+    download_to_file,
+    fetch,
+    post,
+    request_raw,
+)
 
 
-def test_fetch(qgis_new_project, mocker):
+def test_fetch(qgis_new_project: QgsProject, mocker: MockerFixture):
     def fake_request_raw(*args: Any, **kwargs: Any) -> tuple[bytes, str]:
         url = args[0]
         method = args[1]
@@ -49,7 +58,7 @@ def test_fetch(qgis_new_project, mocker):
     assert data["url"] == "https://httpbin.org/get"
 
 
-def test_fetch_with_timeout(qgis_new_project, mocker):
+def test_fetch_with_timeout(qgis_new_project: QgsProject, mocker: MockerFixture):
     def fake_request_raw(*args: Any, **kwargs: Any) -> tuple[bytes, str]:
         url = args[0]
         encoding = args[2]
@@ -62,12 +71,12 @@ def test_fetch_with_timeout(qgis_new_project, mocker):
     assert data["url"] == "https://httpbin.org/get"
 
 
-def test_fetch_invalid_url(qgis_new_project):
+def test_fetch_invalid_url(qgis_new_project: QgsProject):
     with pytest.raises(QgsPluginNetworkException):
         fetch("invalidurl")
 
 
-def test_fetch_params(qgis_new_project, mocker):
+def test_fetch_params(qgis_new_project: QgsProject, mocker: MockerFixture):
     def fake_request_raw(*args: Any, **kwargs: Any) -> tuple[bytes, str]:
         url = args[0]
         method = args[1]
@@ -86,7 +95,7 @@ def test_fetch_params(qgis_new_project, mocker):
     assert data["args"] == {"foo": "bar"}
 
 
-def test_post(qgis_new_project, mocker):
+def test_post(qgis_new_project: QgsProject, mocker: MockerFixture):
     def fake_request_raw(*args: Any, **kwargs: Any) -> tuple[bytes, str]:
         url = args[0]
         method = args[1]
@@ -107,7 +116,7 @@ def test_post(qgis_new_project, mocker):
     assert data["url"] == "https://httpbin.org/post"
 
 
-def test_post_with_timeout(qgis_new_project, mocker):
+def test_post_with_timeout(qgis_new_project: QgsProject, mocker: MockerFixture):
     def fake_request_raw(*args: Any, **kwargs: Any) -> tuple[bytes, str]:
         url = args[0]
         method = args[1]
@@ -122,12 +131,12 @@ def test_post_with_timeout(qgis_new_project, mocker):
     assert data["url"] == "https://httpbin.org/post"
 
 
-def test_post_invalid_url(qgis_new_project):
+def test_post_invalid_url(qgis_new_project: QgsProject):
     with pytest.raises(QgsPluginNetworkException):
         post("invalidurl")
 
 
-def test_post_data(qgis_new_project, mocker):
+def test_post_data(qgis_new_project: QgsProject, mocker: MockerFixture):
     def fake_request_raw(*args: Any, **kwargs: Any) -> tuple[bytes, str]:
         url = args[0]
         method = args[1]
@@ -150,7 +159,11 @@ def test_post_data(qgis_new_project, mocker):
     assert data["data"] == json.dumps({"foo": "bar"})
 
 
-def test_upload_file(qgis_new_project, file_fixture, mocker):
+def test_upload_file(
+    qgis_new_project: QgsProject,
+    file_fixture: tuple[str, bytes, str],
+    mocker: MockerFixture,
+):
     file_name, file_content, file_type = file_fixture
 
     def fake_request_raw(*args: Any, **kwargs: Any) -> tuple[bytes, str]:
@@ -171,7 +184,7 @@ def test_upload_file(qgis_new_project, file_fixture, mocker):
     mocker.patch.object(network, "request_raw", side_effect=fake_request_raw)
     data = post(
         "https://httpbin.org/post",
-        files=[("file", (file_name, file_content, file_type))],
+        files=[FileField("file", FileInfo(file_name, file_content, file_type))],
     )
     data = json.loads(data)
     assert data["url"] == "https://httpbin.org/post"
@@ -180,7 +193,10 @@ def test_upload_file(qgis_new_project, file_fixture, mocker):
 
 
 def test_upload_multiple_files(
-    qgis_new_project, file_fixture, another_file_fixture, mocker
+    qgis_new_project: QgsProject,
+    file_fixture: tuple[str, bytes, str],
+    another_file_fixture: tuple[str, bytes, str],
+    mocker: MockerFixture,
 ):
     file_name, file_content, file_type = file_fixture
     another_file_name, another_file_content, another_file_type = another_file_fixture
@@ -216,10 +232,10 @@ def test_upload_multiple_files(
     data = post(
         "https://httpbin.org/post",
         files=[
-            ("file", (file_name, file_content, file_type)),
-            (
+            FileField("file", FileInfo(file_name, file_content, file_type)),
+            FileField(
                 "another_file",
-                (another_file_name, another_file_content, another_file_type),
+                FileInfo(another_file_name, another_file_content, another_file_type),
             ),
         ],
     )
@@ -230,24 +246,26 @@ def test_upload_multiple_files(
     assert bytes(data["files"]["another_file"], "utf-8") == another_file_content
 
 
-def test_download_to_file(qgis_new_project, tmpdir, mocker):
+def test_download_to_file(
+    qgis_new_project: QgsProject, tmp_path: Path, mocker: MockerFixture
+):
     content = b"test response"
 
     class MockResponse:
-        def __init__(self, raw_content: bytes):
+        def __init__(self, raw_content: bytes) -> None:
             self.status_code = 200
             self.text = ""
             self.headers: dict[str, str] = {}
             self.raw = BytesIO(raw_content)
 
-        def __enter__(self):
+        def __enter__(self) -> Self:
             return self
 
-        def __exit__(self, exc_type, exc, tb):
+        def __exit__(self, exc_type: object, exc: object, tb: object) -> Literal[False]:
             return False
 
-        def raise_for_status(self):
-            return None
+        def raise_for_status(self) -> None:
+            return
 
     class MockRequests:
         @staticmethod
@@ -263,7 +281,7 @@ def test_download_to_file(qgis_new_project, tmpdir, mocker):
     mocker.patch.object(network, "requests", MockRequests())
     path_to_file = download_to_file(
         "https://twitter.com/gispofinland/status/1324599933337567232/photo/1",
-        tmpdir,
+        tmp_path,
         "test_file",
     )
     assert path_to_file.exists()
@@ -271,7 +289,9 @@ def test_download_to_file(qgis_new_project, tmpdir, mocker):
     assert path_to_file.read_bytes() == content
 
 
-def test_download_to_file_without_requests(qgis_new_project, tmpdir, mocker):
+def test_download_to_file_without_requests(
+    qgis_new_project: QgsProject, tmp_path: Path, mocker: MockerFixture
+):
     content = b"test response without requests"
 
     def fake_fetch_raw(
@@ -286,7 +306,7 @@ def test_download_to_file_without_requests(qgis_new_project, tmpdir, mocker):
     mocker.patch.object(network, "fetch_raw", side_effect=fake_fetch_raw)
     path_to_file = download_to_file(
         "https://twitter.com/gispofinland/status/1324599933337567232/photo/1",
-        tmpdir,
+        tmp_path,
         "test_file",
         use_requests_if_available=False,
     )
@@ -295,17 +315,17 @@ def test_download_to_file_without_requests(qgis_new_project, tmpdir, mocker):
     assert path_to_file.read_bytes() == content
 
 
-def test_download_to_file_with_name(qgis_new_project, tmpdir):
+def test_download_to_file_with_name(qgis_new_project: QgsProject, tmp_path: Path):
     path_to_file = download_to_file(
         "https://raw.githubusercontent.com/GispoCoding/FMI2QGIS/master/FMI2QGIS/test/data/aq_small.nc",
-        tmpdir,
+        tmp_path,
     )
     assert path_to_file.exists()
     assert path_to_file.is_file()
     assert path_to_file.name == "aq_small.nc"
 
 
-def test_request_raw_sets_timeout(qgis_new_project):
+def test_request_raw_sets_timeout(qgis_new_project: QgsProject):
     previous_timeout = QgsNetworkAccessManager.timeout()
     try:
         with pytest.raises(QgsPluginNetworkException):
@@ -315,11 +335,13 @@ def test_request_raw_sets_timeout(qgis_new_project):
     assert QgsNetworkAccessManager.timeout() == previous_timeout
 
 
-def test_download_to_file_invalid_url(qgis_new_project, tmpdir):
+def test_download_to_file_invalid_url(qgis_new_project: QgsProject, tmp_path: Path):
     with pytest.raises(QgsPluginNetworkException):
-        download_to_file("invalidurl", tmpdir)
+        download_to_file("invalidurl", tmp_path)
 
 
-def test_download_to_file_invalid_url_without_requests(qgis_new_project, tmpdir):
+def test_download_to_file_invalid_url_without_requests(
+    qgis_new_project: QgsProject, tmp_path: Path
+):
     with pytest.raises(QgsPluginNetworkException):
-        download_to_file("invalidurl", tmpdir)
+        download_to_file("invalidurl", tmp_path)

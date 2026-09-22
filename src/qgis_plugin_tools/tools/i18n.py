@@ -22,7 +22,7 @@
 
 """I18n tools."""
 
-from os.path import join
+from pathlib import Path
 from typing import Any
 
 from qgis.core import QgsSettings
@@ -57,13 +57,17 @@ def setup_translation(
         for fldr in [folder, plugin_path("i18n"), resources_path("i18n")]:
             prefixed_locale = prefix + locale
             if fldr:
-                ts_file = QFileInfo(join(fldr, file_pattern.format(prefixed_locale)))
+                ts_file = QFileInfo(
+                    str(Path(fldr, file_pattern.format(prefixed_locale)))
+                )
                 if ts_file.exists():
                     return locale, ts_file.absoluteFilePath()
 
             prefixed_locale = prefix + locale[0:2]
             if fldr:
-                ts_file = QFileInfo(join(fldr, file_pattern.format(prefixed_locale)))
+                ts_file = QFileInfo(
+                    str(Path(fldr, file_pattern.format(prefixed_locale)))
+                )
                 if ts_file.exists():
                     return locale, ts_file.absoluteFilePath()
 

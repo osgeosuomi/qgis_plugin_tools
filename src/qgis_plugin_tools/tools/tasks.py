@@ -55,15 +55,15 @@ class BaseTask(QgsTask):
 
         :return: whether task finished successfully or not.
         """
-        LOGGER.debug(f"Started task {self.name}")
+        LOGGER.debug("Started task %s", self.name)
         try:
             self._check_if_canceled()
             return self._run()
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - stored and reported in finished()
             self.exception = e
             return False
 
-    def finished(self, result: bool) -> None:
+    def finished(self, result: bool) -> None:  # noqa: FBT001
         """This function is automatically called when the task has completed
         (successfully or not).
 
@@ -73,8 +73,9 @@ class BaseTask(QgsTask):
         """
         if result:
             LOGGER.debug(
-                f"Task {self.name} ended successfully in "
-                f"{self.elapsedTime() / 1000:.2f}!"
+                "Task %s ended successfully in %.2f!",
+                self.name,
+                self.elapsedTime() / 1000,
             )
         elif self.exception is None:
             MsgBar.warning(
@@ -83,10 +84,10 @@ class BaseTask(QgsTask):
             )
         else:
             try:
-                raise self.exception
+                raise self.exception  # noqa: TRY301
             except QgsPluginException as e:
                 MsgBar.exception(str(e), **e.bar_msg)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 MsgBar.exception(tr("Unhandled exception occurred"), e)
 
     def setProgress(self, progress: float) -> None:  # noqa: N802
