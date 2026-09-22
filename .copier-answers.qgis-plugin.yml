@@ -1,0 +1,18 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v0.4.0
+_src_path: https://github.com/osgeosuomi/qgis-plugin-copier-template.git
+add_github_workflows: true
+insert_copyright_header: true
+is_monorepo_component: false
+lang_key_for_translations: fi
+min_code_coverage: 80
+plugin_metadata_author: OSGeo Suomi ry
+plugin_metadata_email: code@osgeo.fi
+plugin_metadata_repository_url: https://github.com/osgeosuomi/qgis_plugin_tools
+python_version: '3.12'
+qgis_plugin_class: QgisPluginTools
+qgis_plugin_description: Common tools to use in QGIS plugins
+qgis_plugin_module: qgis_plugin_tools
+qgis_plugin_name: qgis_plugin_tools
+qgis_version: QGIS3 & QGIS4
+setup_translations: true
