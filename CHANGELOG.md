@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 - Breaking maintenance: [Relicense](https://github.com/osgeosuomi/qgis_plugin_tools/issues/106) the project under GPL-2.0-or-later
+- Breaking maintenance: Remove deprecated functionality
 - Fix: Message bar helpers no longer hide unrelated errors. Only `RuntimeError` is suppressed.
 - Fix: Set raster temporal range to UTC correctly on PyQt6
 - Maintenance: Add bandit security checks to linting.
