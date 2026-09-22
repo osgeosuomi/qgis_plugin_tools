@@ -20,7 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
-from ..tools.i18n import tr
+from qgis_plugin_tools.tools.i18n import tr
 
 
 def test_tr_formatting():

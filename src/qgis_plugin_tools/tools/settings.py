@@ -25,8 +25,8 @@ from typing import Any
 from qgis.core import QgsExpressionContextUtils, QgsProject, QgsSettings
 from qgis.PyQt.QtCore import QVariant
 
-from .exceptions import QgsPluginInvalidProjectSetting
-from .resources import plugin_name
+from qgis_plugin_tools.tools.exceptions import QgsPluginInvalidProjectSetting
+from qgis_plugin_tools.tools.resources import plugin_name
 
 
 def setting_key(*args: str) -> str:

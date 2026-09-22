@@ -28,7 +28,7 @@ import time
 from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 
-from ..tools.tasks import BaseTask
+from qgis_plugin_tools.tools.tasks import BaseTask
 
 
 def is_running_inside_ci() -> bool:

@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.10.12,<0.11.0"]
+build-backend = "uv_build"
 
 [project]
 name = "qgis_plugin_tools"
@@ -67,27 +67,6 @@ url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
 explicit = true
 
-[tool.setuptools]
-packages = [
-    "qgis_plugin_tools",
-    "qgis_plugin_tools.resources",
-    "qgis_plugin_tools.resources.ui",
-    "qgis_plugin_tools.testing",
-    "qgis_plugin_tools.tools",
-    "qgis_plugin_tools.widgets",
-]
-zip-safe = false
-
-[tool.setuptools.package-dir]
-qgis_plugin_tools = "."
-
-[tool.setuptools.package-data]
-"*" = [
-    "py.typed",
-    "*.ui",
-    "LICENSE",
-]
-
 [tool.flake8]
 select = [
     "QGS"
@@ -104,7 +83,6 @@ lint.ignore = [
     "ANN401", # Any used in typing
     "PGH003", # Blanket type ignore (some old widgets do not contain typing)
     "RUF100", # Unused noqa (Conflicts with QGS flake8-rule)
-    "TID252", # Ban relative imports (relative imports are needed until submodule usage is removed)
     "PGH004" # Blanket noqa (some old widgets do not contain typing)
 ]
 
@@ -133,6 +111,9 @@ lint.select = [
     "UP",  # pyupgrade
 ]
 
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
 [tool.ruff.lint.per-file-ignores]
 "test/*" = [
     "ANN001",
@@ -143,12 +124,12 @@ lint.select = [
     "N802",
     "PLR2004",
 ]
-"widgets/*" = [
+"src/qgis_plugin_tools/widgets/*" = [
     "ANN201",
     "ANN001",
     "ANN204"
 ]
-"tools/logger_processing.py" = [
+"src/qgis_plugin_tools/tools/logger_processing.py" = [
     "ANN001",
     "ANN201",
     "ANN202",
@@ -156,7 +137,7 @@ lint.select = [
     "N803",
     "ARG002",
 ]
-"tools/algorithm_processing.py" = [
+"src/qgis_plugin_tools/tools/algorithm_processing.py" = [
     "ANN001",
     "ANN201",
     "ANN202",

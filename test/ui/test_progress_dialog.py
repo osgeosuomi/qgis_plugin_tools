@@ -26,9 +26,9 @@ import pytest
 from qgis.PyQt import QtCore
 from qgis.PyQt.QtCore import QCoreApplication
 
-from ...testing.utilities import SimpleTask
-from ...tools.exceptions import TaskInterruptedException
-from ...widgets import progress_dialog
+from qgis_plugin_tools.testing.utilities import SimpleTask
+from qgis_plugin_tools.tools.exceptions import TaskInterruptedException
+from qgis_plugin_tools.widgets import progress_dialog
 
 
 @pytest.mark.parametrize("show_abort_btn", [True, False])

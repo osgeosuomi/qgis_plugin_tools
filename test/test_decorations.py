@@ -24,10 +24,10 @@ import time
 
 from qgis.core import Qgis
 
-from ..testing.utilities import TestTaskRunner
-from ..tools.custom_logging import bar_msg
-from ..tools.decorations import log_if_fails, taskify
-from ..tools.exceptions import QgsPluginNotImplementedException
+from qgis_plugin_tools.testing.utilities import TestTaskRunner
+from qgis_plugin_tools.tools.custom_logging import bar_msg
+from qgis_plugin_tools.tools.decorations import log_if_fails, taskify
+from qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 
 
 @log_if_fails

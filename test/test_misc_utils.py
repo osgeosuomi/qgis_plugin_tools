@@ -22,7 +22,7 @@
 
 from qgis.core import QgsRectangle
 
-from ..tools.misc_utils import extent_to_bbox
+from qgis_plugin_tools.tools.misc_utils import extent_to_bbox
 
 
 def test_extent_to_bbox():

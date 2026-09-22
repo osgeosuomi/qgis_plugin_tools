@@ -27,9 +27,9 @@ from typing import Any
 import pytest
 from qgis.core import QgsNetworkAccessManager
 
-from ..tools import network
-from ..tools.exceptions import QgsPluginNetworkException
-from ..tools.network import download_to_file, fetch, post, request_raw
+from qgis_plugin_tools.tools import network
+from qgis_plugin_tools.tools.exceptions import QgsPluginNetworkException
+from qgis_plugin_tools.tools.network import download_to_file, fetch, post, request_raw
 
 
 def test_fetch(qgis_new_project, mocker):

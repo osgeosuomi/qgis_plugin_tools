@@ -39,9 +39,9 @@ from qgis.PyQt.QtWidgets import (
     QWidget,
 )
 
-from ..tools.decorations import log_if_fails
-from ..tools.i18n import tr
-from ..tools.resources import qgis_plugin_tools_resources
+from qgis_plugin_tools.tools.decorations import log_if_fails
+from qgis_plugin_tools.tools.i18n import tr
+from qgis_plugin_tools.tools.resources import qgis_plugin_tools_resources
 
 FORM_CLASS: QWidget
 FORM_CLASS, _ = uic.loadUiType(qgis_plugin_tools_resources("ui", "progress_dialog.ui"))

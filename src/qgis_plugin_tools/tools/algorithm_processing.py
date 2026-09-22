@@ -27,7 +27,7 @@ from os.path import isfile
 from qgis.core import QgsProcessingAlgorithm
 from qgis.PyQt.QtGui import QIcon
 
-from .resources import resources_path
+from qgis_plugin_tools.tools.resources import resources_path
 
 
 class BaseProcessingAlgorithm(QgsProcessingAlgorithm):

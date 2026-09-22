@@ -36,9 +36,9 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-from .custom_logging import bar_msg
-from .exceptions import QgsPluginExpressionException
-from .i18n import tr
+from qgis_plugin_tools.tools.custom_logging import bar_msg
+from qgis_plugin_tools.tools.exceptions import QgsPluginExpressionException
+from qgis_plugin_tools.tools.i18n import tr
 
 try:
     from qgis.core import QgsUnitTypes, QgsVectorLayerTemporalProperties

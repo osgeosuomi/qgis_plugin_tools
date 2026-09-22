@@ -29,7 +29,12 @@ from qgis.core import QgsSettings
 from qgis.PyQt.QtCore import QFileInfo, QLocale
 from qgis.PyQt.QtWidgets import QApplication
 
-from .resources import plugin_name, plugin_path, resources_path, slug_name
+from qgis_plugin_tools.tools.resources import (
+    plugin_name,
+    plugin_path,
+    resources_path,
+    slug_name,
+)
 
 
 def setup_translation(

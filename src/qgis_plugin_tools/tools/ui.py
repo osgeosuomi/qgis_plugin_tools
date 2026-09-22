@@ -26,7 +26,7 @@ from typing import Any
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QWidget
 
-from .resources import package_file
+from qgis_plugin_tools.tools.resources import package_file
 
 
 class CompiledUI:

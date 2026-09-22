@@ -38,10 +38,10 @@ from qgis.core import (
 from qgis.PyQt.QtCore import QByteArray, QSettings, QUrl
 from qgis.PyQt.QtNetwork import QNetworkReply, QNetworkRequest
 
-from ..tools.exceptions import QgsPluginNetworkException
-from ..tools.i18n import tr
-from ..tools.resources import plugin_name
-from .custom_logging import bar_msg
+from qgis_plugin_tools.tools.custom_logging import bar_msg
+from qgis_plugin_tools.tools.exceptions import QgsPluginNetworkException
+from qgis_plugin_tools.tools.i18n import tr
+from qgis_plugin_tools.tools.resources import plugin_name
 
 DEFAULT_TIMEOUT_SECONDS = 30.0
 

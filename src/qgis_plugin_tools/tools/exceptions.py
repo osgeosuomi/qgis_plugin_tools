@@ -24,7 +24,7 @@ from typing import Any
 
 from qgis.PyQt.QtNetwork import QNetworkReply
 
-from .i18n import tr
+from qgis_plugin_tools.tools.i18n import tr
 
 
 class QgsPluginException(Exception):  # noqa: N818

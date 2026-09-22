@@ -24,9 +24,9 @@ import pytest
 from qgis.core import QgsDateTimeRange, QgsRasterLayer, QgsSingleBandGrayRenderer
 from qgis.PyQt.QtCore import QDate, QDateTime, Qt, QTime
 
-from ..testing.utilities import qgis_supports_temporal
-from ..tools.network import download_to_file
-from ..tools.raster_layers import (
+from qgis_plugin_tools.testing.utilities import qgis_supports_temporal
+from qgis_plugin_tools.tools.network import download_to_file
+from qgis_plugin_tools.tools.raster_layers import (
     set_band_based_on_range,
     set_fixed_temporal_range,
     set_raster_renderer_to_singleband,
