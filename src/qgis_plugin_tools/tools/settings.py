@@ -30,8 +30,7 @@ from qgis_plugin_tools.tools.resources import plugin_name
 
 
 def setting_key(*args: str) -> str:
-    """
-    Get QGIS setting key
+    """Get QGIS setting key
 
     :param args List of path elements e.g. ['img', 'logos', 'image.png']
     """
@@ -45,8 +44,7 @@ def get_setting(
     internal: bool = True,
     section: int = QgsSettings.Section.NoSection,
 ) -> QVariant | str:
-    """
-    Get QGIS setting value plugin
+    """Get QGIS setting value plugin
 
     :param key: Key for the setting
     :param default: Optional default value
@@ -65,12 +63,11 @@ def get_setting(
 
 def set_setting(
     key: str,
-    value: str | int | float | bool,
+    value: str | float | bool,
     internal: bool = True,
     section: int = QgsSettings.Section.NoSection,
 ) -> bool:
-    """
-    Set a value in the QgsSetting
+    """Set a value in the QgsSetting
 
     :param key: Key for the setting
     :param value: Value for the setting
@@ -87,8 +84,7 @@ def get_project_setting(
     typehint: type | None = None,
     internal: bool = True,
 ) -> QVariant | str | None:
-    """
-    Get QGIS project setting value
+    """Get QGIS project setting value
 
     :param key: Key for the setting
     :param default: Optional default value
@@ -124,10 +120,9 @@ def get_project_setting(
 
 
 def set_project_setting(
-    key: str, value: str | int | float | bool, internal: bool = True
+    key: str, value: str | float | bool, internal: bool = True
 ) -> bool:
-    """
-    Set a value in the QGIS project settings
+    """Set a value in the QGIS project settings
 
     :param key: Key for the setting
     :param value: Value for the setting
@@ -136,19 +131,17 @@ def set_project_setting(
     proj = QgsProject.instance()
     if internal:
         return proj.writeEntry(plugin_name(), key, value)
-    else:
-        QgsExpressionContextUtils.setProjectVariable(proj, key, value)
-        return True
+    QgsExpressionContextUtils.setProjectVariable(proj, key, value)
+    return True
 
 
 def parse_value(value: QVariant | str) -> None | str | bool:
-    """
-    Parse QSettings value
+    """Parse QSettings value
 
     :param value: QVariant
     """
     str_value = str(value)
-    val: None | str | bool = str_value
+    val: str | bool | None = str_value
     if str_value == "NULL":
         val = None
     elif str_value == "true":

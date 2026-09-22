@@ -55,8 +55,7 @@ def proj_version() -> tuple[int, int]:
 
 
 def version_from_string(version: str) -> tuple[int, int, int]:
-    """
-    Transforms version string in format 'x.y.z' to tuple (x,y,z) for comparisons
+    """Transforms version string in format 'x.y.z' to tuple (x,y,z) for comparisons
     :param version:
     :return:
     """
@@ -67,8 +66,7 @@ def version_from_string(version: str) -> tuple[int, int, int]:
 
 
 def string_from_version(version: tuple[int, int, int]) -> str:
-    """
-    Transforms version tuple in format (x,y,z) to string in format 'x.y.z'
+    """Transforms version tuple in format (x,y,z) to string in format 'x.y.z'
     :param version:
     :return:
     """

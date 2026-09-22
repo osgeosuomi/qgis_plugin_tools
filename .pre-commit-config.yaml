@@ -38,6 +38,7 @@ repos:
     hooks:
       - id: markdownlint
         files: \.md$
+        exclude: ^(CHANGELOG\.md|\.github/PULL_REQUEST_TEMPLATE\.md)$
         args: [ "--fix" ]
 
   - repo: https://github.com/Mateusz-Grzelinski/actionlint-py

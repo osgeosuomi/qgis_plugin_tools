@@ -9,10 +9,10 @@ For setting up the logging (usually in the main plugin file):
 
 from qgis_plugin_tools.tools.custom_logging import setup_loggers
 import qgis_plugin_tools
-import MyPluginPackage # package where plugin.py lies
+import MyPluginPackage  # package where plugin.py lies
+
 
 class MyPlugin:
-
     def __init__(self) -> None:
         # Save the teardown function to be able to teardown the loggers later
         self._teardown_loggers = lambda: None
@@ -33,6 +33,7 @@ class MyPlugin:
         self._teardown_loggers = lambda: None
         ...
 
+
 # In some cases you might want to add a message bar to a dialog and use logging
 # from there, this adds message_bar to dialog and uses it with message bar
 # logging handler
@@ -51,11 +52,11 @@ import logging
 LOGGER = logging.getLogger(__name__)
 
 # Later in the code
-LOGGER.debug('Log some debug messages')
-LOGGER.info('Log some info here')
-LOGGER.warning('Log a warning here')
-LOGGER.error('Log an error here')
-LOGGER.critical('Log a critical error here')
+LOGGER.debug("Log some debug messages")
+LOGGER.info("Log some info here")
+LOGGER.warning("Log a warning here")
+LOGGER.error("Log an error here")
+LOGGER.critical("Log a critical error here")
 
 # To show a message bar in addition to logging a message use
 # either MsgBar helpers
@@ -63,14 +64,14 @@ LOGGER.critical('Log a critical error here')
 from qgis_plugin_tools.tools.messages import MsgBar
 
 MsgBar.info("Msg bar message", "some details here")
-MsgBar.warning('Msg bar message', "some details here", success=True)
+MsgBar.warning("Msg bar message", "some details here", success=True)
 
 # or "extra" kwarg dict with data, creatable also with bar_msg helper
 
 from qgis_plugin_tools.tools.custom_logging import bar_msg
 
-LOGGER.warning('Msg bar message', extra={'details:': "some details here"})
-LOGGER.error('Msg bar message', extra=bar_msg("some details here", duration=10))
+LOGGER.warning("Msg bar message", extra={"details:": "some details here"})
+LOGGER.error("Msg bar message", extra=bar_msg("some details here", duration=10))
 ```
 
 To change the log level of the plugin you can either edit QGIS3.ini file:
@@ -103,12 +104,14 @@ from qgis_plugin_tools.tools.i18n import tr
 
 try:
     # do something that might throw exception
-    raise QgsPluginNotImplementedException(tr('This is not implemented'), bar_msg(tr('Please implement')))
+    raise QgsPluginNotImplementedException(
+        tr("This is not implemented"), bar_msg(tr("Please implement"))
+    )
 except QgsPluginException as e:
     # Shows bar message
     MsgBar.exception(str(e), **e.bar_msg)
 except Exception as e:
-    MsgBar.exception(tr('Unhandled exception occurred'), e)
+    MsgBar.exception(tr("Unhandled exception occurred"), e)
 ```
 
 Check [tests](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_decorations.py) for more examples.
@@ -122,7 +125,7 @@ Check [tests](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/tes
 ```python
 from qgis_plugin_tools.tools.network import fetch
 
-contents = fetch('www.examapleurl.com')
+contents = fetch("www.examapleurl.com")
 ```
 
 ## Settings tools
@@ -151,6 +154,7 @@ from qgis_plugin_tools.tools.i18n import setup_translation
 
 # For setting up the translation file (usually in root __init__.py)
 TRANSLATORS: list[QtCore.QTranslator] = []
+
 
 def setup_translators() -> list[QtCore.QTranslator]:
     # Function to set up translators. This can lie also outside __init__.py
@@ -184,17 +188,19 @@ def classFactory(_):  # noqa: ANN201, ANN001, N802
     """Class factory."""
 
     from yuor_plugin.plugin import Plugin  # noqa: PLC0415
+
     TRANSLATORS.extend(setup_translators())
 
     return Plugin()
+
 
 # Everywhere else in the plugin
 from qgis_plugin_tools.tools.i18n import tr
 
 # Wrap translatable string with tr
-tr('This will be translated')
-tr('Meaning of life is {}?', 42)
-tr('{} + {} is definitely {}', 1,1,3)
+tr("This will be translated")
+tr("Meaning of life is {}?", 42)
+tr("{} + {} is definitely {}", 1, 1, 3)
 ```
 
 ### Setting up translations

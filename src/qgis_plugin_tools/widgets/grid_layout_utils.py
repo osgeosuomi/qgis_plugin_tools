@@ -27,8 +27,7 @@ https://stackoverflow.com/a/19256990/10068922 """
 
 
 def remove_row(layout: QGridLayout, row: int, delete_widgets: bool = True) -> None:
-    """
-    Removes the contents of the given layout row.
+    """Removes the contents of the given layout row.
 
     :param layout:
     :param row:
@@ -43,8 +42,7 @@ def remove_row(layout: QGridLayout, row: int, delete_widgets: bool = True) -> No
 def remove_column(
     layout: QGridLayout, column: int, delete_widgets: bool = True
 ) -> None:
-    """
-    Removes the contents of the given layout column.
+    """Removes the contents of the given layout column.
 
     :param layout:
     :param column:
@@ -59,8 +57,7 @@ def remove_column(
 def remove_cell(
     layout: QGridLayout, row: int, column: int, delete_widgets: bool = True
 ) -> None:
-    """
-    Removes the contents of the given layout cell.
+    """Removes the contents of the given layout cell.
 
     :param layout:
     :param row:
@@ -90,8 +87,7 @@ def _remove(layout: QGridLayout, row: int, column: int, delete_widgets: bool) ->
 
 
 def _delete_child_widgets(item: QLayoutItem) -> None:
-    """
-    Deletes all child widgets of the given layout item.
+    """Deletes all child widgets of the given layout item.
 
     :param item:
     :return:

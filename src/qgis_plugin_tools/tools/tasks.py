@@ -37,8 +37,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class BaseTask(QgsTask):
-    """
-    Base class for writing QgsTask classes.
+    """Base class for writing QgsTask classes.
     Provides some utility functionality, like error handling and
     easy canceling.
     """
@@ -52,12 +51,10 @@ class BaseTask(QgsTask):
         return self.__class__.__name__
 
     def run(self) -> bool:
-        """
-        Run the task.
+        """Run the task.
 
         :return: whether task finished successfully or not.
         """
-
         LOGGER.debug(f"Started task {self.name}")
         try:
             self._check_if_canceled()
@@ -67,8 +64,7 @@ class BaseTask(QgsTask):
             return False
 
     def finished(self, result: bool) -> None:
-        """
-        This function is automatically called when the task has completed
+        """This function is automatically called when the task has completed
         (successfully or not).
 
         finished is always called from the main thread, so it's safe
@@ -93,13 +89,12 @@ class BaseTask(QgsTask):
             except Exception as e:
                 MsgBar.exception(tr("Unhandled exception occurred"), e)
 
-    def setProgress(self, progress: int | float) -> None:  # noqa: N802
+    def setProgress(self, progress: float) -> None:  # noqa: N802
         self._check_if_canceled()
         super().setProgress(progress)
 
     def _run(self) -> bool:
-        """
-        Common pitfalls:
+        """Common pitfalls:
 
         - Do not create and add layers to the project!
 
@@ -109,7 +104,7 @@ class BaseTask(QgsTask):
 
         - Do not do anything related to GUI!
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _check_if_canceled(self) -> None:
         """Check if the task has been canceled"""
@@ -118,9 +113,7 @@ class BaseTask(QgsTask):
 
 
 class FunctionTask(BaseTask):
-    """
-    Utility class for creating a task out of a function.
-    """
+    """Utility class for creating a task out of a function."""
 
     def __init__(self, callback_function: Callable) -> None:
         super().__init__()

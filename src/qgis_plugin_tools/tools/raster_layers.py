@@ -42,8 +42,7 @@ if TYPE_CHECKING:
 
 
 def set_raster_renderer_to_singleband(layer: QgsRasterLayer, band: int = 1) -> None:
-    """
-    Set raster renderer to singleband
+    """Set raster renderer to singleband
     :param layer: raster layer
     :param band: band number starting from 1
     """
@@ -73,8 +72,7 @@ def set_raster_renderer_to_singleband(layer: QgsRasterLayer, band: int = 1) -> N
 
 
 def set_fixed_temporal_range(layer: QgsRasterLayer, t_range: QgsDateTimeRange) -> None:
-    """
-    Set fixed temporal range for raster layer
+    """Set fixed temporal range for raster layer
     :param layer: raster layer
     :param t_range: fixed temporal range
     """
@@ -94,8 +92,7 @@ def set_fixed_temporal_range(layer: QgsRasterLayer, t_range: QgsDateTimeRange) -
 
 
 def set_band_based_on_range(layer: QgsRasterLayer, t_range: QgsDateTimeRange) -> int:
-    """
-    Set raster layer band based on temporal range
+    """Set raster layer band based on temporal range
     :param layer: Raster layer
     :param t_range: temporal range
     :return: band number
