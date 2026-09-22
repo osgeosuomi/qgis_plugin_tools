@@ -27,7 +27,7 @@ import importlib.resources
 import inspect
 import sys
 from collections.abc import Iterator
-from os.path import abspath, dirname, exists, join, pardir
+from os.path import normpath, pardir
 from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple
 
@@ -39,6 +39,13 @@ if TYPE_CHECKING:
 
 
 from qgis.core import QgsApplication
+
+
+def _absolute_path(*parts: "str | os.PathLike") -> str:
+    """Join the parts and normalise the result like os.path.abspath does."""
+    # os.path is used on purpose: Path.resolve() would also resolve symlinks,
+    # which would change the returned paths for symlinked plugin directories.
+    return normpath(Path.cwd() / Path(*parts))
 
 
 def _iterate_modules(module_name: str) -> Iterator[str]:
@@ -76,26 +83,26 @@ def _is_module_qgis_plugin(module_name: str) -> IsPluginResult:
     """
     module = sys.modules.get(module_name)
     if module is None or not inspect.ismodule(module):
-        return IsPluginResult(False)
+        return IsPluginResult(False)  # noqa: FBT003
 
     class_factory_function = getattr(module, "classFactory", None)
     if class_factory_function is None or not inspect.isfunction(class_factory_function):
-        return IsPluginResult(False)
+        return IsPluginResult(False)  # noqa: FBT003
 
     try:
         source_file = inspect.getsourcefile(module)
     except TypeError:
         # TypeError is thrown for built-in modules. We are only interested in
         # custom modules, so it is safe to ignore the error.
-        return IsPluginResult(False)
+        return IsPluginResult(False)  # noqa: FBT003
     if not source_file:
-        return IsPluginResult(False)
+        return IsPluginResult(False)  # noqa: FBT003
 
-    source_directory = dirname(source_file)
-    if not exists(join(source_directory, "metadata.txt")):
-        return IsPluginResult(False)
+    source_directory = str(Path(source_file).parent)
+    if not Path(source_directory, "metadata.txt").exists():
+        return IsPluginResult(False)  # noqa: FBT003
 
-    return IsPluginResult(True, source_directory)
+    return IsPluginResult(True, source_directory)  # noqa: FBT003
 
 
 def _plugin_path_dependency() -> str:
@@ -126,12 +133,7 @@ def plugin_path(*args: str) -> str:
     :return: Absolute path to the resource.
     :rtype: str
     """
-    path = _plugin_path_dependency()
-
-    for item in args:
-        path = abspath(join(path, item))
-
-    return path
+    return _absolute_path(_plugin_path_dependency(), *args)
 
 
 def root_path(*args: str) -> str:
@@ -153,10 +155,11 @@ def profile_path(*args: str) -> str:
     return: Absolute path to the resource.
     """
     path = QgsApplication.qgisSettingsDirPath()
-    for item in args:
-        path = abspath(join(path, item))
+    if not args:
+        # QGIS returns the directory with a trailing separator, keep it as is
+        return path
 
-    return path
+    return _absolute_path(path, *args)
 
 
 def plugin_name() -> str:
@@ -227,7 +230,7 @@ def qgis_plugin_ci_config() -> dict | None:
         path_str = plugin_path(".qgis-plugin-ci")
     path = Path(path_str)
     if path.exists():
-        with open(path) as f:
+        with path.open() as f:
             config = {}
             for line in f:
                 parts = line.split(":")
@@ -246,13 +249,11 @@ def plugin_test_data_path(*args: str) -> str:
     :return: Absolute path to the resources folder.
     :rtype: str
     """
-    path = abspath(abspath(join(root_path(), "test", "data")))
-    if not exists(path):
-        path = abspath(abspath(join(plugin_path(), "test", "data")))
-    for item in args:
-        path = abspath(join(path, item))
+    path = _absolute_path(root_path(), "test", "data")
+    if not Path(path).exists():
+        path = _absolute_path(plugin_path(), "test", "data")
 
-    return path
+    return _absolute_path(path, *args)
 
 
 def resources_path(*args: str) -> str:
@@ -264,11 +265,7 @@ def resources_path(*args: str) -> str:
     :return: Absolute path to the resources folder.
     :rtype: str
     """
-    path = abspath(abspath(join(plugin_path(), "resources")))
-    for item in args:
-        path = abspath(join(path, item))
-
-    return path
+    return _absolute_path(plugin_path(), "resources", *args)
 
 
 def qgis_plugin_tools_resources(*args: str) -> str:
@@ -296,7 +293,7 @@ def load_ui_from_file(ui_file_path: "str | os.PathLike") -> QWidget:
 def ui_file_dialog(*ui_file_name_parts: str):  # noqa: ANN201
     """DRY helper for building classes from a .ui file"""
 
-    class UiFileDialogClass(QDialog, load_ui(*ui_file_name_parts)):  # type: ignore
+    class UiFileDialogClass(QDialog, load_ui(*ui_file_name_parts)):  # type: ignore[misc]
         def __init__(
             self,
             parent: QWidget | None,
@@ -325,13 +322,11 @@ def package_file(package: importlib.resources.Package, file_name: str) -> Path:
     """
     with importlib.resources.path(package, file_name) as requested_path:
         if not requested_path.is_file():
-            raise FileNotFoundError(
-                f"requested file {file_name} not found in {package}"
-            )
+            message = f"requested file {file_name} not found in {package}"
+            raise FileNotFoundError(message)
 
     if not requested_path.is_file():
-        raise FileNotFoundError(
-            "requested file would be available only as a temporary resource"
-        )
+        message = "requested file would be available only as a temporary resource"
+        raise FileNotFoundError(message)
 
     return requested_path

@@ -28,7 +28,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class LoggerProcessingFeedBack(QgsProcessingFeedback):
-    def __init__(self, use_logger=False):
+    def __init__(self, use_logger=False) -> None:  # noqa: FBT002
         super().__init__()
         self._last = None
         self.use_logger = use_logger
@@ -77,8 +77,9 @@ class LoggerProcessingFeedBack(QgsProcessingFeedback):
         if self.use_logger:
             LOGGER.info(text)
 
-    def reportError(self, text, fatalError=False):
+    def reportError(self, text, fatalError=False):  # noqa: FBT002
         self._last = text
         self.last_report_error = text
         if self.use_logger:
-            LOGGER.exception(text)
+            # Called by QGIS processing while handling an error
+            LOGGER.exception(text)  # noqa: LOG004

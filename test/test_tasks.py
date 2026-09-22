@@ -23,7 +23,9 @@
 import time
 from typing import Any
 
+from pytestqt.qtbot import QtBot
 from qgis.core import Qgis
+from qgis.gui import QgisInterface
 
 from qgis_plugin_tools.testing.utilities import SimpleTask, TestTaskRunner
 from qgis_plugin_tools.tools.exceptions import (
@@ -47,7 +49,9 @@ def test_run_simple_task(task_runner: TestTaskRunner):
     assert task_runner.progress == 100
 
 
-def test_run_simple_task_canceled(task_runner: TestTaskRunner, qgis_iface, qtbot):
+def test_run_simple_task_canceled(
+    task_runner: TestTaskRunner, qgis_iface: QgisInterface, qtbot: QtBot
+):
     task = SimpleTask()
     success = task_runner.run_task(task, cancel=True)
 
@@ -67,7 +71,7 @@ def test_run_simple_task_canceled(task_runner: TestTaskRunner, qgis_iface, qtbot
 
 
 def test_run_simple_task_canceled_after_a_while(
-    task_runner: TestTaskRunner, qgis_iface
+    task_runner: TestTaskRunner, qgis_iface: QgisInterface
 ):
     task = SimpleTask()
     success = task_runner.run_task(task, cancel=True, sleep_before_cancel=0.01)
@@ -79,7 +83,7 @@ def test_run_simple_task_canceled_after_a_while(
     assert "Task canceled!:" in messages
 
 
-def test_run_simple_task_failed(task_runner: TestTaskRunner, qgis_iface):
+def test_run_simple_task_failed(task_runner: TestTaskRunner, qgis_iface: QgisInterface):
     task = SimpleTask(True)
     success = task_runner.run_task(task)
     messages = qgis_iface.messageBar().get_messages(Qgis.MessageLevel.Critical)
@@ -90,7 +94,7 @@ def test_run_simple_task_failed(task_runner: TestTaskRunner, qgis_iface):
 
 
 def test_run_simple_task_failed_with_qgs_plugin_exception(
-    task_runner: TestTaskRunner, qgis_iface
+    task_runner: TestTaskRunner, qgis_iface: QgisInterface
 ):
     task = SimpleTask(True, QgsPluginException)
     success = task_runner.run_task(task)

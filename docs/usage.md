@@ -94,8 +94,9 @@ set_setting(get_log_level_key(LogTarget.FILE), "CRITICAL")
 
 ## Exceptions
 
-Use [`QgsPluginException`](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/exceptions.py) as a base class for every exception. This makes it easy to catch
-all user thrown exceptions at the same time, and you can even use the bar messages in exceptions.
+Use [`QgsPluginException`][exceptions] as a base class for every exception.
+This makes it easy to catch all user thrown exceptions at the same time, and
+you can even use the bar messages in exceptions.
 
 ```python
 from qgis_plugin_tools.tools.exceptions import QgsPluginException
@@ -114,13 +115,13 @@ except Exception as e:
     MsgBar.exception(tr("Unhandled exception occurred"), e)
 ```
 
-Check [tests](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_decorations.py) for more examples.
+Check [tests][test-decorations] for more examples.
 
 ## Network tools
 
 Network tools include blocking network utils using QGIS best practices.
 Use this instead of `requests` or `urllib` modules.
-Check [tests](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_network.py) for more examples.
+Check [tests][test-network] for more examples.
 
 ```python
 from qgis_plugin_tools.tools.network import fetch
@@ -130,12 +131,12 @@ contents = fetch("www.examapleurl.com")
 
 ## Settings tools
 
-[This module](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/settings.py) includes tool to save and load QGIS profile settings easily.
-Check [tests](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_setings.py) for examples.
+[This module][settings] includes tool to save and load QGIS profile settings
+easily. Check [tests][test-settings] for examples.
 
 ## Resource tools
 
-[This module](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/resources.py) provides easy way to get paths to various files in
+[This module][resources] provides easy way to get paths to various files in
 plugin directories. For example to fetch ui file from resources/ui folder use
 `load_ui('resource-file.ui)`.
 
@@ -205,5 +206,15 @@ tr("{} + {} is definitely {}", 1, 1, 3)
 
 ### Setting up translations
 
-To set update and create translation files, refer to [qgis-plugin-dev-tools translation quide](https://github.com/nlsfi/qgis-plugin-dev-tools?tab=readme-ov-file#updating-translations).
-For doing the translation and compiling translation files, we recommend using [Qt Linguist](https://doc.qt.io/qt-6/qtlinguist-index.html).
+To set update and create translation files, refer to the
+[qgis-plugin-dev-tools translation quide][qpdt-translations].
+For doing the translation and compiling translation files, we recommend using
+[Qt Linguist](https://doc.qt.io/qt-6/qtlinguist-index.html).
+
+[exceptions]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/exceptions.py
+[settings]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/settings.py
+[resources]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/resources.py
+[test-decorations]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_decorations.py
+[test-network]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_network.py
+[test-settings]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_setings.py
+[qpdt-translations]: https://github.com/nlsfi/qgis-plugin-dev-tools?tab=readme-ov-file#updating-translations

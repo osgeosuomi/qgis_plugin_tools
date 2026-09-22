@@ -111,6 +111,11 @@ lint.ignore = [
   "COM812", # missing-trailing-comma (formatter will enforce this)
   "ISC001", # single-line-implicit-string-concatenation
   "UP037",  # quoted-annotation (quoted annotations are used with TYPE_CHECKING imports)
+  "ERA001", # commented-out-code - messes with .copyright-header.txt lists the copyright years
+  "D1",     # undocumented-*
+  "D2",     # docstring whitespace and summary formatting
+  "D4",     # docstring content and punctuation
+  "ANN401", # any-type - Any is preferred over object
 ]
 
 # List of all rules https://docs.astral.sh/ruff/rules/
@@ -124,6 +129,9 @@ lint.unfixable = [
 # Avoid flagging (and removing) `SC200` from any `# noqa`
 # directives, despite Ruff's lack of support for `flake8-spellcheck`.
 lint.external = ["SC200", "QGS"]
+
+[tool.ruff.lint.flake8-copyright]
+notice-rgx = "(?i)Copyright \\(C\\)"
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
@@ -148,6 +156,7 @@ known-first-party = ["qgis_plugin_tools"]
   "PLR0913", # Too many arguments in function definition
   "PLR0915", # Too many statements
   "ARG001",  # Unused function argument
+  "ARG002",  # Unused method argument
 ]
 "src/qgis_plugin_tools/widgets/*" = ["ANN201", "ANN001", "ANN204"]
 "src/qgis_plugin_tools/tools/logger_processing.py" = [

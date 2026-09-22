@@ -32,7 +32,7 @@ def test_message_log_proxies_between_threads():
     mock_msg_bar = MagicMock()
     proxy = SimpleMessageBarProxy(mock_msg_bar)
 
-    def mock_thread():
+    def mock_thread() -> None:
         proxy.emit_message("title", "text", 1, 2)
 
     thread = Thread(target=mock_thread)

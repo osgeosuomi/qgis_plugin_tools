@@ -21,6 +21,7 @@
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+from qgis.core import QgsProject
 
 from qgis_plugin_tools.tools.exceptions import QgsPluginInvalidProjectSetting
 from qgis_plugin_tools.tools.settings import (
@@ -31,40 +32,40 @@ from qgis_plugin_tools.tools.settings import (
 )
 
 
-def test_set_setting(qgis_new_project):
+def test_set_setting(qgis_new_project: QgsProject):
     set_setting("test_setting", "test_value")
     assert get_setting("test_setting") == "test_value"
 
 
-def test_get_setting(qgis_new_project):
+def test_get_setting(qgis_new_project: QgsProject):
     assert get_setting("non-existent", 2, int) == 2
 
 
-def test_get_setting2(qgis_new_project):
+def test_get_setting2(qgis_new_project: QgsProject):
     assert get_setting("non-existent", 2, str) == "2"
 
 
-def test_get_setting3(qgis_new_project):
+def test_get_setting3(qgis_new_project: QgsProject):
     assert get_setting("non-existent", 2, bool) is True
 
 
-def test_set_project_setting(qgis_new_project):
+def test_set_project_setting(qgis_new_project: QgsProject):
     set_project_setting("test_setting", "test_value")
     assert get_project_setting("test_setting") == "test_value"
 
 
-def test_get_project_setting(qgis_new_project):
+def test_get_project_setting(qgis_new_project: QgsProject):
     assert get_project_setting("non-existent", 2, int) == 2
 
 
-def test_get_project_setting2(qgis_new_project):
+def test_get_project_setting2(qgis_new_project: QgsProject):
     assert get_project_setting("non-existent", "2", str) == "2"
 
 
-def test_get_project_setting3(qgis_new_project):
+def test_get_project_setting3(qgis_new_project: QgsProject):
     assert get_project_setting("non-existent", True, bool) is True
 
 
-def test_get_project_setting_throws_error(qgis_new_project):
+def test_get_project_setting_throws_error(qgis_new_project: QgsProject):
     with pytest.raises(QgsPluginInvalidProjectSetting):
         get_project_setting("non-existent", 2, list)

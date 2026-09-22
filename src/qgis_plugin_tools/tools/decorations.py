@@ -50,7 +50,7 @@ def log_if_fails(
                     fn(*args[:-1], **kwargs)
             except QgsPluginException as e:
                 message_bar.exception(e, **e.bar_msg, stack_info=True)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - reported to the user
                 message_bar.exception(
                     tr("Unhandled exception occurred"), e, stack_info=True
                 )

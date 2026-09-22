@@ -22,7 +22,7 @@
 
 """Base class algorithm."""
 
-from os.path import isfile
+from pathlib import Path
 
 from qgis.core import QgsProcessingAlgorithm
 from qgis.PyQt.QtGui import QIcon
@@ -31,7 +31,7 @@ from qgis_plugin_tools.tools.resources import resources_path
 
 
 class BaseProcessingAlgorithm(QgsProcessingAlgorithm):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def createInstance(self):
@@ -42,7 +42,7 @@ class BaseProcessingAlgorithm(QgsProcessingAlgorithm):
 
     def icon(self):
         icon = resources_path("icons", "icon.png")
-        if isfile(icon):
+        if Path(icon).is_file():
             return QIcon(icon)
         return super().icon()
 

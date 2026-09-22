@@ -63,7 +63,7 @@ def set_raster_renderer_to_singleband(layer: QgsRasterLayer, band: int = 1) -> N
     contrast_enhancement = (
         QgsContrastEnhancement.ContrastEnhancementAlgorithm.StretchToMinimumMaximum
     )
-    enhancement.setContrastEnhancementAlgorithm(contrast_enhancement, True)
+    enhancement.setContrastEnhancementAlgorithm(contrast_enhancement, True)  # noqa: FBT003
     enhancement.setMinimumValue(min_val)
     enhancement.setMaximumValue(max_val)
     layer.setRenderer(renderer)
