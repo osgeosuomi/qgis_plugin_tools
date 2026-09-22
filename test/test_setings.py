@@ -22,8 +22,8 @@
 
 import pytest
 
-from ..tools.exceptions import QgsPluginInvalidProjectSetting
-from ..tools.settings import (
+from qgis_plugin_tools.tools.exceptions import QgsPluginInvalidProjectSetting
+from qgis_plugin_tools.tools.settings import (
     get_project_setting,
     get_setting,
     set_project_setting,

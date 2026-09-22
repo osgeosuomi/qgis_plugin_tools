@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix: Set raster temporal range to UTC correctly on PyQt6
 - Maintenance: Add bandit security checks to linting.
 - Maintenance: Replace an `assert` with a real check in `resources.plugin_path()` internals. No behaviour change.
-
+- Maintenance: Move the package to a `src/` layout and build with the uv build backend instead of setuptools.
 
 ## [1.1.1] - 2026-7-24
 

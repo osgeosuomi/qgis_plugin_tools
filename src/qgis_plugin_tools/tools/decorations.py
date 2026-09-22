@@ -24,10 +24,10 @@ from collections.abc import Callable
 from functools import wraps
 from typing import Any
 
-from .exceptions import QgsPluginException
-from .i18n import tr
-from .messages import MessageBarLogger
-from .tasks import FunctionTask
+from qgis_plugin_tools.tools.exceptions import QgsPluginException
+from qgis_plugin_tools.tools.i18n import tr
+from qgis_plugin_tools.tools.messages import MessageBarLogger
+from qgis_plugin_tools.tools.tasks import FunctionTask
 
 
 def log_if_fails(

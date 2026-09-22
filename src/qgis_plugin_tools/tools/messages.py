@@ -24,7 +24,7 @@ import logging
 import sys
 from typing import Any
 
-from .custom_logging import bar_msg
+from qgis_plugin_tools.tools.custom_logging import bar_msg
 
 
 class MessageBarLogger:

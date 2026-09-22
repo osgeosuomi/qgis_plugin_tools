@@ -27,15 +27,15 @@ from pathlib import Path
 
 import pytest
 
-from ..testing.utilities import TestTaskRunner
-from ..tools.custom_logging import (
+from qgis_plugin_tools.testing.utilities import TestTaskRunner
+from qgis_plugin_tools.tools.custom_logging import (
     LogTarget,
     get_log_level_key,
     setup_logger,
     teardown_logger,
 )
-from ..tools.resources import plugin_name
-from ..tools.settings import set_setting
+from qgis_plugin_tools.tools.resources import plugin_name
+from qgis_plugin_tools.tools.settings import set_setting
 
 
 @pytest.fixture(scope="session")

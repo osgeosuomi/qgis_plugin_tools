@@ -22,7 +22,7 @@
 
 from qgis.core import QgsWkbTypes
 
-from ..tools.layers import LayerType
+from qgis_plugin_tools.tools.layers import LayerType
 
 
 def test_layer_type():

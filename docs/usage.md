@@ -93,7 +93,7 @@ set_setting(get_log_level_key(LogTarget.FILE), "CRITICAL")
 
 ## Exceptions
 
-Use [`QgsPluginException`](../tools/exceptions.py) as a base class for every exception. This makes it easy to catch
+Use [`QgsPluginException`](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/exceptions.py) as a base class for every exception. This makes it easy to catch
 all user thrown exceptions at the same time, and you can even use the bar messages in exceptions.
 
 ```python
@@ -111,13 +111,13 @@ except Exception as e:
     MsgBar.exception(tr('Unhandled exception occurred'), e)
 ```
 
-Check [tests](../testing/test_decorations.py) for more examples.
+Check [tests](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_decorations.py) for more examples.
 
 ## Network tools
 
 Network tools include blocking network utils using QGIS best practices.
 Use this instead of `requests` or `urllib` modules.
-Check [tests](../testing/test_network.py) for more examples.
+Check [tests](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_network.py) for more examples.
 
 ```python
 from qgis_plugin_tools.tools.network import fetch
@@ -127,12 +127,12 @@ contents = fetch('www.examapleurl.com')
 
 ## Settings tools
 
-[This module](../tools/settings.py) includes tool to save and load QGIS profile settings easily.
-Check [tests](../testing/test_settings.py) for examples.
+[This module](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/settings.py) includes tool to save and load QGIS profile settings easily.
+Check [tests](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_setings.py) for examples.
 
 ## Resource tools
 
-[This module](../tools/resources.py) provides easy way to get paths to various files in
+[This module](https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/resources.py) provides easy way to get paths to various files in
 plugin directories. For example to fetch ui file from resources/ui folder use
 `load_ui('resource-file.ui)`.
 

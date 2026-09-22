@@ -346,7 +346,7 @@ def resources_path(*args: str) -> str:
 
 
 def qgis_plugin_tools_resources(*args: str) -> str:
-    """Get the path within the qgis_plugin_tools submodule"""
+    """Get the path within the qgis_plugin_tools package"""
     return str(Path(__file__, "..", "..", "resources", *args).resolve().absolute())
 
 

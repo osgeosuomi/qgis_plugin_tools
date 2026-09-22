@@ -25,7 +25,7 @@ from unittest.mock import MagicMock
 
 from qgis.PyQt.QtCore import QCoreApplication
 
-from ..tools.custom_logging import SimpleMessageBarProxy
+from qgis_plugin_tools.tools.custom_logging import SimpleMessageBarProxy
 
 
 def test_message_log_proxies_between_threads():

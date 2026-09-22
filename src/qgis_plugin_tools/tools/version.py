@@ -24,8 +24,8 @@
 
 from osgeo import osr
 
-from .exceptions import QgsPluginVersionInInvalidFormat
-from .resources import metadata_config
+from qgis_plugin_tools.tools.exceptions import QgsPluginVersionInInvalidFormat
+from qgis_plugin_tools.tools.resources import metadata_config
 
 EXPECTED_VERSION_LENGTH = 3
 

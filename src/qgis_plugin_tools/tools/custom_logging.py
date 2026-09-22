@@ -36,9 +36,9 @@ from qgis.gui import QgisInterface, QgsMessageBar
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
 from qgis.PyQt.QtWidgets import QLayout, QVBoxLayout, QWidget
 
-from .i18n import tr
-from .resources import plugin_name, plugin_path, profile_path
-from .settings import get_setting, setting_key
+from qgis_plugin_tools.tools.i18n import tr
+from qgis_plugin_tools.tools.resources import plugin_name, plugin_path, profile_path
+from qgis_plugin_tools.tools.settings import get_setting, setting_key
 
 
 @unique

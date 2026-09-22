@@ -26,9 +26,12 @@ from typing import Any
 
 from qgis.core import QgsTask
 
-from .exceptions import QgsPluginException, TaskInterruptedException
-from .i18n import tr
-from .messages import MsgBar
+from qgis_plugin_tools.tools.exceptions import (
+    QgsPluginException,
+    TaskInterruptedException,
+)
+from qgis_plugin_tools.tools.i18n import tr
+from qgis_plugin_tools.tools.messages import MsgBar
 
 LOGGER = logging.getLogger(__name__)
 

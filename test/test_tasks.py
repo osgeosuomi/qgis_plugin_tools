@@ -25,9 +25,12 @@ from typing import Any
 
 from qgis.core import Qgis
 
-from ..testing.utilities import SimpleTask, TestTaskRunner
-from ..tools.exceptions import QgsPluginException, TaskInterruptedException
-from ..tools.tasks import FunctionTask
+from qgis_plugin_tools.testing.utilities import SimpleTask, TestTaskRunner
+from qgis_plugin_tools.tools.exceptions import (
+    QgsPluginException,
+    TaskInterruptedException,
+)
+from qgis_plugin_tools.tools.tasks import FunctionTask
 
 
 def fn(*args: Any, **kwargs: Any):  # noqa: ANN003
