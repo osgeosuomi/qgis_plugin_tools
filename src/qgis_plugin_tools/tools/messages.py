@@ -21,7 +21,6 @@
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
-import sys
 from typing import Any
 
 from qgis_plugin_tools.tools.custom_logging import bar_msg
@@ -36,11 +35,7 @@ class MessageBarLogger:
 
     def __init__(self, logger_name: str, stack_level: int = 2) -> None:
         self._logger = logging.getLogger(logger_name)
-        self._logger_kwargs: dict[str, Any] = (
-            {}
-            if sys.version_info.major == 3 and sys.version_info.minor < 8  # noqa: YTT204
-            else {"stacklevel": stack_level}
-        )
+        self._logger_kwargs: dict[str, Any] = {"stacklevel": stack_level}
 
     def info(  # noqa: PLR0913, PLR0917
         self,
