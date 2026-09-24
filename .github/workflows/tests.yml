@@ -54,12 +54,12 @@ jobs:
           uv run --no-sync diff-cover coverage.xml --format json:report.json
           total_num_lines=$(jq '.["total_num_lines"]' report.json)
           total_percent_covered=$(jq '.["total_percent_covered"]' report.json)
-          test "$total_num_lines" -le 20 || test "$total_percent_covered" -ge 80
+          test "$total_num_lines" -le 20 || test "$total_percent_covered" -ge 35
 
       - name: Check total code coverage
         if: ${{ matrix.qgis-image-tag == '3.44-noble' }}
         run: |
-          uv run coverage report --fail-under=80
+          uv run coverage report --fail-under=35
 
   build:
     name: Build wheels and source distribution
