@@ -1,8 +1,5 @@
 # Force text files to use LF line endings on working tree.
 * text eol=lf
 
-# Force batch scripts to always use CRLF line endings so that if a repo is accessed
-# in Windows via a file share from Linux, the scripts will work.
-*.{cmd,[cC][mM][dD]} text eol=crlf
-*.{bat,[bB][aA][tT]} text eol=crlf
-*.{ics,[iI][cC][sS]} text eol=crlf
+# Keep lines from both sides on merge, pre-commit sorts and removes duplicates
+whitelist.txt merge=union

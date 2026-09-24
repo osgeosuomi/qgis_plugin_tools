@@ -15,7 +15,6 @@ requires-python = ">=3.12"
 license = "GPL-2.0-or-later"
 license-files = ["LICENSE"]
 dependencies = []
-build = ["uv"]
 
 keywords = ["qgis", "QGIS", "PyQGIS"]
 classifiers = [
@@ -65,8 +64,6 @@ default-groups = ["dev", "lint"]
 [dependency-groups]
 dev = [
   "requests",
-  # Debugging
-  "debugpy==1.5.1",
   # Testing
   "pytest>=9.1.1",
   "pytest-cov",
@@ -76,19 +73,20 @@ dev = [
   "pytest-rerunfailures>=16.1",
   "pytest-xdist>=3.8.0",
   # Tools
+  "qgis-plugin-dev-tools>=0.13.2",
   "copier",
 ]
 lint = [
   # Linting and formatting (ensure precommit yaml has same versions)
-  "prek>=0.5.1",
-  "ruff>=0.16.8",
-  "mypy>=2",
-  "flake8>=7.3.0",
-  "bandit[toml]>=1.9.4",
+  "prek>=0.5.3",
+  "ruff==0.16.8",
+  "mypy==2.3.1",
+  "flake8==7.4.1",
+  "bandit[toml]==1.9.4",
   # flake8 plugins
-  "flake8-qgis>=2.1.0",
-  "flake8-pyproject>=1.2.4",
-  "flake8-spellcheck>=0.28.0",
+  "flake8-qgis==2.1.0",
+  "flake8-pyproject==1.2.4",
+  "flake8-spellcheck==0.28.0",
   # Stubs for type checks
   "PyQt6-stubs==20250824",
   "types-requests",
@@ -196,6 +194,13 @@ follow_imports = "normal"
 show_column_numbers = true
 check_untyped_defs = true
 
+[tool.pytest.ini_options]
+testpaths = ["test"]
+addopts = [
+  "-n=auto",
+  # "--qgis_disable_gui" # Runs QGIS tests without GUI
+]
+
 [tool.coverage.paths]
 source = ["src", "**/site-packages"]
 
@@ -209,7 +214,3 @@ exclude_also = [
   "if TYPE_CHECKING:",
   "raise NotImplementedError",
 ]
-
-[tool.pytest.ini_options]
-testpaths = ["test"]
-addopts = "-n auto"

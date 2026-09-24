@@ -5,16 +5,17 @@ on:
   push:
     branches:
       - main
+  workflow_call:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-test-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  pytest:
+  test:
     runs-on: ubuntu-latest
     container:
       image: qgis/qgis:${{ matrix.qgis-image-tag }}
@@ -41,7 +42,7 @@ jobs:
       - name: Run tests
         run: |
           uv sync --all-packages --no-group lint --locked --active
-          uv run pytest test -v --qgis_disable_gui --cov --cov-report=xml
+          uv run pytest -v --qgis_disable_gui --cov --cov-report=xml
 
       - name: Check code coverage for changed lines
         if: ${{ matrix.qgis-image-tag == '3.44-noble' }}
@@ -62,7 +63,7 @@ jobs:
 
   build:
     name: Build wheels and source distribution
-    needs: [pytest]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
