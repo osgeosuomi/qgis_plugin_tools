@@ -45,6 +45,15 @@ pytest
 This project uses [uv](https://docs.astral.sh/uv/concepts/projects/dependencies/) for
 dependency management.
 
+## Copier templates
+
+This repository uses the following `copier` templates:
+
+* [qgis-plugin-copier-template](https://github.com/osgeosuomi/qgis-plugin-copier-template/tree/main)
+
+To get the newest version of the template, check each template's repository
+README.md for update instructions.
+
 ## Code quality and style
 
 The included `qgis-plugin-tools.code-workspace` file is preconfigured for
