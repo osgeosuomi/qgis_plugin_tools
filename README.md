@@ -33,10 +33,15 @@ pip install qgis_plugin_tools
 Remember to add this as a runtime requirement in your pyproject.toml:
 
 ```toml
+[project]
+dependencies = [
+  "qgis_plugin_tools"
+]
+
 [tool.qgis_plugin_dev_tools]
 plugin_package_name = "your_plugin_package_name"
 runtime_requires = [
-    "qgis_plugin_dev_tools"
+    "qgis_plugin_tools"
 ]
 ```
 
