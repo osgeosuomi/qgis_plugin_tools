@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/qgis_plugin_tools.svg)](https://badge.fury.io/py/qgis_plugin_tools)
 [![Downloads](https://img.shields.io/pypi/dm/qgis_plugin_tools.svg)](https://pypistats.org/packages/qgis_plugin_tools)
-[![Code on Github](https://img.shields.io/badge/Code-GitHub-brightgreen)](https://github.com/osgeosuomi/pytest-qgis)
+[![Code on Github](https://img.shields.io/badge/Code-GitHub-brightgreen)](https://github.com/osgeosuomi/qgis_plugin_tools)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![uv](https://img.shields.io/badge/uv-managed-blue)](https://github.com/astral-sh/uv)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
@@ -22,7 +22,7 @@ The module is helping you with:
 ## How to install it
 
 It is recommended to use this library as an external dependency with the help of [qgis-plugin-dev-tools](https://github.com/nlsfi/qgis-plugin-dev-tools).
-Or some other tool that can download the library though pip.
+Or some other tool that can download the library through pip.
 
 The tool can be installed via pip:
 
@@ -49,7 +49,7 @@ runtime_requires = [
 
 See [development readme](./DEVELOPMENT.md).
 
-### Translating with QT Linguistic
+### Translating with QT Linguist
 
 The translation files are in [i18n](./src/qgis_plugin_tools/resources/i18n)
 folder. Translatable content in python files is code such as `tr(u"Hello World")`.
