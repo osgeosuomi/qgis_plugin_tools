@@ -21,8 +21,9 @@
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+from qgis.core import QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 
-from qgis_plugin_tools.utils.typing_utils import require
+from qgis_plugin_tools.utils.typing_utils import require, require_type
 
 
 def test_require_returns_value():
@@ -33,3 +34,19 @@ def test_require_returns_value():
 def test_require_raises_on_none():
     with pytest.raises(TypeError, match="Layer missing"):
         require(None, "Layer missing")
+
+
+def test_require_type_returns_narrowed_value():
+    layer: QgsMapLayer = QgsVectorLayer("Point?crs=EPSG:4326", "points", "memory")
+    assert require_type(layer, QgsVectorLayer) is layer
+
+
+def test_require_type_raises_on_wrong_type():
+    layer = QgsVectorLayer("Point?crs=EPSG:4326", "points", "memory")
+    with pytest.raises(TypeError, match="Expected QgsRasterLayer, got QgsVectorLayer"):
+        require_type(layer, QgsRasterLayer)
+
+
+def test_require_type_raises_on_none():
+    with pytest.raises(TypeError, match="Layer missing"):
+        require_type(None, QgsVectorLayer, "Layer missing")

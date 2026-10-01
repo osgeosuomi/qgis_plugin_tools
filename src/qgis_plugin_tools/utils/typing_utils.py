@@ -33,3 +33,13 @@ def require[T](value: T | None, msg: str = "Required value is None") -> T:
     if value is None:
         raise TypeError(msg)
     return value
+
+
+def require_type[T](value: object, cls: type[T], msg: str | None = None) -> T:
+    """Check that PyQGIS object is an instance of cls, satisfying type checkers.
+
+    Useful for narrowing base class return values, e.g. QgsMapLayer to QgsVectorLayer.
+    """
+    if not isinstance(value, cls):
+        raise TypeError(msg or f"Expected {cls.__name__}, got {type(value).__name__}")
+    return value
