@@ -20,7 +20,13 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
-from qgis_plugin_tools.tools.i18n import tr
+from pathlib import Path
+from types import ModuleType
+
+from pytest_mock import MockerFixture
+
+from qgis_plugin_tools.tools import i18n
+from qgis_plugin_tools.tools.i18n import setup_all_translators, tr
 
 
 def test_tr_formatting():
@@ -28,3 +34,51 @@ def test_tr_formatting():
         "These are args {} {} and these are kwargs {foo} {bar}", 1, 2, foo=3, bar=4
     )
     assert string == "These are args 1 2 and these are kwargs 3 4"
+
+
+def test_setup_all_translators_without_translation_file(mocker: MockerFixture):
+    mocker.patch.object(i18n, "setup_translation", return_value=("fi", None))
+    install = mocker.patch.object(i18n.QCoreApplication, "installTranslator")
+
+    assert setup_all_translators() == []
+    install.assert_not_called()
+
+
+def test_setup_all_translators_installs_translation_file(
+    mocker: MockerFixture, tmp_path: Path
+):
+    qm_file = str(tmp_path / "fi.qm")
+    mocker.patch.object(i18n, "setup_translation", return_value=("fi", qm_file))
+    load = mocker.patch.object(i18n.QTranslator, "load")
+    install = mocker.patch.object(i18n.QCoreApplication, "installTranslator")
+
+    translators = setup_all_translators()
+
+    assert len(translators) == 1
+    load.assert_called_once_with(qm_file)
+    install.assert_called_once_with(translators[0])
+
+
+def test_setup_all_translators_installs_library_translation_files(
+    mocker: MockerFixture, tmp_path: Path
+):
+    library = ModuleType("library")
+    library.__file__ = str(tmp_path / "library" / "__init__.py")
+    library_folder = str(tmp_path / "library" / "resources" / "i18n")
+    setup_translation = mocker.patch.object(
+        i18n,
+        "setup_translation",
+        side_effect=[("fi", "main.qm"), ("fi", f"{library_folder}/fi.qm")],
+    )
+    load = mocker.patch.object(i18n.QTranslator, "load")
+    install = mocker.patch.object(i18n.QCoreApplication, "installTranslator")
+
+    translators = setup_all_translators(library)
+
+    assert len(translators) == 2
+    setup_translation.assert_called_with(folder=library_folder)
+    assert load.call_args_list == [
+        mocker.call("main.qm"),
+        mocker.call(f"{library_folder}/fi.qm"),
+    ]
+    assert install.call_count == 2

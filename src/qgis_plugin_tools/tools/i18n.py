@@ -23,10 +23,11 @@
 """I18n tools."""
 
 from pathlib import Path
+from types import ModuleType
 from typing import Any
 
 from qgis.core import QgsSettings
-from qgis.PyQt.QtCore import QFileInfo, QLocale
+from qgis.PyQt.QtCore import QCoreApplication, QFileInfo, QLocale, QTranslator
 from qgis.PyQt.QtWidgets import QApplication
 
 from qgis_plugin_tools.tools.resources import (
@@ -72,6 +73,35 @@ def setup_translation(
                     return locale, ts_file.absoluteFilePath()
 
     return locale, None
+
+
+def setup_all_translators(*libraries: ModuleType) -> list[QTranslator]:
+    """Install translators for the calling plugin and its libraries.
+
+    :param libraries: Library packages with translations in resources/i18n.
+
+    :return: Installed translators, keep a reference to them.
+    """
+    _, main_file_path = setup_translation()
+    file_paths = [main_file_path]
+    for library in libraries:
+        if library.__file__ is None:
+            msg = f"Cannot find the translations of {library.__name__}"
+            raise ValueError(msg)
+        _, library_file_path = setup_translation(
+            folder=str(Path(library.__file__).parent / "resources" / "i18n")
+        )
+        file_paths.append(library_file_path)
+
+    translators = []
+    for file_path in file_paths:
+        if file_path:
+            translator = QTranslator()
+            translator.load(file_path)
+            QCoreApplication.installTranslator(translator)
+            translators.append(translator)
+
+    return translators
 
 
 def tr(
