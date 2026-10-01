@@ -165,48 +165,21 @@ to make it possibly translatable.
 
 ```python
 from qgis.PyQt import QtCore
-from pathlib import Path
 
-from qgis_plugin_tools.tools.i18n import setup_translation
+from qgis_plugin_tools.tools.i18n import setup_all_translators
 
 # For setting up the translation file (usually in root __init__.py)
 TRANSLATORS: list[QtCore.QTranslator] = []
 
 
-def setup_translators() -> list[QtCore.QTranslator]:
-    # Function to set up translators. This can lie also outside __init__.py
-    translators = []
-    main_locale, main_file_path = setup_translation()
-    if main_file_path:
-        main_translator = QtCore.QTranslator()
-        main_translator.load(main_file_path)
-        # noinspection PyCallByClass
-        QtCore.QCoreApplication.installTranslator(main_translator)
-        translators.append(main_translator)
-
-    # If you have other QGIS plugins as libraries that need translations
-    import other_plugin_1
-    import other_plugin_2
-
-    for library in (other_plugin_1, other_plugin_2):
-        library_locale, library_file_path = setup_translation(
-            folder=str(Path(library.__file__).parent / "resources" / "i18n")
-        )
-        if library_file_path:
-            library_translator = QtCore.QTranslator()
-            library_translator.load(library_file_path)
-            # noinspection PyCallByClass
-            QtCore.QCoreApplication.installTranslator(library_translator)
-            translators.append(library_translator)
-    return translators
-
-
 def classFactory(_):  # noqa: ANN201, ANN001, N802
     """Class factory."""
+    import other_plugin  # noqa: PLC0415
 
-    from yuor_plugin.plugin import Plugin  # noqa: PLC0415
+    from your_plugin.plugin import Plugin  # noqa: PLC0415
 
-    TRANSLATORS.extend(setup_translators())
+    # Pass libraries with translations in resources/i18n, if any
+    TRANSLATORS.extend(setup_all_translators(other_plugin))
 
     return Plugin()
 
