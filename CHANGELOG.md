@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Fix: use Qgis.MessageLevel for message bar logger
+
+
 ## 2.0.0 - 2026-09-25
 
 - Breaking maintenance: Drop support for Python 3.11 and Python 3.10

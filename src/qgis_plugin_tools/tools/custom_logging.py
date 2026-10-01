@@ -208,7 +208,7 @@ class SimpleMessageBarProxy(QObject):
                 self._msg_bar.pushMessage(
                     title=self._sanitize(title),
                     text=self._sanitize(text),
-                    level=level,
+                    level=Qgis.MessageLevel(level),
                     duration=duration,
                 )
 
