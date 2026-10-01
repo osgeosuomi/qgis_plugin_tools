@@ -7,9 +7,7 @@
 [![uv](https://img.shields.io/badge/uv-managed-blue)](https://github.com/astral-sh/uv)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-**Warning: The API is not stable yet. Function and files may move between commits.**
-
-The module is helping you with:
+The library is helping you with:
 
 * [setting up some logging](docs/usage.md#Logging) (QgsMessageLog, file log, remote logs...)
 * [fetching resources](docs/usage.md#Resource-tools) in `resources` or other folders
@@ -18,6 +16,7 @@ The module is helping you with:
 * removing QRC resources file easily
 * translate using the `i18n.tr()` function.
 * providing some common widgets/code for plugins
+* typing helpers to help with type checking
 
 ## How to install it
 

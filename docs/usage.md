@@ -140,6 +140,22 @@ easily. Check [tests][test-settings] for examples.
 plugin directories. For example to fetch ui file from resources/ui folder use
 `load_ui('resource-file.ui)`.
 
+## Typing tools
+
+[This module][typing-utils] helps to narrow optional or too generic PyQGIS
+return types, raising an exception at runtime if the type is not as expected.
+
+```python
+from qgis.core import QgsProject, QgsVectorLayer
+
+from qgis_plugin_tools.utils.typing_utils import require, require_type
+
+project = require(QgsProject.instance())  # QgsProject | None -> QgsProject
+layer = require_type(
+    project.mapLayer(layer_id), QgsVectorLayer
+)  # QgsMapLayer | None -> QgsVectorLayer
+```
+
 ## Translating
 
 ### Using translations in code
@@ -214,6 +230,7 @@ For doing the translation and compiling translation files, we recommend using
 [exceptions]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/exceptions.py
 [settings]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/settings.py
 [resources]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/resources.py
+[typing-utils]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/utils/typing_utils.py
 [test-decorations]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_decorations.py
 [test-network]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_network.py
 [test-settings]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_setings.py
