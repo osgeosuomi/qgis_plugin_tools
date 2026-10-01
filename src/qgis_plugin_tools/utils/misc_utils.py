@@ -19,21 +19,25 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
-"""Deprecated, use qgis_plugin_tools.utils.grid_layout_utils instead."""
 
-import warnings
+from qgis.core import QgsRectangle
 
-from qgis_plugin_tools.utils.grid_layout_utils import (
-    remove_cell,
-    remove_column,
-    remove_row,
-)
 
-__all__ = ["remove_cell", "remove_column", "remove_row"]
+def extent_to_bbox(extent: QgsRectangle, precision: int = 2) -> str:
+    """Add extent for the query
 
-warnings.warn(
-    "qgis_plugin_tools.widgets.grid_layout_utils is deprecated, "
-    "use qgis_plugin_tools.utils.grid_layout_utils instead",
-    DeprecationWarning,
-    stacklevel=2,
-)
+    :param extent: QgsRectangle expected to be in the right extent
+    :param precision: Precision of coordinates
+    :return: string representation xmin,ymin,xmax,ymax
+    """
+
+    def rnd(c: float) -> float:
+        return round(c, precision)
+
+    bbox = (
+        rnd(extent.xMinimum()),
+        rnd(extent.yMinimum()),
+        rnd(extent.xMaximum()),
+        rnd(extent.yMaximum()),
+    )
+    return ",".join(map(str, bbox))
