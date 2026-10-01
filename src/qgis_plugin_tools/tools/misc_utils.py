@@ -19,25 +19,17 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
+"""Deprecated, use qgis_plugin_tools.utils.misc_utils instead."""
 
-from qgis.core import QgsRectangle
+import warnings
 
+from qgis_plugin_tools.utils.misc_utils import extent_to_bbox
 
-def extent_to_bbox(extent: QgsRectangle, precision: int = 2) -> str:
-    """Add extent for the query
+__all__ = ["extent_to_bbox"]
 
-    :param extent: QgsRectangle expected to be in the right extent
-    :param precision: Precision of coordinates
-    :return: string representation xmin,ymin,xmax,ymax
-    """
-
-    def rnd(c: float) -> float:
-        return round(c, precision)
-
-    bbox = (
-        rnd(extent.xMinimum()),
-        rnd(extent.yMinimum()),
-        rnd(extent.xMaximum()),
-        rnd(extent.yMaximum()),
-    )
-    return ",".join(map(str, bbox))
+warnings.warn(
+    "qgis_plugin_tools.tools.misc_utils is deprecated, "
+    "use qgis_plugin_tools.utils.misc_utils instead",
+    DeprecationWarning,
+    stacklevel=2,
+)

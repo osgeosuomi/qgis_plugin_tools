@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix: use Qgis.MessageLevel for message bar logger
 - Feature: Add typing utils to help with type checking
+- Maintenance: Move utils modules to utils package, old import paths are deprecated
 
 ## 2.0.0 - 2026-09-25
 

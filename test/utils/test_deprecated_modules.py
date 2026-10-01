@@ -20,12 +20,28 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
-from qgis.core import QgsRectangle
+import importlib
+import sys
 
-from qgis_plugin_tools.tools.misc_utils import extent_to_bbox
+import pytest
 
 
-def test_extent_to_bbox():
-    extent = QgsRectangle(1, 2, 3, 4)
-    bbox = extent_to_bbox(extent, precision=1)
-    assert bbox == "1.0,2.0,3.0,4.0"
+@pytest.mark.parametrize(
+    ("old_module", "new_module"),
+    [
+        ("qgis_plugin_tools.tools.misc_utils", "qgis_plugin_tools.utils.misc_utils"),
+        (
+            "qgis_plugin_tools.widgets.grid_layout_utils",
+            "qgis_plugin_tools.utils.grid_layout_utils",
+        ),
+    ],
+)
+def test_deprecated_module_reexports_new_module(old_module: str, new_module: str):
+    sys.modules.pop(old_module, None)
+
+    with pytest.deprecated_call(match=new_module):
+        old = importlib.import_module(old_module)
+
+    new = importlib.import_module(new_module)
+    for name in old.__all__:
+        assert getattr(old, name) is getattr(new, name)

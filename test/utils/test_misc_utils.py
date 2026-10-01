@@ -19,21 +19,13 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
-"""Deprecated, use qgis_plugin_tools.utils.grid_layout_utils instead."""
 
-import warnings
+from qgis.core import QgsRectangle
 
-from qgis_plugin_tools.utils.grid_layout_utils import (
-    remove_cell,
-    remove_column,
-    remove_row,
-)
+from qgis_plugin_tools.utils.misc_utils import extent_to_bbox
 
-__all__ = ["remove_cell", "remove_column", "remove_row"]
 
-warnings.warn(
-    "qgis_plugin_tools.widgets.grid_layout_utils is deprecated, "
-    "use qgis_plugin_tools.utils.grid_layout_utils instead",
-    DeprecationWarning,
-    stacklevel=2,
-)
+def test_extent_to_bbox():
+    extent = QgsRectangle(1, 2, 3, 4)
+    bbox = extent_to_bbox(extent, precision=1)
+    assert bbox == "1.0,2.0,3.0,4.0"
