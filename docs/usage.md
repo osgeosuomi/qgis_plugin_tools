@@ -138,7 +138,10 @@ easily. Check [tests][test-settings] for examples.
 
 [This module][resources] provides easy way to get paths to various files in
 plugin directories. For example to fetch ui file from resources/ui folder use
-`load_ui('resource-file.ui)`.
+`load_ui('resource-file.ui')`.
+
+If the plugin cannot be determined, use [`load_ui_file`][ui] to load it explicitly
+from a package: `load_ui_file(myplugin.resources.ui, "dialog.ui")`.
 
 ## Typing tools
 
@@ -203,6 +206,7 @@ For doing the translation and compiling translation files, we recommend using
 [exceptions]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/exceptions.py
 [settings]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/settings.py
 [resources]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/resources.py
+[ui]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/tools/ui.py
 [typing-utils]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/src/qgis_plugin_tools/utils/typing_utils.py
 [test-decorations]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_decorations.py
 [test-network]: https://github.com/osgeosuomi/qgis_plugin_tools/blob/main/test/test_network.py

@@ -71,10 +71,19 @@ class IsPluginResult(NamedTuple):
         return self.is_plugin
 
 
+def _is_qgis_plugin_metadata(path: Path) -> bool:
+    config = configparser.ConfigParser()
+    try:
+        config.read(path, encoding="utf-8")
+    except (configparser.Error, UnicodeDecodeError):
+        return False
+    return config.has_option("general", "qgisMinimumVersion")
+
+
 def _is_module_qgis_plugin(module_name: str) -> IsPluginResult:
     """Checks if the module is a QGIS plugin
 
-    A plugin module has a classFactory method and a metadata.txt at the package root.
+    A plugin module is a package with a metadata.txt at the package root.
 
     Returns a IsPluginResult thats compares to True when the module given is a plugin.
 
@@ -82,11 +91,11 @@ def _is_module_qgis_plugin(module_name: str) -> IsPluginResult:
     >>>    print(f"Plugin is installed ad {is_plugin.plugin_directory}")
     """
     module = sys.modules.get(module_name)
-    if module is None or not inspect.ismodule(module):
-        return IsPluginResult(False)  # noqa: FBT003
-
-    class_factory_function = getattr(module, "classFactory", None)
-    if class_factory_function is None or not inspect.isfunction(class_factory_function):
+    if (
+        module is None
+        or not inspect.ismodule(module)
+        or not hasattr(module, "__path__")
+    ):
         return IsPluginResult(False)  # noqa: FBT003
 
     try:
@@ -99,7 +108,7 @@ def _is_module_qgis_plugin(module_name: str) -> IsPluginResult:
         return IsPluginResult(False)  # noqa: FBT003
 
     source_directory = str(Path(source_file).parent)
-    if not Path(source_directory, "metadata.txt").exists():
+    if not _is_qgis_plugin_metadata(Path(source_directory, "metadata.txt")):
         return IsPluginResult(False)  # noqa: FBT003
 
     return IsPluginResult(True, source_directory)  # noqa: FBT003
@@ -139,17 +148,9 @@ def _plugin_path_dependency() -> str:
     if len(loaded_plugin_directories) == 1:
         return loaded_plugin_directories.pop()
 
-    if loaded_plugin_directories:
-        message = (
-            "Could not determine the QGIS plugin directory: the call did not come "
-            "from a plugin package and multiple plugins are loaded: "
-            f"{', '.join(sorted(loaded_plugin_directories))}"
-        )
-    else:
-        message = (
-            "Could not determine the QGIS plugin directory: no QGIS plugin package "
-            "(a package with classFactory and metadata.txt) is loaded"
-        )
+    message = (
+        f"Could not determine the plugin, loaded: {sorted(loaded_plugin_directories)}"
+    )
     # avoid circular import
     from qgis_plugin_tools.tools.exceptions import PluginNotFoundError  # noqa: PLC0415
 
@@ -311,6 +312,8 @@ def qgis_plugin_tools_resources(*args: str) -> str:
 
 def load_ui(*args: str) -> QWidget:
     """Get compiled UI file.
+
+    Use tools.ui.load_ui_file to load it explicitly from a package.
 
     :param args List of path elements e.g. ['img', 'logos', 'image.png']
     :type args: str

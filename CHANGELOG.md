@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-- Fix: resolve the plugin path from the loaded plugin when not called from a plugin package (e.g. in plugin tests)
+- Fix: find plugin from loaded modules if not called from a plugin
+- Fix: support module level `load_ui` during plugin import
 
 ## 2.1.0 - 2026-10-01
 
