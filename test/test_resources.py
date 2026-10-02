@@ -20,6 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
+import importlib
 import sys
 from pathlib import Path
 from types import ModuleType
@@ -57,10 +58,20 @@ def test_plugin_path_from_plugin(dummy_plugin: ModuleType, plugin_directory: Pat
     )
 
 
+def test_load_ui_at_module_level_during_plugin_import(dummy_plugin: ModuleType):
+    try:
+        early_ui_plugin = importlib.import_module("early_ui_plugin")
+        assert early_ui_plugin.FORM_CLASS.__name__ == "Ui_EarlyDialog"
+    finally:
+        for module_name in [*sys.modules]:
+            if module_name.split(".")[0] == "early_ui_plugin":
+                del sys.modules[module_name]
+
+
 def test_plugin_path_raises_if_no_plugin_is_loaded(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.delitem(sys.modules, "dummy_plugin")
 
-    with pytest.raises(PluginNotFoundError, match="no QGIS plugin package"):
+    with pytest.raises(PluginNotFoundError, match="Could not determine the plugin"):
         plugin_path()
 
 

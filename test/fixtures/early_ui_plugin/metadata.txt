@@ -1,0 +1,5 @@
+[general]
+name=Early UI plugin
+qgisMinimumVersion=3.0
+description=Plugin for testing qgis_plugin_tools
+version=0.1.0

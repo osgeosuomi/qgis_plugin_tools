@@ -1,0 +1,7 @@
+
+<ui version="4.0">
+ <class>EarlyDialog</class>
+ <widget class="QDialog" name="EarlyDialog"/>
+ <resources/>
+ <connections/>
+</ui>
