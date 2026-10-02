@@ -20,33 +20,72 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
+import sys
 from pathlib import Path
+from types import ModuleType
 
+import pytest
 from qgis.core import QgsApplication
 
-import qgis_plugin_tools
+from qgis_plugin_tools.tools.exceptions import PluginNotFoundError
 from qgis_plugin_tools.tools.resources import (
+    load_ui,
+    plugin_name,
     plugin_path,
     profile_path,
     resources_path,
     root_path,
 )
 
-PACKAGE_PATH = Path(qgis_plugin_tools.__file__).parent
+
+@pytest.fixture
+def plugin_directory(dummy_plugin: ModuleType) -> Path:
+    assert dummy_plugin.__file__ is not None
+    return Path(dummy_plugin.__file__).parent
 
 
-def test_plugin_path():
-    assert plugin_path() == str(PACKAGE_PATH)
-    assert plugin_path("resources", "ui") == str(PACKAGE_PATH / "resources" / "ui")
+def test_plugin_path_from_outside_of_plugin_uses_loaded_plugin(
+    plugin_directory: Path,
+):
+    assert plugin_path() == str(plugin_directory)
+    assert plugin_path("resources", "ui") == str(plugin_directory / "resources" / "ui")
 
 
-def test_root_path():
-    assert root_path() == str(PACKAGE_PATH.parent)
-    assert root_path("test") == str(PACKAGE_PATH.parent / "test")
+def test_plugin_path_from_plugin(dummy_plugin: ModuleType, plugin_directory: Path):
+    assert dummy_plugin.path_from_plugin("metadata.txt") == str(
+        plugin_directory / "metadata.txt"
+    )
 
 
-def test_resources_path_points_to_a_packaged_file():
-    assert Path(resources_path("ui", "progress_dialog.ui")).is_file()
+def test_plugin_path_raises_if_no_plugin_is_loaded(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.delitem(sys.modules, "dummy_plugin")
+
+    with pytest.raises(PluginNotFoundError, match="no QGIS plugin package"):
+        plugin_path()
+
+
+def test_plugin_name():
+    assert plugin_name() == "Dummyplugin"
+
+
+def test_root_path(plugin_directory: Path):
+    assert root_path() == str(plugin_directory.parent)
+    assert root_path("test") == str(plugin_directory.parent / "test")
+
+
+def test_resources_path_points_to_a_plugin_file(plugin_directory: Path):
+    assert resources_path("ui", "dialog.ui") == str(
+        plugin_directory / "resources" / "ui" / "dialog.ui"
+    )
+
+
+def test_resources_path_raises_if_resource_is_not_found():
+    with pytest.raises(FileNotFoundError, match=r"missing\.ui"):
+        resources_path("ui", "missing.ui")
+
+
+def test_load_ui():
+    assert load_ui("dialog.ui").__name__ == "Ui_Dialog"
 
 
 def test_profile_path():

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Fix: resolve the plugin path from the loaded plugin when not called from a plugin package (e.g. in plugin tests)
+
 ## 2.1.0 - 2026-10-01
 
 - Fix: use Qgis.MessageLevel for message bar logger

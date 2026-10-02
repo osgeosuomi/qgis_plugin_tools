@@ -20,30 +20,12 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
-"""Base class algorithm."""
-
-from qgis.core import QgsProcessingAlgorithm
-from qgis.PyQt.QtGui import QIcon
-
-from qgis_plugin_tools.tools.resources import resources_path
+from qgis_plugin_tools.tools.resources import plugin_path
 
 
-class BaseProcessingAlgorithm(QgsProcessingAlgorithm):
-    def __init__(self) -> None:
-        super().__init__()
+def classFactory(iface: object) -> None:  # noqa: N802
+    raise NotImplementedError
 
-    def createInstance(self):
-        return type(self)()
 
-    def flags(self):
-        return super().flags() | QgsProcessingAlgorithm.Flag.FlagHideFromModeler
-
-    def icon(self):
-        try:
-            icon = resources_path("icons", "icon.png")
-        except FileNotFoundError:
-            return super().icon()
-        return QIcon(icon)
-
-    def shortHelpString(self):
-        raise NotImplementedError
+def path_from_plugin(*args: str) -> str:
+    return plugin_path(*args)

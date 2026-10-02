@@ -20,8 +20,11 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
+import importlib
+import sys
 from collections.abc import Iterator
 from pathlib import Path
+from types import ModuleType
 
 import pytest
 from qgis.gui import QgisInterface
@@ -37,8 +40,19 @@ from qgis_plugin_tools.tools.resources import plugin_name
 from qgis_plugin_tools.tools.settings import set_setting
 
 
+@pytest.fixture(scope="session", autouse=True)
+def dummy_plugin() -> Iterator[ModuleType]:
+    plugins_directory = str(Path(__file__).parent / "fixtures")
+    sys.path.insert(0, plugins_directory)
+    try:
+        yield importlib.import_module("dummy_plugin")
+    finally:
+        sys.path.remove(plugins_directory)
+        sys.modules.pop("dummy_plugin", None)
+
+
 @pytest.fixture(scope="session")
-def initialize_logger(qgis_iface: QgisInterface):
+def initialize_logger(qgis_iface: QgisInterface, dummy_plugin: ModuleType):
     set_setting(get_log_level_key(LogTarget.FILE), "NOTSET")
     setup_logger(plugin_name(), qgis_iface)
     yield
