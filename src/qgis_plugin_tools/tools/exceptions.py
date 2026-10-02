@@ -27,6 +27,10 @@ from qgis.PyQt.QtNetwork import QNetworkReply
 from qgis_plugin_tools.tools.i18n import tr
 
 
+class PluginNotFoundError(Exception):
+    pass
+
+
 class QgsPluginException(Exception):  # noqa: N818
     """Use this as a base exception class in custom exceptions"""
 

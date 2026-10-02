@@ -120,8 +120,40 @@ def _plugin_path_dependency() -> str:
             if is_plugin and is_plugin.plugin_directory:
                 return is_plugin.plugin_directory
 
-    # fall back to the qgis_plugin_tools package directory
-    return str(Path(__file__).resolve().parent.parent)
+    # embedded dependency, e.g. myplugin.dependencies.qgis_plugin_tools
+    top_level_package_name = __name__.split(".", maxsplit=1)[0]
+    if (
+        top_level_package_name != "qgis_plugin_tools"
+        and (is_plugin := _is_module_qgis_plugin(top_level_package_name))
+        and is_plugin.plugin_directory
+    ):
+        return is_plugin.plugin_directory
+
+    # not called from a plugin, e.g. in tests
+    loaded_plugin_directories = {
+        is_plugin.plugin_directory
+        for module_name in list(sys.modules)
+        if (is_plugin := _is_module_qgis_plugin(module_name))
+        and is_plugin.plugin_directory
+    }
+    if len(loaded_plugin_directories) == 1:
+        return loaded_plugin_directories.pop()
+
+    if loaded_plugin_directories:
+        message = (
+            "Could not determine the QGIS plugin directory: the call did not come "
+            "from a plugin package and multiple plugins are loaded: "
+            f"{', '.join(sorted(loaded_plugin_directories))}"
+        )
+    else:
+        message = (
+            "Could not determine the QGIS plugin directory: no QGIS plugin package "
+            "(a package with classFactory and metadata.txt) is loaded"
+        )
+    # avoid circular import
+    from qgis_plugin_tools.tools.exceptions import PluginNotFoundError  # noqa: PLC0415
+
+    raise PluginNotFoundError(message)
 
 
 def plugin_path(*args: str) -> str:
@@ -265,7 +297,11 @@ def resources_path(*args: str) -> str:
     :return: Absolute path to the resources folder.
     :rtype: str
     """
-    return _absolute_path(plugin_path(), "resources", *args)
+    path = _absolute_path(plugin_path(), "resources", *args)
+    if not Path(path).exists():
+        message = f"Resource {path} not found"
+        raise FileNotFoundError(message)
+    return path
 
 
 def qgis_plugin_tools_resources(*args: str) -> str:

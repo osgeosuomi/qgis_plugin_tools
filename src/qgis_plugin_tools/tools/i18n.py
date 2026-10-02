@@ -33,7 +33,6 @@ from qgis.PyQt.QtWidgets import QApplication
 from qgis_plugin_tools.tools.resources import (
     plugin_name,
     plugin_path,
-    resources_path,
     slug_name,
 )
 
@@ -55,7 +54,7 @@ def setup_translation(
     locale = QgsSettings().value("locale/userLocale", QLocale().name())
 
     for prefix in ["", f"{plugin_name()}_", f"{slug_name()}_"]:
-        for fldr in [folder, plugin_path("i18n"), resources_path("i18n")]:
+        for fldr in [folder, plugin_path("i18n"), plugin_path("resources", "i18n")]:
             prefixed_locale = prefix + locale
             if fldr:
                 ts_file = QFileInfo(

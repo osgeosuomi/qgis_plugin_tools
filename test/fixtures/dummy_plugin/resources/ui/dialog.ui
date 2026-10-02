@@ -1,0 +1,7 @@
+
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog"/>
+ <resources/>
+ <connections/>
+</ui>
