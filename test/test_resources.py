@@ -68,6 +68,21 @@ def test_load_ui_at_module_level_during_plugin_import(dummy_plugin: ModuleType):
                 del sys.modules[module_name]
 
 
+def test_plugin_path_from_outside_of_plugin_ignores_core_plugins(
+    plugin_directory: Path, monkeypatch: pytest.MonkeyPatch
+):
+    core_plugins = Path(QgsApplication.pkgDataPath(), "python", "plugins")
+    monkeypatch.syspath_prepend(str(core_plugins))
+    modules_before = set(sys.modules)
+    try:
+        importlib.import_module("processing")
+        assert plugin_path() == str(plugin_directory)
+    finally:
+        for module_name in set(sys.modules) - modules_before:
+            if module_name.split(".")[0] == "processing":
+                del sys.modules[module_name]
+
+
 def test_plugin_path_raises_if_no_plugin_is_loaded(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.delitem(sys.modules, "dummy_plugin")
 
