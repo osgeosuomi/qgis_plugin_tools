@@ -25,6 +25,7 @@
 import contextlib
 import functools
 import logging
+import sys
 from collections.abc import Callable
 from enum import Enum, unique
 from logging.handlers import RotatingFileHandler
@@ -295,7 +296,8 @@ def _create_handlers(
     handlers: list[logging.Handler] = []
 
     stream_level = get_log_level(LogTarget.STREAM)
-    if stream_level > logging.NOTSET:
+    # On Windows QGIS has no console and sys.stderr is None
+    if stream_level > logging.NOTSET and sys.stderr is not None:
         console_handler = logging.StreamHandler()
         console_handler.setLevel(stream_level)
         console_formatter = logging.Formatter(

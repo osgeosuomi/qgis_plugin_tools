@@ -20,13 +20,17 @@
 # You should have received a copy of the GNU General Public License
 # along with qgis_plugin_tools.  If not, see <https://www.gnu.org/licenses/>.
 
+import logging
+import sys
 from threading import Thread
 from unittest.mock import MagicMock
 
+import pytest
 from qgis.core import Qgis
 from qgis.gui import QgsMessageBar
 from qgis.PyQt.QtCore import QCoreApplication
 
+from qgis_plugin_tools.tools import custom_logging
 from qgis_plugin_tools.tools.custom_logging import SimpleMessageBarProxy
 
 
@@ -57,3 +61,20 @@ def test_message_bar_proxy_pushes_message_with_int_level():
     proxy.push_message("title", "text", 1, 2)
 
     assert msg_bar.currentItem().level() == Qgis.MessageLevel.Warning
+
+
+def _stream_only_log_level(target: custom_logging.LogTarget) -> int:
+    if target == custom_logging.LogTarget.STREAM:
+        return logging.INFO
+    return logging.NOTSET
+
+
+def test_stream_handler_is_skipped_without_stderr(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(custom_logging, "get_log_level", _stream_only_log_level)
+    monkeypatch.setattr(sys, "stderr", None)
+
+    handlers = custom_logging._create_handlers("test", None)
+
+    assert not any(type(h) is logging.StreamHandler for h in handlers)
