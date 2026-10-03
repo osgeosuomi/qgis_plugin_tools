@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Fix: avoiding logging errors in the Python console
+
 ## 2.1.1 - 2026-10-02
 
 - Fix: find plugin from loaded modules if not called from a plugin
