@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 - Fix: avoiding logging errors in the Python console
+- Fix: ignore QGIS core plugins when finding plugin from loaded modules
 
 ## 2.1.1 - 2026-10-02
 

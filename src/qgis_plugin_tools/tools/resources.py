@@ -139,11 +139,17 @@ def _plugin_path_dependency() -> str:
         return is_plugin.plugin_directory
 
     # not called from a plugin, e.g. in tests
+    core_plugins_directory = Path(
+        QgsApplication.pkgDataPath(), "python", "plugins"
+    ).resolve()
     loaded_plugin_directories = {
         is_plugin.plugin_directory
         for module_name in list(sys.modules)
         if (is_plugin := _is_module_qgis_plugin(module_name))
         and is_plugin.plugin_directory
+        and not Path(is_plugin.plugin_directory)
+        .resolve()
+        .is_relative_to(core_plugins_directory)
     }
     if len(loaded_plugin_directories) == 1:
         return loaded_plugin_directories.pop()
